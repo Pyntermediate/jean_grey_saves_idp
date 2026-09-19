@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Flare // Tactical SOS Dispatch</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Space Grotesk & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-container": "#ff7300",
+            "on-primary-fixed": "#331100",
+            "primary-fixed": "#ffdbca",
+            "error-container": "#93000a",
+            "on-primary": "#542100",
+            "inverse-surface": "#f7ddd2",
+            "on-surface": "#f7ddd2",
+            "success-accent": "#00E676",
+            "error": "#ffb4ab",
+            "scaffold-bg": "#08090B",
+            "on-error": "#690005",
+            "tertiary": "#96ccff",
+            "outline": "#a88b7c",
+            "on-secondary": "#680011",
+            "on-tertiary": "#003353",
+            "on-tertiary-fixed": "#001d32",
+            "outline-variant": "#594236",
+            "tertiary-fixed": "#cee5ff",
+            "surface-container-highest": "#41312a",
+            "inverse-primary": "#9d4400",
+            "surface-tint": "#ffb68f",
+            "on-background": "#f7ddd2",
+            "surface-container": "#2a1d16",
+            "on-secondary-fixed": "#410007",
+            "on-error-container": "#ffdad6",
+            "surface-container-lowest": "#170b06",
+            "text-muted": "#7E8C9F",
+            "secondary-fixed": "#ffdad8",
+            "border-outline": "#232A36",
+            "secondary-container": "#df0431",
+            "on-primary-container": "#5a2400",
+            "tertiary-container": "#00a4fb",
+            "surface-variant": "#41312a",
+            "on-primary-fixed-variant": "#773200",
+            "primary": "#ffb68f",
+            "secondary-fixed-dim": "#ffb3b1",
+            "background": "#1d110a",
+            "surface-card": "#12151B",
+            "on-secondary-container": "#fff1f0",
+            "on-tertiary-container": "#003759",
+            "on-secondary-fixed-variant": "#92001c",
+            "surface-elevated": "#191E27",
+            "primary-fixed-dim": "#ffb68f",
+            "surface-dim": "#1d110a",
+            "surface-container-low": "#261912",
+            "secondary": "#ffb3b1",
+            "surface-bright": "#45362e",
+            "surface-container-high": "#352720",
+            "inverse-on-surface": "#3c2d26",
+            "tertiary-fixed-dim": "#96ccff",
+            "on-surface-variant": "#e1c0b0",
+            "distress-accent": "#FF2B43",
+            "text-primary": "#F0F4F8",
+            "surface": "#1d110a",
+            "on-tertiary-fixed-variant": "#004a75"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-md": "12px",
+            "space-lg": "16px",
+            "space-sm": "8px",
+            "space-xs": "4px",
+            "space-xl": "24px",
+            "margin": "16px",
+            "gutter": "12px"
+          },
+          "fontFamily": {
+            "headline-sm": ["Space Grotesk"],
+            "body-sm": ["Space Grotesk"],
+            "body-md": ["Space Grotesk"],
+            "action-label": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"],
+            "telemetry-mono": ["JetBrains Mono"],
+            "headline-lg": ["Space Grotesk"]
+          },
+          "fontSize": {
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "action-label": ["14px", { "lineHeight": "20px", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "telemetry-mono": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    @keyframes pulse-radar {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.92); }
+    }
+    .tactical-pulse {
+      animation: pulse-radar 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes beacon-glow {
+      0%, 100% { box-shadow: 0 0 0px 0px rgba(255, 43, 67, 0.4); }
+      50% { box-shadow: 0 0 16px 2px rgba(255, 43, 67, 0.35); }
+    }
+    .beacon-active {
+      animation: beacon-glow 1.8s ease-in-out infinite;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-scaffold-bg text-text-primary min-h-screen flex flex-col items-center justify-start antialiased selection:bg-distress-accent selection:text-white pb-24">
+<!-- TOP APP BAR (Shared Component JSON anchor) -->
+<header class="w-full bg-surface-card border-b border-border-outline sticky top-0 z-40">
+<div class="flex justify-between items-center w-full px-margin py-space-sm h-14 max-w-lg mx-auto">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-elevated border border-distress-accent flex items-center justify-center text-distress-accent tactical-pulse">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">emergency</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm font-bold tracking-wider text-distress-accent uppercase leading-none">FLARE // TACTICAL DISPATCH</span>
+<span class="text-telemetry-mono font-telemetry-mono text-[10px] text-text-muted uppercase">SYS_SEC: AIRGAP / SECURE ECDH-P256</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<div class="px-2 py-0.5 rounded border border-border-outline bg-surface-elevated flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-distress-accent tactical-pulse"></span>
+<span class="text-telemetry-mono font-telemetry-mono text-[11px] text-text-primary font-bold">BEACON READY</span>
+</div>
+<button class="p-1.5 rounded text-text-muted hover:bg-surface-elevated hover:text-text-primary active:scale-[0.98] transition-transform duration-100" title="PHY Radar Diagnostics">
+<span class="material-symbols-outlined text-[20px]">radar</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN VIEWPORT CONTAINER (Max-w-lg Mobile Cockpit View) -->
+<main class="w-full max-w-lg px-margin pt-space-md space-y-space-md flex-1">
+<!-- STATUS BEACON BANNER -->
+<section class="w-full rounded-lg bg-surface-card border border-border-outline p-space-sm flex flex-col gap-space-xs relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-distress-accent text-[16px]">sensors</span>
+<span class="text-telemetry-mono font-telemetry-mono text-[11px] font-bold text-text-primary uppercase">CONTINUOUS BLE BEACON ACTIVE [0x48]</span>
+</div>
+<span class="text-telemetry-mono font-telemetry-mono text-[10px] px-1.5 py-0.2 border border-success-accent text-success-accent bg-scaffold-bg rounded">TX SYNC</span>
+</div>
+<div class="grid grid-cols-3 gap-space-xs pt-1 border-t border-border-outline/50 text-telemetry-mono font-telemetry-mono text-[11px]">
+<div class="flex flex-col">
+<span class="text-text-muted text-[9px] uppercase">LoRa RF</span>
+<span class="text-text-primary font-semibold">915.0 MHz</span>
+</div>
+<div class="flex flex-col">
+<span class="text-text-muted text-[9px] uppercase">PHY MOD</span>
+<span class="text-text-primary font-semibold">LE CODED S=8</span>
+</div>
+<div class="flex flex-col">
+<span class="text-text-muted text-[9px] uppercase">MESH PEERS</span>
+<span class="text-success-accent font-semibold">4 REACHABLE</span>
+</div>
+</div>
+</section>
+<!-- GNSS FIX & CO-ORDINATES TELEMETRY CARD -->
+<section class="w-full rounded-lg bg-surface-card border border-border-outline p-space-md flex flex-col gap-space-sm">
+<div class="flex justify-between items-center pb-space-xs border-b border-border-outline">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px]">satellite_alt</span>
+<span class="text-telemetry-mono font-telemetry-mono text-body-sm font-bold uppercase text-text-primary">PRECISION GNSS TELEMETRY</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-success-accent"></span>
+<span class="text-telemetry-mono font-telemetry-mono text-[10px] text-success-accent">3D FIX LOCK</span>
+</div>
+</div>
+<!-- Lat & Long Readouts -->
+<div class="grid grid-cols-2 gap-space-sm bg-surface-elevated p-space-sm rounded border border-border-outline">
+<div>
+<span class="text-telemetry-mono font-telemetry-mono text-[10px] text-text-muted uppercase block">LATITUDE (WGS84)</span>
+<span class="text-telemetry-mono font-telemetry-mono text-[15px] font-bold text-text-primary tracking-tight">44° 18' 24.2" N</span>
+<span class="text-telemetry-mono font-telemetry-mono text-[10px] text-text-muted block">44.306722 DEC</span>
+</div>
+<div>
+<span class="text-telemetry-mono font-telemetry-mono text-[10px] text-text-muted uppercase block">LONGITUDE (WGS84)</span>
+<span class="text-telemetry-mono font-telemetry-mono text-[15px] font-bold text-text-primary tracking-tight">121° 46' 19.8" W</span>
+<span class="text-telemetry-mono font-telemetry-mono text-[10px] text-text-muted block">-121.772167 DEC</span>
+</div>
+</div>
+<!-- Secondary Telemetry Grid -->
+<div class="grid grid-cols-3 gap-space-xs text-telemetry-mono font-telemetry-mono text-[11px] py-1">
+<div class="bg-scaffold-bg px-2 py-1 rounded border border-border-outline">
+<span class="text-text-muted text-[9px] uppercase block">EST ACCURACY</span>
+<span class="text-text-primary font-bold">± 2.4m CEP</span>
+</div>
+<div class="bg-scaffold-bg px-2 py-1 rounded border border-border-outline">
+<span class="text-text-muted text-[9px] uppercase block">BARO ALTITUDE</span>
+<span class="text-text-primary font-bold">1,842m MSL</span>
+</div>
+<div class="bg-scaffold-bg px-2 py-1 rounded border border-border-outline">
+<span class="text-text-muted text-[9px] uppercase block">SATELLITES</span>
+<span class="text-text-primary font-bold">9 CONSTELL.</span>
+</div>
+</div>
+<!-- Acquire Live Fix Action Trigger -->
+<button class="w-full py-2 px-space-sm bg-surface-elevated hover:bg-surface-card border border-border-outline rounded text-text-primary text-telemetry-mono font-telemetry-mono text-body-sm font-semibold flex items-center justify-center gap-space-xs active:scale-[0.98] transition-transform duration-100">
+<span class="material-symbols-outlined text-[16px] text-tertiary">my_location</span>
+<span>ACQUIRE LIVE RE-FIX [INTERVAL: 10s]</span>
+</button>
+</section>
+<!-- DISTRESS MODE & MODULATION PHY CONFIG -->
+<section class="grid grid-cols-2 gap-space-sm">
+<!-- PHY Selection Card -->
+<div class="bg-surface-card border border-border-outline rounded-lg p-space-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="text-telemetry-mono font-telemetry-mono text-[10px] text-text-muted uppercase">PHY LAYER</span>
+<span class="w-2 h-2 rounded-full bg-distress-accent"></span>
+</div>
+<p class="text-action-label font-action-label text-text-primary text-[13px] leading-tight">LE Coded S=8</p>
+<span class="text-telemetry-mono font-telemetry-mono text-[10px] text-primary block mt-0.5">MAX RANGE (4x SENSITIVITY)</span>
+</div>
+<div class="mt-space-sm pt-space-xs border-t border-border-outline flex justify-between items-center text-telemetry-mono font-telemetry-mono text-[9px]">
+<span class="text-text-muted">TX PWR</span>
+<span class="text-text-primary font-bold">+22 dBm ERP</span>
+</div>
+</div>
+<!-- Dispatch Target Card -->
+<div class="bg-surface-card border border-border-outline rounded-lg p-space-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="text-telemetry-mono font-telemetry-mono text-[10px] text-text-muted uppercase">BROADCAST TARGET</span>
+<span class="material-symbols-outlined text-tertiary text-[14px]">public</span>
+</div>
+<p class="text-action-label font-action-label text-text-primary text-[13px] leading-tight">Open Flood Route</p>
+<span class="text-telemetry-mono font-telemetry-mono text-[10px] text-tertiary block mt-0.5">7-HOP MESH PROPAGATION</span>
+</div>
+<div class="mt-space-sm pt-space-xs border-t border-border-outline flex justify-between items-center text-telemetry-mono font-telemetry-mono text-[9px]">
+<span class="text-text-muted">TTL ENFORCE</span>
+<span class="text-text-primary font-bold">UNRESTRICTED</span>
+</div>
+</div>
+</section>
+<!-- SITUATION / TRIAGE REPORT -->
+<section class="bg-surface-card border border-border-outline rounded-lg p-space-md space-y-space-sm">
+<div class="flex justify-between items-center">
+<label class="text-telemetry-mono font-telemetry-mono text-body-sm font-bold uppercase text-text-primary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-distress-accent">flag</span>
+          TRIAGE CATEGORY SELECTOR
+        </label>
+<span class="text-telemetry-mono font-telemetry-mono text-[10px] text-text-muted uppercase">PAYLOAD: 32 BYTES</span>
+</div>
+<!-- Quick-Select Pills -->
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="px-2.5 py-1.5 rounded border border-distress-accent bg-surface-elevated text-distress-accent text-telemetry-mono font-telemetry-mono text-body-sm font-bold flex items-center justify-between active:scale-[0.98] transition-transform duration-100" type="button">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">medical_services</span>
+            Medical Injury
+          </span>
+<span class="w-1.5 h-1.5 rounded-full bg-distress-accent"></span>
+</button>
+<button class="px-2.5 py-1.5 rounded border border-border-outline bg-surface-card hover:bg-surface-elevated text-text-muted hover:text-text-primary text-telemetry-mono font-telemetry-mono text-body-sm flex items-center justify-between active:scale-[0.98] transition-transform duration-100" type="button">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">device_thermostat</span>
+            Hypothermia
+          </span>
+</button>
+<button class="px-2.5 py-1.5 rounded border border-border-outline bg-surface-card hover:bg-surface-elevated text-text-muted hover:text-text-primary text-telemetry-mono font-telemetry-mono text-body-sm flex items-center justify-between active:scale-[0.98] transition-transform duration-100" type="button">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">explore_off</span>
+            Lost / Trapped
+          </span>
+</button>
+<button class="px-2.5 py-1.5 rounded border border-border-outline bg-surface-card hover:bg-surface-elevated text-text-muted hover:text-text-primary text-telemetry-mono font-telemetry-mono text-body-sm flex items-center justify-between active:scale-[0.98] transition-transform duration-100" type="button">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">cabin</span>
+            Shelter Failure
+          </span>
+</button>
+</div>
+<!-- Distress Custom Dispatch Note Input Field -->
+<div class="relative pt-space-xs">
+<input class="w-full bg-surface-elevated border border-border-outline rounded text-text-primary text-telemetry-mono font-telemetry-mono text-body-sm px-3 py-2 focus:outline-none focus:border-distress-accent" placeholder="Add supplementary triage note..." type="text" value="PBI: Compound fracture lower limb. 2 survivors. No shelter."/>
+</div>
+</section>
+<!-- HERO ACTION TRIGGER: BROADCAST EMERGENCY SOS (Tactile Full-Width) -->
+<section class="pt-space-xs pb-space-xs">
+<div class="relative group">
+<button class="w-full relative overflow-hidden bg-distress-accent hover:brightness-110 active:scale-[0.98] transition-all duration-100 p-space-lg rounded-xl border border-distress-accent beacon-active flex flex-col items-center justify-center text-center" id="sos-broadcast-btn">
+<div class="flex items-center justify-center gap-space-sm text-white">
+<span class="material-symbols-outlined text-[28px] animate-pulse" style="font-variation-settings: 'FILL' 1;">emergency_share</span>
+<span class="font-headline-md text-headline-md font-bold tracking-wider uppercase text-white">HOLD 3S TO BROADCAST SOS</span>
+</div>
+<p class="font-telemetry-mono text-telemetry-mono text-[11px] text-white/80 mt-1 uppercase tracking-wider">
+            AUTOMATIC REPEAT: EVERY 45 SEC // LE CODED PHY // FLOOD MESH
+          </p>
+<div class="w-full bg-black/40 h-1 mt-3 rounded-full overflow-hidden">
+<div class="bg-white h-full w-0 transition-all duration-300" id="sos-progress"></div>
+</div>
+</button>
+</div>
+</section>
+<!-- PACKET TELEMETRY & ENCRYPTION CRYPTO FOOTER -->
+<section class="bg-surface-card border border-border-outline rounded-lg p-space-sm text-telemetry-mono font-telemetry-mono text-[11px] space-y-1.5">
+<div class="flex justify-between items-center text-text-muted text-[10px] pb-1 border-b border-border-outline">
+<span>PACKET ENCRYPTION &amp; SIGNATURE</span>
+<span class="text-success-accent font-semibold">ED25519 VALIDATED</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-text-muted">PUBKEY FINGERPRINT:</span>
+<span class="text-text-primary font-bold tracking-wider">9F:3B:82:1E:A4:70:C9:8F</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-text-muted">NONCE PACKET ID:</span>
+<span class="text-text-primary">#0842-TX-FLOOD-DISPATCH</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-text-muted">OFFLINE HOPPING:</span>
+<span class="text-primary font-semibold">AUTO-RELAY VIA MESH DAEMON</span>
+</div>
+</section>
+</main>
+<!-- BOTTOM NAVIGATION BAR (Shared Component JSON anchor) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-space-xs max-w-lg mx-auto bg-surface-card border-t border-border-outline">
+<!-- Item 1: SOS Beacon (ACTIVE MATCH FOR SOS DISPATCH SCREEN) -->
+<button class="flex flex-col items-center justify-center bg-surface-elevated text-distress-accent rounded-lg border border-distress-accent py-1 px-3 active:scale-[0.98] transition-transform duration-100">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">emergency_share</span>
+<span class="text-telemetry-mono font-telemetry-mono uppercase text-[10px] mt-0.5 font-bold">SOS Beacon</span>
+</button>
+<!-- Item 2: Mesh Nodes -->
+<button class="flex flex-col items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-card py-1 px-3 active:scale-[0.98] transition-transform duration-100">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+<span class="text-telemetry-mono font-telemetry-mono uppercase text-[10px] mt-0.5">Mesh Nodes</span>
+</button>
+<!-- Item 3: Radio PHY -->
+<button class="flex flex-col items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-card py-1 px-3 active:scale-[0.98] transition-transform duration-100">
+<span class="material-symbols-outlined text-[20px]">cell_tower</span>
+<span class="text-telemetry-mono font-telemetry-mono uppercase text-[10px] mt-0.5">Radio PHY</span>
+</button>
+<!-- Item 4: Map Log -->
+<button class="flex flex-col items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-card py-1 px-3 active:scale-[0.98] transition-transform duration-100">
+<span class="material-symbols-outlined text-[20px]">share_location</span>
+<span class="text-telemetry-mono font-telemetry-mono uppercase text-[10px] mt-0.5">Map Log</span>
+</button>
+</nav>
+<!-- Micro-interactions Script -->
+<script>
+    const sosBtn = document.getElementById('sos-broadcast-btn');
+    const progressBar = document.getElementById('sos-progress');
+    let timer = null;
+    let progress = 0;
+
+    function startHolding(e) {
+      e.preventDefault();
+      progress = 0;
+      progressBar.style.width = '0%';
+      timer = setInterval(() => {
+        progress += 4;
+        progressBar.style.width = `${progress}%`;
+        if (progress >= 100) {
+          clearInterval(timer);
+          triggerBroadcast();
+        }
+      }, 100);
+    }
+
+    function cancelHolding() {
+      if (timer) clearInterval(timer);
+      if (progress < 100) {
+        progressBar.style.width = '0%';
+        progress = 0;
+      }
+    }
+
+    function triggerBroadcast() {
+      sosBtn.classList.remove('bg-distress-accent');
+      sosBtn.classList.add('bg-success-accent');
+      sosBtn.querySelector('span.font-headline-md').innerText = 'SOS BROADCASTING LIVE';
+      progressBar.style.backgroundColor = '#FFFFFF';
+      progressBar.style.width = '100%';
+    }
+
+    sosBtn.addEventListener('mousedown', startHolding);
+    sosBtn.addEventListener('mouseup', cancelHolding);
+    sosBtn.addEventListener('mouseleave', cancelHolding);
+    sosBtn.addEventListener('touchstart', startHolding, {passive: false});
+    sosBtn.addEventListener('touchend', cancelHolding);
+  </script>
+</body></html>

@@ -25,7 +25,7 @@ class KeyVaultScreen extends StatelessWidget {
       backgroundColor: _bg,
       appBar: AppBar(
         title: Text('Key Vault',
-            style: GoogleFonts.spaceGrotesk(
+            style: GoogleFonts.outfit(
                 fontWeight: FontWeight.w700, fontSize: 17, color: _text)),
         backgroundColor: _bg,
         elevation: 0,
@@ -56,7 +56,7 @@ class KeyVaultScreen extends StatelessWidget {
                       const Icon(Icons.key_outlined, color: _blue, size: 16),
                       const SizedBox(width: 8),
                       Text('Device Identity Key  ·  X25519',
-                          style: GoogleFonts.spaceGrotesk(
+                          style: GoogleFonts.outfit(
                               color: _blue,
                               fontSize: 13,
                               fontWeight: FontWeight.w700)),
@@ -78,7 +78,7 @@ class KeyVaultScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Text('Public Key', style: GoogleFonts.spaceGrotesk(
+                  Text('Public Key', style: GoogleFonts.outfit(
                       color: _muted, fontSize: 11, fontWeight: FontWeight.w600)),
                   const SizedBox(height: 4),
                   SelectableText(
@@ -93,11 +93,11 @@ class KeyVaultScreen extends StatelessWidget {
 
             // ── Contacts Header ────────────────────────────────────────────
             Text('Pre-Synced Contacts',
-                style: GoogleFonts.spaceGrotesk(
+                style: GoogleFonts.outfit(
                     color: _text, fontSize: 15, fontWeight: FontWeight.w700)),
             const SizedBox(height: 4),
             Text('Keys exchanged before entering the forest. Used for offline E2EE.',
-                style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 12)),
+                style: GoogleFonts.outfit(color: _muted, fontSize: 12)),
             const SizedBox(height: 14),
 
             // ── Contact List ───────────────────────────────────────────────
@@ -137,20 +137,20 @@ class KeyVaultScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(contact.name,
-                              style: GoogleFonts.spaceGrotesk(
+                              style: GoogleFonts.outfit(
                                   color: _text,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600)),
                           const SizedBox(height: 2),
                           Text(contact.phoneNumber,
                               style:
-                                  GoogleFonts.spaceGrotesk(color: _muted, fontSize: 11)),
+                                  GoogleFonts.outfit(color: _muted, fontSize: 11)),
                           const SizedBox(height: 3),
                           Text(
                             hasApp
                                 ? 'E2EE key synced  ·  ${contact.publicKey}'
                                 : 'No app installed — SMS Gateway fallback',
-                            style: GoogleFonts.spaceGrotesk(
+                            style: GoogleFonts.outfit(
                                 color: hasApp ? _green : _amber,
                                 fontSize: 10),
                             maxLines: 1,
@@ -172,7 +172,7 @@ class KeyVaultScreen extends StatelessWidget {
                       ),
                       child: Text(
                         hasApp ? 'E2EE' : 'SMS',
-                        style: GoogleFonts.spaceGrotesk(
+                        style: GoogleFonts.outfit(
                             color: hasApp ? _green : _amber,
                             fontSize: 10,
                             fontWeight: FontWeight.w700),

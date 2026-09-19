@@ -1,0 +1,287 @@
+<!DOCTYPE html><html class="h-full bg-[#05090f]" lang="en"><svg class="inline-defs-container" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"></svg><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Flare Contacts - Aurora Glass Edition</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            midnight: '#05090f',
+            deepSpace: '#08111c',
+            auroraCyan: '#00f2fe',
+            auroraBlue: '#4facfe',
+            neonGreen: '#10b981',
+            crimsonRed: '#f43f5e',
+            glassBg: 'rgba(13, 25, 41, 0.65)',
+            glassBorder: 'rgba(0, 242, 254, 0.16)'
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+            mono: ['SF Mono', 'ui-monospace', 'Menlo', 'Monaco', 'Cascadia Mono', 'Courier New', 'monospace']
+          },
+          boxShadow: {
+            'cyan-glow': '0 0 20px -2px rgba(0, 242, 254, 0.35)',
+            'cyan-rim': '0 0 12px 0 rgba(0, 242, 254, 0.22)',
+            'card-glow': '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: CSS Stylesheets -->
+<style data-purpose="aurora-glass-effects">
+    /* Ambient Aurora Glow Backdrop */
+    .aurora-bg {
+      background: radial-gradient(circle at 50% 15%, rgba(0, 180, 219, 0.12) 0%, transparent 55%),
+                  radial-gradient(circle at 10% 85%, rgba(0, 242, 254, 0.08) 0%, transparent 45%),
+                  linear-gradient(180deg, #070d14 0%, #050a10 50%, #03060a 100%);
+    }
+
+    /* Tactile Frosted Glass Effect */
+    .glass-panel {
+      background: rgba(12, 23, 38, 0.68);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(0, 242, 254, 0.14);
+    }
+
+    .glass-panel-active {
+      background: linear-gradient(135deg, rgba(0, 150, 255, 0.25) 0%, rgba(0, 242, 254, 0.15) 100%);
+      border: 1px solid rgba(0, 242, 254, 0.45);
+      box-shadow: 0 0 24px rgba(0, 242, 254, 0.2), inset 0 0 12px rgba(0, 242, 254, 0.1);
+    }
+
+    .glass-btn-bright {
+      background: linear-gradient(135deg, #0072ff 0%, #00d2ff 100%);
+      box-shadow: 0 4px 20px rgba(0, 180, 255, 0.4);
+    }
+
+    .glass-btn-outline {
+      background: rgba(10, 21, 35, 0.6);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(0, 242, 254, 0.22);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    }
+
+    /* Hide scrollbar for seamless mobile UI */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<!-- END: CSS Stylesheets -->
+</head>
+<body class="h-full w-full bg-midnight text-slate-100 antialiased flex justify-center items-center select-none overflow-hidden font-sans">
+<!-- BEGIN: Mobile Device Frame -->
+<div class="relative w-full max-w-[430px] h-full max-h-[932px] sm:h-[92vh] sm:rounded-[44px] sm:border-[5px] sm:border-[#142334] overflow-hidden flex flex-col justify-between aurora-bg shadow-2xl" data-purpose="mobile-viewport-container">
+<!-- Mobile Top Status Bar & Flare Brand Header -->
+<!-- BEGIN: AppHeader -->
+<header class="pt-3 px-6 pb-2 shrink-0 z-20 flex flex-col gap-2">
+<!-- iOS Status Bar Placeholder (Battery, Time, WiFi) -->
+<div class="flex justify-between items-center text-xs font-semibold text-slate-400 opacity-80 pt-1 px-1 tracking-tight" data-purpose="status-bar">
+<span class="">9:41</span>
+<div class="flex items-center space-x-2">
+<!-- Cellular 5G -->
+<span class="text-[10px] font-mono tracking-tighter">5G</span>
+<!-- Signal bars icon -->
+<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+<path d="M2 18h3v4H2v-4zm6-5h3v9H8v-9zm6-5h3v14h-3V8zm6-5h3v19h-3V3z"></path>
+</svg>
+<!-- Battery icon -->
+<div class="w-5 h-2.5 rounded-sm border border-slate-400 p-0.5 flex items-center">
+<div class="h-full w-3.5 bg-slate-300 rounded-[1px]"></div>
+</div>
+</div>
+</div>
+<!-- Main Flare App Navigation Bar -->
+<div class="flex justify-between items-center mt-3" data-purpose="navigation-header">
+<!-- Logo Left: Flame Cyan/Blue Gradient + Typography -->
+<div class="flex items-center space-x-2.5">
+<div class="relative w-8 h-8 rounded-full flex items-center justify-center bg-cyan-950/40 border border-cyan-500/20">
+<!-- Flame SVG with vibrant glowing gradient -->
+<svg class="w-5 h-5" fill="none" viewBox="0 0 24 24">
+<defs>
+<linearGradient id="flameGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#00f2fe"></stop>
+<stop offset="100%" stop-color="#2563eb"></stop>
+</linearGradient>
+</defs>
+<path d="M12 2.5C11.5 5 9 6.5 8 8.5C6.8 10.9 6.5 13.2 7.2 15.5C8.2 18.8 11.2 21 14.5 20.8C18 20.5 20.5 17.5 20 14C19.5 10.5 16 8.5 15.5 5.5C15 8 13.5 9 12.5 9.5C13.5 7.5 13.5 5 12 2.5Z" fill="url(#flameGrad)"></path>
+</svg>
+</div>
+<span class="text-2xl font-bold tracking-tight text-white font-sans drop-shadow-sm">flare</span>
+</div>
+<!-- Top Right Settings Gear Icon -->
+<button aria-label="Settings" class="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:text-cyan-300 hover:bg-white/5 active:scale-95 transition-all" type="button">
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</header>
+<!-- END: AppHeader -->
+<!-- Scrollable Content Area -->
+<main class="flex-1 px-5 pt-2 pb-6 overflow-y-auto no-scrollbar flex flex-col justify-start">
+<!-- BEGIN: PageTitleSection -->
+<section class="mt-4 mb-6" data-purpose="title-section">
+<h1 class="text-3xl font-extrabold tracking-tight text-white drop-shadow-sm">
+          Add Contacts
+        </h1>
+</section>
+<!-- END: PageTitleSection -->
+<!-- BEGIN: PrimaryActionButtonsRow -->
+<!-- Two large tactile action buttons: Scan Contact QR vs Show My QR -->
+<section class="grid grid-cols-2 gap-3.5 mb-8" data-purpose="qr-action-buttons">
+<!-- Left: Scan Contact QR Button (Prominent Glowing Cyan Gradient) -->
+<button class="glass-btn-bright relative group rounded-2xl p-4 h-20 flex items-center justify-center space-x-2.5 transition-all duration-200 active:scale-[0.98] border border-cyan-500/20" type="button">
+<!-- Viewfinder QR scan icon -->
+<div class="relative shrink-0 text-white">
+<svg class="w-6 h-6 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<!-- Corner brackets -->
+<path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2" stroke-linecap="round" stroke-linejoin="round"></path>
+<!-- Inner QR dots representation -->
+<rect fill="currentColor" height="3" rx="0.5" stroke="none" width="3" x="7" y="7"></rect>
+<rect fill="currentColor" height="3" rx="0.5" stroke="none" width="3" x="14" y="7"></rect>
+<rect fill="currentColor" height="3" rx="0.5" stroke="none" width="3" x="7" y="14"></rect>
+<rect fill="currentColor" height="3" rx="0.5" stroke="none" width="3" x="14" y="14"></rect>
+</svg>
+</div>
+<span class="text-white text-[15px] font-semibold tracking-tight text-left leading-tight">
+            Scan Contact QR
+          </span>
+</button>
+<!-- Right: Show My QR Button (Frosted Dark Glass with Cyan Border) -->
+<button class="glass-btn-outline group rounded-2xl p-4 h-20 flex items-center justify-center space-x-2.5 hover:border-auroraCyan/50 active:scale-[0.98] transition-all duration-200" type="button">
+<!-- QR Grid Icon with luminous blue tone -->
+<div class="shrink-0 text-auroraCyan group-hover:text-cyan-300">
+<svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<!-- 4 stylized QR blocks -->
+<rect height="6.5" rx="1.5" stroke="currentColor" width="6.5" x="3.5" y="3.5"></rect>
+<rect height="6.5" rx="1.5" stroke="currentColor" width="6.5" x="14" y="3.5"></rect>
+<rect height="6.5" rx="1.5" stroke="currentColor" width="6.5" x="3.5" y="14"></rect>
+<circle cx="17.25" cy="17.25" fill="currentColor" r="2.5" stroke="none"></circle>
+</svg>
+</div>
+<span class="text-[#3b9eff] group-hover:text-cyan-300 text-[15px] font-semibold tracking-tight text-left leading-tight">
+            Show My QR
+          </span>
+</button>
+</section>
+<!-- END: PrimaryActionButtonsRow -->
+<!-- BEGIN: SyncedContactsSection -->
+<section class="flex flex-col space-y-3.5" data-purpose="synced-contacts-container">
+<!-- Section Header with count and add button -->
+<div class="flex justify-between items-center px-0.5">
+<h2 class="text-lg font-bold tracking-tight text-slate-100">
+            Synced Contacts <span class="text-slate-400 font-medium">(1)</span>
+</h2>
+<!-- Plus / Add Contact Icon Button -->
+<button aria-label="Add contact manually" class="w-7 h-7 rounded-full flex items-center justify-center text-slate-300 hover:text-auroraCyan hover:bg-cyan-500/10 active:scale-90 transition-all" type="button">
+<svg class="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+<!-- Contact Card ("Tester") with Aurora Glass styling -->
+<div class="glass-panel rounded-2xl p-4 flex items-center justify-between border hover:border-cyan-400/35 transition-all border-cyan-500/10" data-purpose="contact-card">
+<!-- Left side: E2EE Pair Indicator & Info -->
+<div class="flex items-center space-x-3.5 min-w-0">
+<!-- Shield lock green indicator icon container -->
+<div class="w-11 h-11 rounded-xl bg-[#092920]/80 border border-emerald-500/30 flex items-center justify-center shrink-0" data-purpose="paired-security-indicator">
+<svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<rect height="10" rx="2" stroke-linecap="round" stroke-linejoin="round" width="14" x="5" y="11"></rect>
+<path d="M8 11V7a4 4 0 018 0v4" stroke-linecap="round" stroke-linejoin="round"></path>
+<circle cx="12" cy="16" fill="currentColor" r="1.5" stroke="none"></circle>
+</svg>
+</div>
+<!-- Contact Name & E2EE Public Key String -->
+<div class="flex flex-col truncate pr-2">
+<span class="text-base font-bold text-white tracking-tight truncate leading-snug">
+                Tester
+              </span>
+<span class="text-xs font-mono text-emerald-400/95 tracking-tight truncate mt-0.5">
+                Security Key: PUB_KEY_4174FF...
+              </span>
+</div>
+</div>
+<!-- Right side: Quick Action Buttons (Copy Key & Delete Contact) -->
+<div class="flex items-center space-x-1 shrink-0">
+<!-- Copy Key Button (Blue) -->
+<button aria-label="Copy Public Key" class="w-9 h-9 rounded-lg flex items-center justify-center text-[#3b9eff] hover:text-cyan-300 hover:bg-blue-500/15 active:scale-90 transition-all" type="button">
+<svg class="w-5 h-5 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<rect height="12" rx="2" stroke-linecap="round" stroke-linejoin="round" width="12" x="9" y="9"></rect>
+<path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Delete Contact Button (Crimson) -->
+<button aria-label="Delete Contact" class="w-9 h-9 rounded-lg flex items-center justify-center text-crimsonRed/90 hover:text-red-400 hover:bg-rose-500/15 active:scale-90 transition-all" type="button">
+<svg class="w-5 h-5 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</div>
+</section>
+<!-- END: SyncedContactsSection -->
+<!-- BEGIN: BuildVersionFooter -->
+<footer class="mt-14 mb-4 text-center" data-purpose="build-version-info">
+<span class="text-xs font-mono text-slate-500 tracking-wider">
+          Flare v38.39 (Build 89)
+        </span>
+</footer>
+<!-- END: BuildVersionFooter -->
+</main>
+<!-- BEGIN: BottomNavigation -->
+<!-- 4 Tabs: Messages, SOS, Peers/Mesh, Contacts (Active with pill highlight) -->
+<nav class="px-5 py-3 shrink-0 bg-[#060c14]/90 backdrop-blur-2xl border-t border-cyan-500/10" data-purpose="bottom-tab-bar">
+<div class="flex items-center justify-between">
+<!-- Tab 1: Messages -->
+<button class="flex-1 py-1.5 flex flex-col items-center justify-center text-slate-500 hover:text-slate-300 transition-colors" type="button">
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Tab 2: SOS Emergency -->
+<button class="flex-1 py-1.5 flex flex-col items-center justify-center text-slate-500 hover:text-rose-400 transition-colors" type="button">
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Tab 3: Peers / Mesh Network -->
+<button class="flex-1 py-1.5 flex flex-col items-center justify-center text-slate-500 hover:text-slate-300 transition-colors" type="button">
+<svg class="w-6 h-6 stroke-[1.75]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="2.5"></circle>
+<circle cx="6" cy="6" r="2"></circle>
+<circle cx="18" cy="6" r="2"></circle>
+<circle cx="6" cy="18" r="2"></circle>
+<circle cx="18" cy="18" r="2"></circle>
+<path d="M7.5 7.5l3 3m3 3l3 3m-9 0l3-3m3-3l3-3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Tab 4: Contacts (Active Aurora Pill) -->
+<button class="flex items-center space-x-2 bg-gradient-to-r from-cyan-950/80 to-blue-950/80 border px-4 py-2 rounded-full text-cyan-300 transition-all border-cyan-500/20" type="button">
+<!-- Id Card / Contacts icon -->
+<svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<rect height="16" rx="3" stroke-linecap="round" stroke-linejoin="round" width="18" x="3" y="4"></rect>
+<circle cx="9" cy="10" r="2" stroke-linecap="round" stroke-linejoin="round"></circle>
+<path d="M15 8h2m-2 4h2M6 16c0-1.5 1.5-2.5 3-2.5s3 1 3 2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-xs font-bold tracking-wide text-white">Contacts</span>
+</button>
+</div>
+<!-- Android Home Bar / Navigation Indicator for Mobile -->
+<div class="w-32 h-1 bg-slate-700/60 rounded-full mx-auto mt-3" data-purpose="home-indicator"></div>
+</nav>
+<!-- END: BottomNavigation -->
+</div>
+<!-- END: Mobile Device Frame -->
+
+
+</body></html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Flare // Emergency SOS Dispatch</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Space Grotesk & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "scaffold-bg": "#0C0E12",
+            "surface-card": "#141820",
+            "surface-elevated": "#1C222E",
+            "border-outline": "#252D3D",
+            "primary": "#3B82F6",
+            "distress-accent": "#EF4444",
+            "success-accent": "#10B981",
+            "text-primary": "#F8FAFC",
+            "text-muted": "#94A3B8"
+          },
+          borderRadius: {
+            "card": "14px",
+            "btn": "8px"
+          },
+          fontFamily: {
+            "sans": ["Space Grotesk", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.9); }
+    }
+    .pulse-dot {
+      animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes beacon-glow {
+      0%, 100% { box-shadow: 0 0 0px 0px rgba(239, 68, 68, 0.4); }
+      50% { box-shadow: 0 0 24px 2px rgba(239, 68, 68, 0.35); }
+    }
+    .beacon-active {
+      animation: beacon-glow 1.8s ease-in-out infinite;
+    }
+    body {
+      min-height: max(884px, 100dvh);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-scaffold-bg text-text-primary min-h-screen flex flex-col items-center justify-start antialiased selection:bg-distress-accent selection:text-white pb-24">
+<!-- TOP APP BAR -->
+<header class="w-full bg-surface-card/95 backdrop-blur-md border-b border-border-outline sticky top-0 z-40">
+<div class="flex justify-between items-center w-full px-4 py-2.5 h-14 max-w-lg mx-auto">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-btn bg-surface-elevated border border-distress-accent/40 flex items-center justify-center text-distress-accent">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">emergency</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold tracking-wider text-text-primary uppercase leading-tight font-sans">FLARE // EMERGENCY SOS</span>
+<span class="font-mono text-[10px] text-text-muted tracking-tight uppercase">AIRGAP / SECURE ECDH-P256</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="px-2 py-1 rounded-btn border border-border-outline bg-surface-elevated flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-distress-accent pulse-dot"></span>
+<span class="font-mono text-[10px] text-text-primary font-medium tracking-tight">BEACON READY [100% OFFLINE]</span>
+</div>
+<button class="w-8 h-8 rounded-btn border border-border-outline bg-surface-elevated flex items-center justify-center text-text-muted hover:text-text-primary active:scale-[0.97] transition-all" title="PHY Radar Diagnostics">
+<span class="material-symbols-outlined text-[18px]">radar</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN VIEWPORT CONTAINER -->
+<main class="w-full max-w-lg px-4 pt-3 space-y-3 flex-1">
+<!-- STATUS BEACON BANNER -->
+<section class="w-full rounded-card bg-surface-card border border-border-outline p-3 flex flex-col gap-2 relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[17px]">sensors</span>
+<span class="font-mono text-[11px] font-semibold text-text-primary uppercase tracking-tight">CONTINUOUS BLE BEACON ACTIVE [0x48]</span>
+</div>
+<span class="font-mono text-[10px] px-2 py-0.5 border border-success-accent/60 text-success-accent bg-success-accent/10 rounded-btn font-medium">TX SYNC</span>
+</div>
+<div class="grid grid-cols-3 gap-2 pt-2 border-t border-border-outline font-mono text-[11px]">
+<div class="flex flex-col">
+<span class="text-text-muted text-[9px] uppercase tracking-wider">LoRa RF</span>
+<span class="text-text-primary font-medium mt-0.5">915.0 MHz</span>
+</div>
+<div class="flex flex-col">
+<span class="text-text-muted text-[9px] uppercase tracking-wider">PHY MOD</span>
+<span class="text-text-primary font-medium mt-0.5">LE CODED S=8</span>
+</div>
+<div class="flex flex-col">
+<span class="text-text-muted text-[9px] uppercase tracking-wider">MESH PEERS</span>
+<span class="text-success-accent font-medium mt-0.5">4 REACHABLE</span>
+</div>
+</div>
+</section>
+<!-- MONOLITHIC GNSS TELEMETRY BLOCK -->
+<section class="w-full rounded-card bg-surface-card border border-border-outline overflow-hidden">
+<!-- Header -->
+<div class="flex justify-between items-center px-3.5 py-2.5 bg-surface-card border-b border-border-outline">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[17px]">satellite_alt</span>
+<span class="font-mono text-xs font-semibold uppercase tracking-wide text-text-primary">PRECISION GNSS TELEMETRY</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded-btn bg-surface-elevated border border-border-outline">
+<span class="w-1.5 h-1.5 rounded-full bg-success-accent"></span>
+<span class="font-mono text-[10px] text-success-accent font-medium uppercase tracking-tight">3D FIX LOCK</span>
+</div>
+</div>
+<!-- Lat/Lon Hairline Split Block -->
+<div class="grid grid-cols-2 divide-x divide-border-outline border-b border-border-outline bg-surface-elevated/40">
+<div class="p-3">
+<span class="font-mono text-[9px] text-text-muted uppercase tracking-wider block">LATITUDE (WGS84)</span>
+<span class="font-mono text-[15px] font-bold text-text-primary tracking-tight mt-0.5 block">44° 18' 24.2" N</span>
+<span class="font-mono text-[10px] text-text-muted mt-0.5 block">44.306722 DEC</span>
+</div>
+<div class="p-3">
+<span class="font-mono text-[9px] text-text-muted uppercase tracking-wider block">LONGITUDE (WGS84)</span>
+<span class="font-mono text-[15px] font-bold text-text-primary tracking-tight mt-0.5 block">121° 46' 19.8" W</span>
+<span class="font-mono text-[10px] text-text-muted mt-0.5 block">-121.772167 DEC</span>
+</div>
+</div>
+<!-- Hairline Grid Divider: Accuracy / Altitude / Satellites -->
+<div class="grid grid-cols-3 divide-x divide-border-outline border-b border-border-outline font-mono text-[11px] bg-surface-card">
+<div class="p-2.5">
+<span class="text-text-muted text-[9px] uppercase tracking-wider block">EST ACCURACY</span>
+<span class="text-text-primary font-semibold mt-0.5 block">± 2.4m CEP</span>
+</div>
+<div class="p-2.5">
+<span class="text-text-muted text-[9px] uppercase tracking-wider block">BARO ALTITUDE</span>
+<span class="text-text-primary font-semibold mt-0.5 block">1,842m MSL</span>
+</div>
+<div class="p-2.5">
+<span class="text-text-muted text-[9px] uppercase tracking-wider block">SATELLITES</span>
+<span class="text-text-primary font-semibold mt-0.5 block">9 CONSTELL.</span>
+</div>
+</div>
+<!-- Live Re-fix Action Trigger -->
+<div class="p-2 bg-surface-card">
+<button class="w-full py-2 px-3 bg-surface-elevated hover:bg-surface-elevated/80 border border-border-outline rounded-btn text-text-primary font-mono text-xs font-medium flex items-center justify-center gap-2 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined text-[15px] text-primary">my_location</span>
+<span>ACQUIRE LIVE RE-FIX [INTERVAL: 10s]</span>
+</button>
+</div>
+</section>
+<!-- RF PHY MODULATION & BROADCAST TARGET SELECTOR -->
+<section class="grid grid-cols-2 gap-2.5">
+<!-- PHY Selection Card (LE Coded S=8 vs 1M PHY) -->
+<div class="bg-surface-card border border-primary/40 rounded-card p-3 flex flex-col justify-between relative">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-mono text-[9px] text-text-muted uppercase tracking-wider">PHY MODULATION</span>
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+</div>
+<div>
+<div class="flex items-center justify-between">
+<p class="font-sans font-bold text-text-primary text-[13px] leading-tight">LE Coded S=8</p>
+<span class="font-mono text-[9px] text-primary font-semibold uppercase">ACTIVE</span>
+</div>
+<span class="font-mono text-[10px] text-primary block mt-0.5">MAX RANGE (4x SENS)</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-border-outline flex justify-between items-center font-mono text-[9px]">
+<span class="text-text-muted">TX PWR</span>
+<span class="text-text-primary font-medium">+22 dBm ERP</span>
+</div>
+</div>
+<!-- Dispatch Target Card -->
+<div class="bg-surface-card border border-border-outline rounded-card p-3 flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-mono text-[9px] text-text-muted uppercase tracking-wider">BROADCAST TARGET</span>
+<span class="material-symbols-outlined text-primary text-[14px]">public</span>
+</div>
+<div>
+<p class="font-sans font-bold text-text-primary text-[13px] leading-tight">Open Flood Route</p>
+<span class="font-mono text-[10px] text-text-muted block mt-0.5">7-HOP MESH FLOOD</span>
+</div>
+<div class="mt-2.5 pt-2 border-t border-border-outline flex justify-between items-center font-mono text-[9px]">
+<span class="text-text-muted">TTL ENFORCE</span>
+<span class="text-text-primary font-medium">UNRESTRICTED</span>
+</div>
+</div>
+</section>
+<!-- SITUATION / TRIAGE REPORT -->
+<section class="bg-surface-card border border-border-outline rounded-card p-3.5 space-y-2.5">
+<div class="flex justify-between items-center">
+<label class="font-mono text-xs font-semibold uppercase text-text-primary flex items-center gap-1.5 tracking-tight">
+<span class="material-symbols-outlined text-[15px] text-primary">flag</span>
+        TRIAGE CATEGORY SELECTOR
+      </label>
+<span class="font-mono text-[10px] text-text-muted uppercase tracking-tight">PAYLOAD: 32 BYTES</span>
+</div>
+<!-- Triage Category Grid -->
+<div class="grid grid-cols-2 gap-2">
+<!-- Active: Medical Injury -->
+<button class="px-2.5 py-2 rounded-btn border border-distress-accent bg-surface-elevated text-text-primary font-mono text-xs font-semibold flex items-center justify-between active:scale-[0.98] transition-all" type="button">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-distress-accent text-[16px]">medical_services</span>
+          Medical Injury
+        </span>
+<span class="w-1.5 h-1.5 rounded-full bg-distress-accent"></span>
+</button>
+<!-- Hypothermia -->
+<button class="px-2.5 py-2 rounded-btn border border-border-outline bg-surface-card hover:bg-surface-elevated hover:border-text-muted/40 text-text-muted hover:text-text-primary font-mono text-xs flex items-center justify-between active:scale-[0.98] transition-all" type="button">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">device_thermostat</span>
+          Hypothermia
+        </span>
+</button>
+<!-- Lost / Trapped -->
+<button class="px-2.5 py-2 rounded-btn border border-border-outline bg-surface-card hover:bg-surface-elevated hover:border-text-muted/40 text-text-muted hover:text-text-primary font-mono text-xs flex items-center justify-between active:scale-[0.98] transition-all" type="button">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">explore_off</span>
+          Lost / Trapped
+        </span>
+</button>
+<!-- Shelter Failure -->
+<button class="px-2.5 py-2 rounded-btn border border-border-outline bg-surface-card hover:bg-surface-elevated hover:border-text-muted/40 text-text-muted hover:text-text-primary font-mono text-xs flex items-center justify-between active:scale-[0.98] transition-all" type="button">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">cabin</span>
+          Shelter Failure
+        </span>
+</button>
+</div>
+<!-- Situation Report Note Input Preview -->
+<div class="relative pt-1">
+<div class="flex items-center justify-between mb-1">
+<span class="font-mono text-[9px] text-text-muted uppercase tracking-wider">SITUATION REPORT NOTE</span>
+<span class="font-mono text-[9px] text-text-muted">ENCRYPTED LORAFRAME</span>
+</div>
+<input class="w-full bg-surface-elevated border border-border-outline rounded-btn text-text-primary font-mono text-xs px-3 py-2 focus:outline-none focus:border-primary transition-colors" placeholder="Add supplementary triage note..." type="text" value="PBI: Compound fracture lower limb. 2 survivors. No shelter."/>
+</div>
+</section>
+<!-- HERO ACTION TRIGGER: BROADCAST EMERGENCY SOS -->
+<section class="pt-1 pb-1">
+<div class="relative group">
+<button class="w-full relative overflow-hidden bg-distress-accent hover:brightness-105 active:scale-[0.99] transition-all duration-100 p-4 rounded-card border border-distress-accent/80 beacon-active flex flex-col items-center justify-center text-center shadow-lg shadow-distress-accent/20" id="sos-broadcast-btn">
+<div class="flex items-center justify-center gap-2 text-white">
+<span class="material-symbols-outlined text-[24px] animate-pulse" style="font-variation-settings: 'FILL' 1;">emergency_share</span>
+<span class="font-sans text-base font-bold tracking-wider uppercase text-white">HOLD 3S TO BROADCAST SOS</span>
+</div>
+<p class="font-mono text-[10px] text-white/90 mt-1 uppercase tracking-wider">
+          AUTOMATIC REPEAT: EVERY 45 SEC // LE CODED PHY // FLOOD MESH
+        </p>
+<div class="w-full bg-black/40 h-1 mt-3 rounded-full overflow-hidden">
+<div class="bg-white h-full w-0 transition-all duration-300" id="sos-progress"></div>
+</div>
+</button>
+</div>
+</section>
+<!-- PACKET TELEMETRY & ENCRYPTION CRYPTO FOOTER -->
+<section class="bg-surface-card border border-border-outline rounded-card p-3 font-mono text-[11px] space-y-1.5">
+<div class="flex justify-between items-center text-text-muted text-[10px] pb-1.5 border-b border-border-outline">
+<span class="uppercase tracking-wider">PACKET ENCRYPTION &amp; SIGNATURE</span>
+<span class="text-success-accent font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-success-accent"></span>
+        ED25519 VALIDATED
+      </span>
+</div>
+<div class="flex justify-between items-center pt-0.5">
+<span class="text-text-muted uppercase text-[10px]">PUBKEY FINGERPRINT:</span>
+<span class="text-text-primary font-bold tracking-wider">9F:3B:82:1E:A4:70:C9:8F</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-text-muted uppercase text-[10px]">NONCE PACKET ID:</span>
+<span class="text-text-primary">#0842-TX-FLOOD-DISPATCH</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-text-muted uppercase text-[10px]">OFFLINE HOPPING:</span>
+<span class="text-primary font-medium">AUTO-RELAY VIA MESH DAEMON</span>
+</div>
+</section>
+</main>
+<!-- BOTTOM NAVIGATION BAR -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 max-w-lg mx-auto bg-surface-card/95 backdrop-blur-md border-t border-border-outline">
+<!-- Item 1: SOS Beacon (Active) -->
+<button class="flex flex-col items-center justify-center bg-surface-elevated text-distress-accent rounded-btn border border-distress-accent/40 py-1 px-3 active:scale-[0.97] transition-all">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">emergency_share</span>
+<span class="font-mono uppercase text-[9px] mt-0.5 font-bold tracking-wider">SOS Beacon</span>
+</button>
+<!-- Item 2: Mesh Nodes -->
+<button class="flex flex-col items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-elevated rounded-btn py-1 px-3 active:scale-[0.97] transition-all">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+<span class="font-mono uppercase text-[9px] mt-0.5 tracking-wider">Mesh Nodes</span>
+</button>
+<!-- Item 3: Radio PHY -->
+<button class="flex flex-col items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-elevated rounded-btn py-1 px-3 active:scale-[0.97] transition-all">
+<span class="material-symbols-outlined text-[20px]">cell_tower</span>
+<span class="font-mono uppercase text-[9px] mt-0.5 tracking-wider">Radio PHY</span>
+</button>
+<!-- Item 4: Map Log -->
+<button class="flex flex-col items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-elevated rounded-btn py-1 px-3 active:scale-[0.97] transition-all">
+<span class="material-symbols-outlined text-[20px]">share_location</span>
+<span class="font-mono uppercase text-[9px] mt-0.5 tracking-wider">Map Log</span>
+</button>
+</nav>
+<!-- Micro-interactions Script -->
+<script>
+  const sosBtn = document.getElementById('sos-broadcast-btn');
+  const progressBar = document.getElementById('sos-progress');
+  let timer = null;
+  let progress = 0;
+
+  function startHolding(e) {
+    e.preventDefault();
+    progress = 0;
+    progressBar.style.width = '0%';
+    timer = setInterval(() => {
+      progress += 4;
+      progressBar.style.width = `${progress}%`;
+      if (progress >= 100) {
+        clearInterval(timer);
+        triggerBroadcast();
+      }
+    }, 100);
+  }
+
+  function cancelHolding() {
+    if (timer) clearInterval(timer);
+    if (progress < 100) {
+      progressBar.style.width = '0%';
+      progress = 0;
+    }
+  }
+
+  function triggerBroadcast() {
+    sosBtn.classList.remove('bg-distress-accent');
+    sosBtn.classList.add('bg-success-accent');
+    sosBtn.querySelector('span.font-sans').innerText = 'SOS BROADCASTING LIVE';
+    progressBar.style.backgroundColor = '#FFFFFF';
+    progressBar.style.width = '100%';
+  }
+
+  sosBtn.addEventListener('mousedown', startHolding);
+  sosBtn.addEventListener('mouseup', cancelHolding);
+  sosBtn.addEventListener('mouseleave', cancelHolding);
+  sosBtn.addEventListener('touchstart', startHolding, {passive: false});
+  sosBtn.addEventListener('touchend', cancelHolding);
+</script>
+</body></html>

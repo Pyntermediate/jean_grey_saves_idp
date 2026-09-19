@@ -56,7 +56,7 @@ class _SosDispatchScreenState extends State<SosDispatchScreen> {
             Expanded(
               child: Text(
                 '${_selectedMode.label} — broadcasting to nearby mesh nodes',
-                style: GoogleFonts.spaceGrotesk(fontSize: 13, color: Colors.white),
+                style: GoogleFonts.outfit(fontSize: 13, color: Colors.white),
               ),
             ),
           ],
@@ -86,7 +86,7 @@ class _SosDispatchScreenState extends State<SosDispatchScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('flare',
-                            style: GoogleFonts.spaceGrotesk(
+                            style: GoogleFonts.outfit(
                               fontSize: 22,
                               fontWeight: FontWeight.w700,
                               color: _text,
@@ -190,7 +190,7 @@ class _SosDispatchScreenState extends State<SosDispatchScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(c.name,
-                                      style: GoogleFonts.spaceGrotesk(
+                                      style: GoogleFonts.outfit(
                                           color: _text,
                                           fontWeight: FontWeight.w600,
                                           fontSize: 13)),
@@ -198,7 +198,7 @@ class _SosDispatchScreenState extends State<SosDispatchScreen> {
                                     c.isAppInstalled
                                         ? 'E2EE key synced · ${c.phoneNumber}'
                                         : 'No app → SMS fallback',
-                                    style: GoogleFonts.spaceGrotesk(
+                                    style: GoogleFonts.outfit(
                                         color: _muted, fontSize: 11),
                                   ),
                                 ],
@@ -221,10 +221,10 @@ class _SosDispatchScreenState extends State<SosDispatchScreen> {
               TextField(
                 controller: _noteController,
                 maxLines: 3,
-                style: GoogleFonts.spaceGrotesk(color: _text, fontSize: 13),
+                style: GoogleFonts.outfit(color: _text, fontSize: 13),
                 decoration: InputDecoration(
                   hintText: 'Enter status, injuries, or landmarks…',
-                  hintStyle: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 13),
+                  hintStyle: GoogleFonts.outfit(color: _muted, fontSize: 13),
                   filled: true,
                   fillColor: _surface,
                   contentPadding: const EdgeInsets.all(14),
@@ -281,7 +281,7 @@ class _Pill extends StatelessWidget {
           Icon(icon, color: color, size: 13),
           const SizedBox(width: 5),
           Text(label,
-              style: GoogleFonts.spaceGrotesk(
+              style: GoogleFonts.outfit(
                   color: color, fontSize: 11, fontWeight: FontWeight.w700)),
         ],
       ),
@@ -307,13 +307,13 @@ class _SectionLabel extends StatelessWidget {
           ),
           child: Center(
             child: Text(number,
-                style: GoogleFonts.spaceGrotesk(
+                style: GoogleFonts.outfit(
                     color: _blue, fontSize: 11, fontWeight: FontWeight.w700)),
           ),
         ),
         const SizedBox(width: 8),
         Text(title,
-            style: GoogleFonts.spaceGrotesk(
+            style: GoogleFonts.outfit(
                 color: _text, fontSize: 14, fontWeight: FontWeight.w600)),
       ],
     );
@@ -355,7 +355,7 @@ class _DispatchButton extends StatelessWidget {
                 broadcasting
                     ? 'Broadcasting SOS signal…'
                     : 'Dispatch Emergency SOS',
-                style: GoogleFonts.spaceGrotesk(
+                style: GoogleFonts.outfit(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
@@ -405,10 +405,10 @@ class _SelectCard extends StatelessWidget {
             Icon(icon, color: selected ? _blue : _muted, size: 20),
             const SizedBox(height: 8),
             Text(title,
-                style: GoogleFonts.spaceGrotesk(
+                style: GoogleFonts.outfit(
                     color: _text, fontSize: 13, fontWeight: FontWeight.w600)),
             Text(subtitle,
-                style: GoogleFonts.spaceGrotesk(
+                style: GoogleFonts.outfit(
                     color: selected ? _blue : _muted, fontSize: 11)),
           ],
         ),
@@ -461,14 +461,14 @@ class _ModeRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(mode.label,
-                      style: GoogleFonts.spaceGrotesk(
+                      style: GoogleFonts.outfit(
                           color: _text,
                           fontSize: 13,
                           fontWeight: FontWeight.w600)),
                   const SizedBox(height: 1),
                   Text(mode.description,
                       style:
-                          GoogleFonts.spaceGrotesk(color: _muted, fontSize: 11)),
+                          GoogleFonts.outfit(color: _muted, fontSize: 11)),
                 ],
               ),
             ),
@@ -526,7 +526,7 @@ class _PacketStatusCard extends StatelessWidget {
                   size: 16),
               const SizedBox(width: 6),
               Text('Active Packet',
-                  style: GoogleFonts.spaceGrotesk(
+                  style: GoogleFonts.outfit(
                       color: delivered
                           ? const Color(0xFF3FB950)
                           : const Color(0xFFD29922),
@@ -535,7 +535,7 @@ class _PacketStatusCard extends StatelessWidget {
               const Spacer(),
               Text(
                 delivered ? 'DELIVERED' : 'IN TRANSIT',
-                style: GoogleFonts.spaceGrotesk(
+                style: GoogleFonts.outfit(
                     color: delivered
                         ? const Color(0xFF3FB950)
                         : const Color(0xFFD29922),
@@ -547,12 +547,12 @@ class _PacketStatusCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'ID: ${packet.packetId}  ·  Hops: ${packet.hopHistory.length - 1}  ·  TTL: ${packet.ttl}',
-            style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 11),
+            style: GoogleFonts.outfit(color: _muted, fontSize: 11),
           ),
           const SizedBox(height: 4),
           Text(
             packet.hopHistory.join(' → '),
-            style: GoogleFonts.spaceGrotesk(color: _text, fontSize: 11),
+            style: GoogleFonts.outfit(color: _text, fontSize: 11),
           ),
           if (delivered) ...[
             const SizedBox(height: 6),
@@ -560,7 +560,7 @@ class _PacketStatusCard extends StatelessWidget {
               packet.isSmsFallbackTriggered
                   ? 'Gateway -> SMS dispatched'
                   : 'Delivered to recipient via mesh',
-              style: GoogleFonts.spaceGrotesk(
+              style: GoogleFonts.outfit(
                   color: const Color(0xFF3FB950),
                   fontWeight: FontWeight.w600,
                   fontSize: 12),

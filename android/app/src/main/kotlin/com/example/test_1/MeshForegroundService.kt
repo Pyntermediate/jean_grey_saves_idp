@@ -597,6 +597,13 @@ class MeshForegroundService : Service() {
         super.onCreate()
         serviceInstance = this
         createNotificationChannel()
+
+        val prefs = applicationContext.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+        val isMuleEnabled = prefs.getBoolean("flutter.is_mule_enabled", true)
+        if (!isMuleEnabled) {
+            return
+        }
+
         registerBluetoothReceiver()
         registerScreenReceiver()
         registerScanCycleReceiver()
@@ -609,6 +616,25 @@ class MeshForegroundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val prefs = applicationContext.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+        val isMuleEnabled = prefs.getBoolean("flutter.is_mule_enabled", true)
+        if (!isMuleEnabled) {
+            isServiceRunning = false
+            if (serviceInstance == this) {
+                serviceInstance = null
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                stopForeground(STOP_FOREGROUND_REMOVE)
+            } else {
+                @Suppress("DEPRECATION")
+                stopForeground(true)
+            }
+            val nm = getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+            nm?.cancel(1)
+            stopSelf()
+            return START_NOT_STICKY
+        }
+
         isServiceRunning = true
         ensureWakeLock()
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -640,6 +666,12 @@ class MeshForegroundService : Service() {
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
+        val prefs = applicationContext.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+        val isMuleEnabled = prefs.getBoolean("flutter.is_mule_enabled", true)
+        if (!isMuleEnabled) {
+            return
+        }
+
         ensureWakeLock()
         wakeUpAndRescan()
 
@@ -691,15 +723,15 @@ class MeshForegroundService : Service() {
         try {
             val prefs = applicationContext.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
             val isMuleEnabled = prefs.getBoolean("flutter.is_mule_enabled", true)
+            val restartIntent = Intent(applicationContext, MeshForegroundService::class.java)
+            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            } else {
+                PendingIntent.FLAG_ONE_SHOT
+            }
+            val restartPendingIntent = PendingIntent.getService(applicationContext, 999, restartIntent, flags)
+            val am = getSystemService(Context.ALARM_SERVICE) as? AlarmManager
             if (isMuleEnabled) {
-                val restartIntent = Intent(applicationContext, MeshForegroundService::class.java)
-                val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
-                } else {
-                    PendingIntent.FLAG_ONE_SHOT
-                }
-                val restartPendingIntent = PendingIntent.getService(applicationContext, 999, restartIntent, flags)
-                val am = getSystemService(Context.ALARM_SERVICE) as? AlarmManager
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     am?.setExactAndAllowWhileIdle(
                         AlarmManager.ELAPSED_REALTIME_WAKEUP,
@@ -713,6 +745,8 @@ class MeshForegroundService : Service() {
                         restartPendingIntent
                     )
                 }
+            } else {
+                am?.cancel(restartPendingIntent)
             }
         } catch (e: Exception) {}
 

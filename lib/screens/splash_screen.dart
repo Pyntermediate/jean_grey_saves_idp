@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 24),
             Text(
               'flare',
-              style: GoogleFonts.spaceGrotesk(
+              style: GoogleFonts.outfit(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(height: 8),
             Text(
               'Offline Messaging',
-              style: GoogleFonts.spaceGrotesk(
+              style: GoogleFonts.outfit(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: Colors.white54,

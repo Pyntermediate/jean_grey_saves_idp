@@ -18,7 +18,10 @@ class RealEmergencyScreen extends StatefulWidget {
   State<RealEmergencyScreen> createState() => _RealEmergencyScreenState();
 }
 
-class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
+class _RealEmergencyScreenState extends State<RealEmergencyScreen> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final _ble = RealBleService.instance;
   final _gps = RealGpsService.instance;
 
@@ -184,7 +187,7 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                     success
                         ? 'Broadcasting emergency signal to nearby devices'
                         : 'Failed to start broadcast: $errorString',
-                    style: GoogleFonts.spaceGrotesk(fontSize: 12, fontWeight: FontWeight.w600),
+                    style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                 ),
               ],
@@ -198,78 +201,81 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final isLeCodedSupported = _ble.hardwareCapabilities['isLeCodedPhySupported'] == true;
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(18, 10, 18, 90),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ── Header ──────────────────────────────────────────────────────
-              Row(
+        child: Column(
+          children: [
+            Container(
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              alignment: Alignment.centerLeft,
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Emergency SOS',
-                        style: GoogleFonts.spaceGrotesk(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                      
-                    ],
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: (_ble.isEmergencySosBroadcasting ? ThemeManager.accentRed : ThemeManager.accentSlate)
-                          .withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: (_ble.isEmergencySosBroadcasting ? ThemeManager.accentRed : ThemeManager.accentSlate)
-                            .withValues(alpha: 0.3),
-                      ),
+                  Text(
+                    'Emergency SOS',
+                    style: GoogleFonts.outfit(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          _ble.isEmergencySosBroadcasting ? Icons.sensors : Icons.sensors_off,
-                          size: 13,
-                          color: _ble.isEmergencySosBroadcasting ? ThemeManager.accentRed : ThemeManager.accentSlate,
+                  ),
+                  if (_ble.isEmergencySosBroadcasting)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: ThemeManager.accentRed.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: ThemeManager.accentRed.withValues(alpha: 0.35),
                         ),
-                        const SizedBox(width: 4),
-                        Text(
-                          _ble.isEmergencySosBroadcasting ? 'SENDING SIGNAL' : 'IDLE',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: _ble.isEmergencySosBroadcasting ? ThemeManager.accentRed : ThemeManager.accentSlate,
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.sensors,
+                            size: 13,
+                            color: ThemeManager.accentRed,
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 5),
+                          Text(
+                            'SENDING SIGNAL',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: ThemeManager.accentRed,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
-              const SizedBox(height: 24),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(18, 4, 18, 90),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 8),
 
-              // ── Modes ────────────────────────────────────
-              _buildSectionTitle('Modes'),
+                    // ── Modes ────────────────────────────────────
+                    _buildSectionTitle('Modes'),
               const SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
                     child: NeuContainer(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                       isSelected: _selectedPhy == BlePhyMode.leCodedS8,
                       onTap: isLeCodedSupported ? () {
                         setState(() => _selectedPhy = BlePhyMode.leCodedS8);
@@ -277,25 +283,26 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.bluetooth_searching, size: 18, color: ThemeManager.accentBlue),
-                              const Spacer(),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: ThemeManager.accentBlue.withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: const Text(
-                                  'Low Strength',
-                                  style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: ThemeManager.accentBlue),
-                                ),
-                              ),
-                            ],
+                          Text(
+                            'Maximum Range',
+                            style: GoogleFonts.outfit(
+                              fontSize: 14,
+                              fontWeight: _selectedPhy == BlePhyMode.leCodedS8 ? FontWeight.bold : FontWeight.w500,
+                              color: _selectedPhy == BlePhyMode.leCodedS8
+                                  ? (isDark ? Colors.white : theme.colorScheme.onSurface)
+                                  : (isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 6),
-                          Text('Maximum Range', style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+                          const SizedBox(height: 4),
+                          Text(
+                            isLeCodedSupported ? 'Long range PHY' : 'Not supported',
+                            style: GoogleFonts.outfit(
+                              fontSize: 11,
+                              color: isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -303,7 +310,7 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: NeuContainer(
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                       isSelected: _selectedPhy == BlePhyMode.standard1M,
                       onTap: () {
                         setState(() => _selectedPhy = BlePhyMode.standard1M);
@@ -311,25 +318,26 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.bluetooth, size: 18, color: ThemeManager.accentGreen),
-                              const Spacer(),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: ThemeManager.accentGreen.withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: const Text(
-                                  'High Strength',
-                                  style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: ThemeManager.accentGreen),
-                                ),
-                              ),
-                            ],
+                          Text(
+                            'Standard Range',
+                            style: GoogleFonts.outfit(
+                              fontSize: 14,
+                              fontWeight: _selectedPhy == BlePhyMode.standard1M ? FontWeight.bold : FontWeight.w500,
+                              color: _selectedPhy == BlePhyMode.standard1M
+                                  ? (isDark ? Colors.white : theme.colorScheme.onSurface)
+                                  : (isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 6),
-                          Text('Standard Range', style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
+                          const SizedBox(height: 4),
+                          Text(
+                            'Default 1M PHY',
+                            style: GoogleFonts.outfit(
+                              fontSize: 11,
+                              color: isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -338,8 +346,8 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
               ),
               const SizedBox(height: 18),
 
-              // ── Section 2: Privacy / Mode Selection ────────────────────────
-              _buildSectionTitle('2. Who Should Receive This?'),
+              // ── Privacy / Mode Selection ────────────────────────
+              _buildSectionTitle('Who Should Receive This'),
               const SizedBox(height: 8),
               Column(
                 children: const [
@@ -351,7 +359,7 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: NeuContainer(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       isSelected: isSelected,
                       onTap: () => setState(() => _selectedMode = mode),
                       child: Row(
@@ -359,18 +367,19 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                           Icon(
                             isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
                             size: 18,
-                            color: isSelected ? ThemeManager.accentBlue : (isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted),
+                            color: isSelected ? (isDark ? ThemeManager.accentCyan : ThemeManager.accentBlue) : (isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 10),
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  mode.label,
-                                  style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600),
-                                ),
-                              ],
+                            child: Text(
+                              mode.label,
+                              style: GoogleFonts.outfit(
+                                fontSize: 13.5,
+                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                                color: isSelected
+                                    ? (isDark ? Colors.white : theme.colorScheme.onSurface)
+                                    : (isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted),
+                              ),
                             ),
                           ),
                         ],
@@ -383,16 +392,17 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'Select Target Contact:',
-                  style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
                   initialValue: _selectedEmergencyContactId,
+                  dropdownColor: isDark ? ThemeManager.darkSurfaceAlt : ThemeManager.lightSurface,
                   hint: const Text('Choose a contact'),
                   items: ContactVault.contacts.map((c) {
                     return DropdownMenuItem(
                       value: c.id,
-                      child: Text(c.name),
+                      child: Text(c.name, style: GoogleFonts.outfit()),
                     );
                   }).toList(),
                   onChanged: (val) => setState(() => _selectedEmergencyContactId = val),
@@ -406,11 +416,11 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
               
               const SizedBox(height: 16),
 
-              // ── // -- Section 3: Satellite GPS Coordinates ------------------
+              // ── Satellite GPS Coordinates ──────────────────
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildSectionTitle('3. Current Satellite Location'),
+                  _buildSectionTitle('Current Satellite Location'),
                   IconButton(
                     icon: _isLoadingGps
                         ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2))
@@ -441,7 +451,9 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                             _currentLat != null
                                 ? '${_currentLat!.toStringAsFixed(5)}, ${_currentLng!.toStringAsFixed(5)}'
                                 : (_isLoadingGps ? 'Locking GPS...' : 'Location Not Locked Yet'),
-                            style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.bold),
+                            style: _currentLat != null
+                                ? GoogleFonts.jetBrainsMono(fontSize: 13, fontWeight: FontWeight.bold)
+                                : GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -454,7 +466,7 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                       )
                     else
                       IconButton(
-                        icon: Icon(_currentLat != null ? Icons.refresh : Icons.gps_fixed, size: 18, color: ThemeManager.accentBlue),
+                        icon: Icon(_currentLat != null ? Icons.refresh : Icons.gps_fixed, size: 18, color: isDark ? ThemeManager.accentCyan : ThemeManager.accentBlue),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         tooltip: 'Refresh Location',
@@ -463,7 +475,7 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                     if (_currentLat != null) ...[
                       const SizedBox(width: 8),
                       IconButton(
-                        icon: const Icon(Icons.copy, size: 18, color: ThemeManager.accentBlue),
+                        icon: Icon(Icons.copy, size: 18, color: isDark ? ThemeManager.accentCyan : ThemeManager.accentBlue),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         tooltip: 'Copy Coordinates',
@@ -481,8 +493,8 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
               ),
               const SizedBox(height: 18),
 
-              // ── Section 4: Distress Message Note ──────────────────────────
-              _buildSectionTitle('4. Note (Max 27 characters)'),
+              // ── Distress Message Note ──────────────────────────
+              _buildSectionTitle('Note (Max 27 characters)'),
               const SizedBox(height: 6),
               NeuContainer(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -490,7 +502,7 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                   controller: _noteController,
                   maxLines: 2,
                   maxLength: 27,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: GoogleFonts.outfit(
                     fontSize: 13,
                     color: theme.colorScheme.onSurface,
                   ),
@@ -525,18 +537,18 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.black : Colors.white,
-                    border: Border.all(color: ThemeManager.accentRed, width: 3),
+                    color: Colors.transparent,
+                    border: Border.all(color: ThemeManager.accentRed, width: 2.0),
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (_isStartingBroadcast)
-                        Stack(
+                        const Stack(
                           alignment: Alignment.center,
                           children: [
-                            const SizedBox(
+                            SizedBox(
                               width: 22, height: 22,
                               child: CircularProgressIndicator(strokeWidth: 2, color: ThemeManager.accentRed),
                             ),
@@ -554,11 +566,11 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
                         _isStartingBroadcast
                             ? 'STARTING SIGNAL...'
                             : (_ble.isEmergencySosBroadcasting ? 'STOP EMERGENCY BROADCAST' : 'BROADCAST EMERGENCY SIGNAL'),
-                        style: GoogleFonts.spaceGrotesk(
+                        style: GoogleFonts.outfit(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: ThemeManager.accentRed,
-                          letterSpacing: 0.3,
+                          letterSpacing: 0.5,
                         ),
                       ),
                     ],
@@ -570,14 +582,17 @@ class _RealEmergencyScreenState extends State<RealEmergencyScreen> {
           ),
         ),
       ),
-    );
+    ],
+  ),
+),
+);
   }
 
   Widget _buildSectionTitle(String title) {
     final theme = Theme.of(context);
     return Text(
       title,
-      style: GoogleFonts.spaceGrotesk(
+      style: GoogleFonts.outfit(
         fontSize: 13,
         fontWeight: FontWeight.bold,
         color: theme.colorScheme.onSurface,

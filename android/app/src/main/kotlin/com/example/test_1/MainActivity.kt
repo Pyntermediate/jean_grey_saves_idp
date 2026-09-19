@@ -168,6 +168,9 @@ class MainActivity : FlutterActivity() {
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.example.test_1/foreground_service").setMethodCallHandler { call, result ->
             when (call.method) {
                 "startForegroundService" -> {
+                    val prefs = applicationContext.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+                    prefs.edit().putBoolean("flutter.is_mule_enabled", true).commit()
+
                     val serviceIntent = android.content.Intent(this, MeshForegroundService::class.java)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         startForegroundService(serviceIntent)
@@ -177,6 +180,20 @@ class MainActivity : FlutterActivity() {
                     result.success(null)
                 }
                 "stopForegroundService" -> {
+                    val prefs = applicationContext.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+                    prefs.edit().putBoolean("flutter.is_mule_enabled", false).commit()
+
+                    MeshForegroundService.serviceInstance?.let { s ->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            s.stopForeground(android.app.Service.STOP_FOREGROUND_REMOVE)
+                        } else {
+                            @Suppress("DEPRECATION")
+                            s.stopForeground(true)
+                        }
+                    }
+                    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as? android.app.NotificationManager
+                    notificationManager?.cancel(1)
+
                     val serviceIntent = android.content.Intent(this, MeshForegroundService::class.java)
                     stopService(serviceIntent)
                     result.success(null)

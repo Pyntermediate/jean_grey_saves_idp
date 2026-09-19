@@ -54,7 +54,7 @@ class _IncomingAlertsScreenState extends State<IncomingAlertsScreen> {
       backgroundColor: _bg,
       appBar: AppBar(
         title: Text('Alert Receiver',
-            style: GoogleFonts.spaceGrotesk(
+            style: GoogleFonts.outfit(
                 fontWeight: FontWeight.w700, fontSize: 17, color: _text)),
         backgroundColor: _bg,
         elevation: 0,
@@ -78,11 +78,11 @@ class _IncomingAlertsScreenState extends State<IncomingAlertsScreen> {
                   const Icon(Icons.inbox_outlined, size: 48, color: _muted),
                   const SizedBox(height: 14),
                   Text('No active broadcasts',
-                      style: GoogleFonts.spaceGrotesk(color: _text, fontSize: 15,
+                      style: GoogleFonts.outfit(color: _text, fontSize: 15,
                           fontWeight: FontWeight.w600)),
                   const SizedBox(height: 4),
                   Text('Dispatch an SOS from the first tab to see alerts here.',
-                      style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 12)),
+                      style: GoogleFonts.outfit(color: _muted, fontSize: 12)),
                 ],
               ),
             )
@@ -147,7 +147,7 @@ class _PersonBCard extends StatelessWidget {
                     color: delivered ? _green : _amber, size: 15),
                 const SizedBox(width: 7),
                 Text('PERSON B — RECEIVER VIEW',
-                    style: GoogleFonts.spaceGrotesk(
+                    style: GoogleFonts.outfit(
                         color: delivered ? _green : _amber,
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
@@ -162,7 +162,7 @@ class _PersonBCard extends StatelessWidget {
                   ),
                   child: Text(
                     delivered ? 'DELIVERED' : 'IN TRANSIT',
-                    style: GoogleFonts.spaceGrotesk(
+                    style: GoogleFonts.outfit(
                         color: delivered ? _green : _amber,
                         fontSize: 10,
                         fontWeight: FontWeight.w700),
@@ -177,7 +177,7 @@ class _PersonBCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(packet.cleartextHeader,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: GoogleFonts.outfit(
                         color: _text,
                         fontSize: 12,
                         fontWeight: FontWeight.w500)),
@@ -194,12 +194,12 @@ class _PersonBCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(packet.mode.label,
-                          style: GoogleFonts.spaceGrotesk(
+                          style: GoogleFonts.outfit(
                               color: _muted, fontSize: 10,
                               fontWeight: FontWeight.w600)),
                       const SizedBox(height: 4),
                       Text(decryptedNote,
-                          style: GoogleFonts.spaceGrotesk(
+                          style: GoogleFonts.outfit(
                               color: _green,
                               fontSize: 13,
                               fontWeight: FontWeight.w600)),
@@ -214,7 +214,7 @@ class _PersonBCard extends StatelessWidget {
                           color: _amber, size: 13),
                       const SizedBox(width: 6),
                       Text('Dispatched via Gateway SMS',
-                          style: GoogleFonts.spaceGrotesk(
+                          style: GoogleFonts.outfit(
                               color: _amber, fontSize: 11)),
                     ],
                   ),
@@ -263,7 +263,7 @@ class _HikerCard extends StatelessWidget {
                   isPublic
                       ? 'THIRD-PARTY HIKER — UNIVERSAL SOS ALARM'
                       : 'THIRD-PARTY HIKER — SILENT MULE RELAY',
-                  style: GoogleFonts.spaceGrotesk(
+                  style: GoogleFonts.outfit(
                       color: isPublic ? _red : _muted,
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
@@ -305,7 +305,7 @@ class _HikerCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Distress signal detected nearby',
-                          style: GoogleFonts.spaceGrotesk(
+                          style: GoogleFonts.outfit(
                               color: _text,
                               fontSize: 13,
                               fontWeight: FontWeight.w600)),
@@ -313,10 +313,10 @@ class _HikerCard extends StatelessWidget {
                       Text(
                           'GPS: ${packet.lat.toStringAsFixed(4)}, ${packet.lng.toStringAsFixed(4)}',
                           style:
-                              GoogleFonts.spaceGrotesk(color: _muted, fontSize: 11)),
+                              GoogleFonts.outfit(color: _muted, fontSize: 11)),
                       const SizedBox(height: 2),
                       Text('HIGH PRIORITY ALARM ACTIVE',
-                          style: GoogleFonts.spaceGrotesk(
+                          style: GoogleFonts.outfit(
                               color: _red,
                               fontSize: 11,
                               fontWeight: FontWeight.w700)),
@@ -328,7 +328,7 @@ class _HikerCard extends StatelessWidget {
           ] else ...[
             Text(
               'Silent relay active — carrying encrypted payload for intended recipient only.',
-              style: GoogleFonts.spaceGrotesk(color: _muted, fontSize: 12),
+              style: GoogleFonts.outfit(color: _muted, fontSize: 12),
             ),
           ],
         ],

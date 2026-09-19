@@ -1,0 +1,313 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Flare Messages - Aurora Glass Edition</title>
+<!-- Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            void: '#05090e',
+            canvas: '#070d14',
+            surface: 'rgba(11, 21, 34, 0.65)',
+            aurora: {
+              cyan: '#06b6d4',
+              neon: '#22d3ee',
+              teal: '#14b8a6',
+              blue: '#2563eb',
+              sky: '#38bdf8'
+            }
+          },
+          fontFamily: {
+            sans: ['Space Grotesk', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace']
+          },
+          boxShadow: {
+            'glow-cyan': '0 0 20px -3px rgba(6, 182, 212, 0.35)',
+            'glow-cyan-sm': '0 0 10px -2px rgba(34, 211, 238, 0.3)',
+            'glow-blue': '0 0 24px -4px rgba(37, 99, 235, 0.4)',
+            'glow-sos': '0 0 16px -2px rgba(239, 68, 68, 0.4)'
+          }
+        }
+      }
+    }
+  </script>
+<!-- Google Fonts: Space Grotesk & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style data-purpose="custom-scroll-and-effects">
+    /* Prevent default scrollbars for sleek mobile presentation */
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    * {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Radial ambient gradients mimicking physical glass refraction */
+    .aurora-ambient-radial {
+      background: radial-gradient(circle at 15% 10%, rgba(6, 182, 212, 0.14) 0%, transparent 45%),
+                  radial-gradient(circle at 85% 60%, rgba(37, 99, 235, 0.12) 0%, transparent 50%),
+                  radial-gradient(circle at 50% 100%, rgba(20, 184, 166, 0.08) 0%, transparent 45%);
+    }
+
+    /* Subtle hairline border sheen */
+    .glass-border-sheen {
+      border: 1px solid rgba(34, 211, 238, 0.18);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(6, 182, 212, 0.02) 100%);
+    }
+
+    .glass-pill-active {
+      border: 1px solid rgba(34, 211, 238, 0.45);
+      background: rgba(6, 182, 212, 0.12);
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-void text-slate-100 antialiased font-sans flex justify-center items-center min-h-screen p-0 sm:p-4 selection:bg-cyan-500/30">
+<!-- Mobile Frame Container (iPhone 15 / Galaxy Modern Viewport: 390px) -->
+<main class="relative w-full max-w-[400px] h-[100dvh] sm:h-[844px] bg-[#070d14] flex flex-col justify-between overflow-hidden sm:rounded-[44px] border border-cyan-950/40 shadow-2xl shadow-cyan-950/30">
+<!-- Ambient Aurora Glow Background Layer -->
+<div aria-hidden="true" class="absolute inset-0 aurora-ambient-radial pointer-events-none"></div>
+<div aria-hidden="true" class="absolute -top-24 -left-20 w-64 h-64 bg-cyan-950/20 rounded-full blur-3xl pointer-events-none"></div>
+<div aria-hidden="true" class="absolute top-1/2 -right-28 w-72 h-72 bg-blue-900/10 rounded-full blur-3xl pointer-events-none"></div>
+<!-- Scrollable Main Content -->
+<div class="relative z-10 flex-1 overflow-y-auto px-5 pt-3 pb-24 space-y-5">
+<!-- BEGIN: TopStatusBar -->
+<!-- iOS / Modern Status Bar Indicator -->
+<div class="flex justify-between items-center text-[11px] text-slate-400 font-mono tracking-wider pt-1 pb-1" data-purpose="os-status-bar">
+<span class="font-bold tracking-tight text-slate-200">11:44</span>
+<div class="flex items-center space-x-1.5 text-slate-300">
+<!-- 5G Badge -->
+<span class="text-[10px] font-bold px-1 py-0.5 rounded bg-white/5 border border-white/10">5G</span>
+<!-- Signal Bar -->
+<svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+<path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.22.28-.05.6.31.6h14.68c.36 0 .53-.32.31-.6l-.62-1.79C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z" opacity="0.2"></path>
+<path d="M18.36 17.64c1.62-1.62 2.64-3.86 2.64-6.32 0-4.97-4.03-9-9-9S3 6.31 3 11.32c0 2.46 1.02 4.7 2.64 6.32"></path>
+<circle cx="12" cy="12" r="3"></circle>
+</svg>
+<!-- Battery Pill -->
+<div class="flex items-center space-x-1 bg-cyan-950/40 border border-cyan-500/30 rounded-full px-1.5 py-0.5 text-[10px] font-mono text-cyan-300">
+<span class="">55</span>
+</div>
+</div>
+</div>
+<!-- END: TopStatusBar -->
+<!-- BEGIN: BrandHeader -->
+<!-- Brand & Settings Bar -->
+<header class="flex items-center justify-between pt-1" data-purpose="app-header">
+<!-- Logo with Aurora Glow -->
+<div class="flex items-center space-x-2.5">
+<!-- Flame Logo Icon (Aurora Glow Edition) -->
+<div class="relative w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-500/40 to-blue-600/40 flex items-center justify-center p-[1px] border border-cyan-500/20"><div class="w-full h-full bg-[#08131d] rounded-[11px] flex items-center justify-center"><svg class="w-4 h-4 text-cyan-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.25c.34 0 .66.19.82.5 1.13 2.15 3.03 4.8 4.68 7.37 1.8 2.8 2.5 4.83 2.5 6.63 0 4.42-3.58 7.25-8 7.25s-8-2.83-8-7.25c0-1.8.7-3.83 2.5-6.63 1.65-2.57 3.55-5.22 4.68-7.37.16-.31.48-.5.82-.5zm0 8.75c-1.38 0-2.5 1.12-2.5 2.5 0 1.25.75 2.22 1.83 2.44-.09-.4-.14-.82-.14-1.25 0-1.93 1.57-3.5 3.5-3.5.43 0 .85.05 1.25.14-.22-1.08-1.19-1.83-2.44-1.83z"></path></svg></div></div>
+<span class="text-xl font-bold tracking-tight text-white font-sans">flare</span>
+</div>
+<!-- Gear / Settings Icon -->
+<button aria-label="System Settings" class="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/10 hover:border-cyan-500/40 flex items-center justify-center text-slate-300 hover:text-cyan-300 transition-all active:scale-95 backdrop-blur-md">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round"></path>
+<circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round"></circle>
+</svg>
+</button>
+</header>
+<!-- END: BrandHeader -->
+<!-- BEGIN: TitleAndStatusSection -->
+<section class="flex items-center justify-between pt-1" data-purpose="screen-title">
+<h1 class="text-3xl font-bold tracking-tight text-white font-sans">Messages</h1>
+<!-- Live Peer / Mesh Status Pill -->
+<div class="flex items-center space-x-2 px-2.5 py-1 rounded-full bg-cyan-950/30 border border-cyan-500/20 text-xs text-cyan-400/90 font-mono"><span class="relative flex h-2 w-2"><span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span></span><span class="font-semibold uppercase tracking-wider text-[10px]">Mesh Active</span></div>
+</section>
+<!-- END: TitleAndStatusSection -->
+<!-- BEGIN: SearchBar -->
+<div class="relative" data-purpose="search-box">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+<!-- Search Icon -->
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<input class="w-full bg-[#0d1824]/80 text-sm text-slate-200 placeholder-slate-500 rounded-2xl pl-10 pr-4 py-3 border border-white/10 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 focus:outline-none transition-all shadow-inner backdrop-blur-md" placeholder="Search contacts..." type="text">
+</div>
+<!-- END: SearchBar -->
+<!-- Thin subtle divider matching the original screenshot structure -->
+<div class="h-px w-full bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent"></div>
+<!-- BEGIN: BroadcastCard -->
+<!-- Broadcast to All Nearby Card (Original: You: it is just not happening) -->
+<section data-purpose="broadcast-channel-card">
+<article class="group relative rounded-2xl p-3.5 glass-border-sheen hover:border-cyan-400/40 transition-all duration-200 backdrop-blur-xl cursor-pointer active:scale-[0.99] shadow-lg shadow-black/40">
+<div class="flex items-start space-x-3.5">
+<!-- Broadcast Antenna Radial Glowing Avatar -->
+<div class="relative shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-900/30 to-cyan-950/40 border border-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:border-cyan-500/40 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9.348 14.652a3.75 3.75 0 010-5.304m5.304 0a3.75 3.75 0 010 5.304m-7.424 2.12a6.75 6.75 0 010-9.544m9.544 0a6.75 6.75 0 010 9.544M12 12h.01" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="absolute -top-1 -right-1 flex h-2 w-2"><span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-400"></span></span></div>
+<!-- Content Details -->
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h2 class="text-[15px] font-semibold text-white tracking-tight group-hover:text-cyan-300 transition-colors">
+                  Broadcast to All Nearby
+                </h2>
+<span class="text-[11px] font-mono text-cyan-400/80 shrink-0">Now</span>
+</div>
+<!-- Message preview from original screenshot -->
+<p class="text-[13px] text-slate-300 truncate mt-0.5 font-normal">
+<span class="text-cyan-400/90 font-medium">You:</span> it is just not happening
+              </p>
+<!-- Sub-pills: RF Status / Omnidirectional tag -->
+<div class="flex items-center space-x-2 mt-2">
+<span class="inline-flex items-center space-x-1 text-[10px] font-mono text-cyan-300/80 bg-cyan-950/40 border border-cyan-500/20 px-2 py-0.5 rounded-full">
+<span class="">OMNI-MESH</span>
+<span class="text-slate-500">•</span>
+<span class="">14 PEERS</span>
+</span>
+</div>
+</div>
+</div>
+</article>
+</section>
+<!-- END: BroadcastCard -->
+<!-- BEGIN: ContactsSection -->
+<section class="space-y-3 pt-2" data-purpose="contacts-list">
+<!-- Section Subtitle -->
+<div class="flex items-center justify-between px-1">
+<span class="text-[11px] font-bold tracking-widest text-slate-400 uppercase font-mono">Contacts</span>
+<span class="text-[11px] font-mono text-slate-500">2 NODES IN RANGE</span>
+</div>
+<!-- Contact Item 1: Tester (Original Screenshot data) -->
+<article class="group relative rounded-2xl p-3.5 bg-white/[0.02] border border-white/[0.08] hover:border-cyan-500/30 hover:bg-cyan-950/20 transition-all duration-200 backdrop-blur-md cursor-pointer active:scale-[0.99]">
+<div class="flex items-start space-x-3.5">
+<!-- Contact Avatar with Green Accent & Glow -->
+<div class="relative shrink-0 w-12 h-12 rounded-2xl bg-emerald-950/30 border border-emerald-500/20 flex items-center justify-center text-emerald-400"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" fill-rule="evenodd"></path></svg><span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[#070d14]"></span></div>
+<!-- Message Info -->
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h3 class="text-[15px] font-semibold text-white tracking-tight group-hover:text-emerald-300 transition-colors">
+                  Tester
+                </h3>
+<span class="text-[11px] font-mono text-slate-400 shrink-0">02:44</span>
+</div>
+<!-- Message preview from original screenshot -->
+<p class="text-[13px] text-slate-300 truncate mt-0.5">
+<span class="text-slate-400">Tester:</span> well try shi out
+              </p>
+<!-- Node Info Pills -->
+<div class="flex items-center space-x-2 mt-2 text-[10px] font-mono">
+<span class="text-emerald-400 bg-emerald-950/30 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                  RADIO READY
+                </span>
+<span class="text-slate-400">Direct LoRa-BLE</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Contact Item 2: Mridul (from physical devices offline chat screen) -->
+<article class="group relative rounded-2xl p-3.5 bg-white/[0.02] border border-white/[0.08] hover:border-cyan-500/30 hover:bg-cyan-950/20 transition-all duration-200 backdrop-blur-md cursor-pointer active:scale-[0.99]">
+<div class="flex items-start space-x-3.5">
+<!-- Contact Avatar with Cyan Accent & Glow -->
+<div class="relative shrink-0 w-12 h-12 rounded-2xl bg-cyan-950/30 border border-cyan-500/20 flex items-center justify-center text-cyan-400"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" fill-rule="evenodd"></path></svg><span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-cyan-400 ring-2 ring-[#070d14]"></span></div>
+<!-- Message Info -->
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h3 class="text-[15px] font-semibold text-white tracking-tight group-hover:text-cyan-300 transition-colors">
+                  Mridul
+                </h3>
+<span class="text-[11px] font-mono text-slate-400 shrink-0">02:46</span>
+</div>
+<!-- Message preview matching physical device test log -->
+<p class="text-[13px] text-slate-300 truncate mt-0.5">
+<span class="text-slate-400">Mridul:</span> how is shi bro
+              </p>
+<!-- Node Info Pills -->
+<div class="flex items-center space-x-2 mt-2 text-[10px] font-mono">
+<span class="text-cyan-300 bg-cyan-950/30 border border-cyan-500/20 px-2 py-0.5 rounded-full">
+                  MESH RELAY
+                </span>
+<span class="text-slate-400">Encrypted AES-256</span>
+</div>
+</div>
+</div>
+</article>
+</section>
+<!-- END: ContactsSection -->
+<!-- BEGIN: MeshInfoBanner -->
+<!-- Offline radio status callout -->
+<div class="mt-4 p-3 rounded-2xl bg-cyan-950/20 border border-cyan-500/20 backdrop-blur-md flex items-center justify-between" data-purpose="mesh-network-banner">
+<div class="flex items-center space-x-2.5">
+<div class="w-2 h-2 rounded-full bg-cyan-400"></div>
+<span class="text-xs text-slate-300 font-medium">Off-Grid P2P Mode Active</span>
+</div>
+<span class="text-[11px] font-mono text-cyan-400">915 MHz LoRa</span>
+</div>
+<!-- END: MeshInfoBanner -->
+</div>
+<!-- BEGIN: BottomNavigationBar -->
+<!-- Aurora Glass Floating Dock Navigation Bar (Matches original bottom 4 tabs) -->
+<nav class="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-[#05090e] via-[#070d14]/90 to-transparent backdrop-blur-xl border-t border-cyan-900/30 z-20" data-purpose="floating-tab-bar">
+<div class="bg-[#0b1522]/90 border border-cyan-500/20 rounded-3xl p-1.5 flex items-center justify-around shadow-2xl shadow-cyan-950/50">
+<!-- Tab 1: Messages (Active) -->
+<button class="relative flex items-center space-x-1.5 py-2 px-3.5 rounded-2xl glass-pill-active text-cyan-300 font-semibold text-xs transition-all active:scale-95">
+<!-- Chat Bubble / Messages Icon -->
+<svg class="w-4 h-4 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span class="tracking-wide">Messages</span>
+</button>
+<!-- Tab 2: SOS (Distress Flare) -->
+<button class="flex flex-col items-center py-2 px-3 rounded-2xl text-slate-400 hover:text-red-400 transition-colors group">
+<div class="relative">
+<svg class="w-5 h-5 group-hover:text-red-400 transition-colors" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="text-[9px] font-bold tracking-widest text-slate-400 group-hover:text-red-400 mt-0.5">SOS</span>
+</button>
+<!-- Tab 3: Mesh Nodes / Network -->
+<button class="flex flex-col items-center py-2 px-3 rounded-2xl text-slate-400 hover:text-cyan-300 transition-colors group">
+<svg class="w-5 h-5 group-hover:text-cyan-300 transition-colors" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="3"></circle>
+<circle cx="5" cy="7" r="2"></circle>
+<circle cx="19" cy="7" r="2"></circle>
+<circle cx="6" cy="17" r="2"></circle>
+<circle cx="18" cy="17" r="2"></circle>
+<path d="M7 8l3 3M17 8l-3 3M8 16l3-2M16 16l-3-2"></path>
+</svg>
+<span class="text-[9px] font-bold tracking-wider text-slate-400 group-hover:text-cyan-300 mt-0.5">Mesh</span>
+</button>
+<!-- Tab 4: Contacts / Key ID Vault -->
+<button class="flex flex-col items-center py-2 px-3 rounded-2xl text-slate-400 hover:text-cyan-300 transition-colors group">
+<svg class="w-5 h-5 group-hover:text-cyan-300 transition-colors" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<rect height="16" rx="3" width="18" x="3" y="4"></rect>
+<circle cx="9" cy="10" r="2.5"></circle>
+<path d="M6 16c0-1.5 1.5-2.5 3-2.5s3 1 3 2.5"></path>
+<line x1="14" x2="18" y1="9" y2="9"></line>
+<line x1="14" x2="17" y1="13" y2="13"></line>
+</svg>
+<span class="text-[9px] font-bold tracking-wider text-slate-400 group-hover:text-cyan-300 mt-0.5">Vault</span>
+</button>
+</div>
+<!-- Android / iOS Home Indicator -->
+<div class="mt-2.5 flex justify-center">
+<div class="w-32 h-1 bg-white/20 rounded-full"></div>
+</div>
+</nav>
+<!-- END: BottomNavigationBar -->
+</main>
+<!-- Interactive script for tap feedback -->
+<script data-purpose="micro-interactions">
+    document.addEventListener('DOMContentLoaded', () => {
+      // Tap feedback on clickable chat and broadcast cards
+      const cards = document.querySelectorAll('article');
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          card.classList.add('ring-1', 'ring-cyan-400');
+          setTimeout(() => {
+            card.classList.remove('ring-1', 'ring-cyan-400');
+          }, 250);
+        });
+      });
+    });
+  </script>
+
+
+</body></html>

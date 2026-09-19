@@ -141,7 +141,7 @@ class UpdateChecker {
                       children: [
                         Text(
                           'Update Available',
-                          style: GoogleFonts.spaceGrotesk(
+                          style: GoogleFonts.outfit(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: theme.colorScheme.onSurface,
@@ -149,7 +149,7 @@ class UpdateChecker {
                         ),
                         Text(
                           'v$currentVersion  →  v$latestVersion',
-                          style: TextStyle(
+                          style: GoogleFonts.jetBrainsMono(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: ThemeManager.accentBlue,
@@ -166,7 +166,7 @@ class UpdateChecker {
               if (releaseNotes.isNotEmpty) ...[
                 Text(
                   'What\'s New',
-                  style: GoogleFonts.spaceGrotesk(
+                  style: GoogleFonts.outfit(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                     color: isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted,
@@ -175,7 +175,7 @@ class UpdateChecker {
                 const SizedBox(height: 4),
                 Text(
                   releaseNotes,
-                  style: GoogleFonts.spaceGrotesk(
+                  style: GoogleFonts.outfit(
                     fontSize: 13,
                     color: theme.colorScheme.onSurface,
                   ),
@@ -196,7 +196,7 @@ class UpdateChecker {
                       ),
                       child: Text(
                         'Later',
-                        style: GoogleFonts.spaceGrotesk(
+                        style: GoogleFonts.outfit(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted,
@@ -218,7 +218,7 @@ class UpdateChecker {
                       icon: const Icon(Icons.download_rounded, size: 18),
                       label: Text(
                         'Download Update',
-                        style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.bold),
+                        style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ThemeManager.accentBlue,

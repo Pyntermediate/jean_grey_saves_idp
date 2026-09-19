@@ -124,11 +124,16 @@ class ChatMessageItem {
 class RealChatScreen extends StatefulWidget {
   const RealChatScreen({super.key});
 
+  static final ValueNotifier<bool> isChatOpenNotifier = ValueNotifier<bool>(false);
+
   @override
   State<RealChatScreen> createState() => _RealChatScreenState();
 }
 
-class _RealChatScreenState extends State<RealChatScreen> {
+class _RealChatScreenState extends State<RealChatScreen> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final _ble = RealBleService.instance;
   final TextEditingController _msgController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -301,7 +306,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(notificationText, style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.w600)),
+          content: Text(notificationText, style: GoogleFonts.outfit(fontWeight: FontWeight.w600)),
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 3),
         ),
@@ -333,7 +338,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
         final isDark = Theme.of(ctx).brightness == Brightness.dark;
         return AlertDialog(
           backgroundColor: Theme.of(ctx).cardColor,
-          title: Text('Clear chat history?', style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold, fontSize: 18)),
+          title: Text('Clear chat history?', style: GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 18)),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
@@ -387,7 +392,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          title: Text('Save as Contact', style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold)),
+          title: Text('Save as Contact', style: GoogleFonts.outfit(fontWeight: FontWeight.bold)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1262,7 +1267,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
                   success
                       ? 'Downloaded "${msg.fileName}" to your device!'
                       : 'Saving "${msg.fileName}" to downloads…',
-                  style: GoogleFonts.spaceGrotesk(fontSize: 12, fontWeight: FontWeight.w600),
+                  style: GoogleFonts.outfit(fontSize: 12, fontWeight: FontWeight.w600),
                 ),
               ),
             ],
@@ -1298,7 +1303,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
                     Expanded(
                       child: Text(
                         msg.fileName!,
-                        style: GoogleFonts.spaceGrotesk(
+                        style: GoogleFonts.outfit(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: theme.colorScheme.onSurface,
@@ -1345,7 +1350,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
                         const SizedBox(height: 8),
                         Text(
                           msg.fileName!,
-                          style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                         Text(
@@ -1393,6 +1398,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return PopScope(
       canPop: !_isChatOpen,
       onPopInvokedWithResult: (didPop, _) {
@@ -1402,6 +1408,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
           _loadLastMessages();
           setState(() {
             _isChatOpen = false;
+            RealChatScreen.isChatOpenNotifier.value = false;
           });
         }
       },
@@ -1411,6 +1418,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
 
   Widget _buildContactsList() {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     
     final contacts = ContactVault.contacts.where((c) {
       if (_contactSearchQuery.isEmpty) return true;
@@ -1418,44 +1426,61 @@ class _RealChatScreenState extends State<RealChatScreen> {
     }).toList();
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           children: [
+            Container(
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Messages',
+                style: GoogleFonts.outfit(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
+            ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Messages',
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
+              padding: const EdgeInsets.fromLTRB(18, 4, 18, 12),
+              child: TextField(
                     onChanged: (val) {
                       setState(() => _contactSearchQuery = val);
                     },
-                    style: GoogleFonts.spaceGrotesk(fontSize: 14),
+                    style: GoogleFonts.outfit(fontSize: 14),
                     decoration: InputDecoration(
                       hintText: 'Search contacts...',
                       prefixIcon: const Icon(Icons.search, size: 20),
                       filled: true,
-                      fillColor: theme.colorScheme.surfaceContainerHighest,
+                      fillColor: isDark ? const Color(0xFF0D1929) : theme.colorScheme.surfaceContainerHighest,
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide(
+                          color: isDark ? const Color(0x3300F2FE) : theme.colorScheme.outline,
+                          width: 1,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide(
+                          color: isDark ? const Color(0x2800F2FE) : theme.colorScheme.outline,
+                          width: 1,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        borderSide: BorderSide(
+                          color: isDark ? ThemeManager.accentCyan : theme.colorScheme.primary,
+                          width: 1.5,
+                        ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-            const Divider(height: 1),
+                ),
+            Divider(height: 1, color: isDark ? const Color(0x2800F2FE) : theme.dividerColor),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(vertical: 8),
@@ -1465,7 +1490,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
                       id: 'broadcast',
                       name: 'Broadcast to All Nearby',
                       icon: Icons.cell_tower,
-                      color: ThemeManager.accentBlue,
+                      color: isDark ? ThemeManager.accentCyan : ThemeManager.accentBlue,
                     ),
                   if (_unknownPeerIds.isNotEmpty && _contactSearchQuery.isEmpty) ...[
                     const Padding(
@@ -1535,6 +1560,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
     VoidCallback? onDelete,
   }) {
     final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
     final lastMsg = _lastMessages[id] ?? 'Tap to chat';
     final unreadCount = _unreadCounts[id] ?? 0;
     final hasUnread = unreadCount > 0;
@@ -1543,21 +1569,29 @@ class _RealChatScreenState extends State<RealChatScreen> {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: theme.colorScheme.outline.withValues(alpha: 0.2),
+            color: isDark ? const Color(0x1800F2FE) : theme.colorScheme.outline.withValues(alpha: 0.2),
             width: 0.5,
           ),
         ),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        leading: CircleAvatar(
-          radius: 24,
-          backgroundColor: color.withValues(alpha: 0.15),
-          child: Icon(icon, color: color, size: 24),
+        leading: Container(
+          width: 46,
+          height: 46,
+          decoration: BoxDecoration(
+            color: color.withValues(alpha: 0.15),
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: color.withValues(alpha: 0.35),
+              width: 1,
+            ),
+          ),
+          child: Icon(icon, color: color, size: 22),
         ),
         title: Text(
           name, 
-          style: GoogleFonts.spaceGrotesk(
+          style: GoogleFonts.outfit(
             fontWeight: hasUnread ? FontWeight.w700 : FontWeight.bold, 
             fontSize: 16,
           ),
@@ -1602,14 +1636,14 @@ class _RealChatScreenState extends State<RealChatScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: ThemeManager.accentBlue,
+                  color: isDark ? ThemeManager.accentCyan : ThemeManager.accentBlue,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 constraints: const BoxConstraints(minWidth: 20, minHeight: 20),
                 child: Text(
                   '$unreadCount',
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: isDark ? Colors.black : Colors.white,
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
                   ),
@@ -1635,6 +1669,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
           setState(() {
             _selectedContactId = id;
             _isChatOpen = true;
+            RealChatScreen.isChatOpenNotifier.value = true;
           });
           _loadMessages();
         },
@@ -1730,6 +1765,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         body: SafeArea(
         child: Column(
           children: [
@@ -1743,7 +1779,10 @@ class _RealChatScreenState extends State<RealChatScreen> {
                     onPressed: () {
                       _markConversationAsSeen(_selectedContactId);
                       _loadLastMessages();
-                      setState(() => _isChatOpen = false);
+                      setState(() {
+                        _isChatOpen = false;
+                        RealChatScreen.isChatOpenNotifier.value = false;
+                      });
                     },
                   ),
                   Expanded(
@@ -1752,7 +1791,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
                       children: [
                         Text(
                           chatTitle,
-                          style: GoogleFonts.spaceGrotesk(
+                          style: GoogleFonts.outfit(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: theme.colorScheme.onSurface,
@@ -1777,7 +1816,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
                                   ),
                                 Text(
                                   presenceSubtitle,
-                                  style: GoogleFonts.spaceGrotesk(
+                                  style: GoogleFonts.jetBrainsMono(
                                     fontSize: 11,
                                     fontWeight: isContactOnline ? FontWeight.w600 : FontWeight.normal,
                                     color: presenceColor,
@@ -1801,37 +1840,6 @@ class _RealChatScreenState extends State<RealChatScreen> {
                     color: ThemeManager.accentRed.withValues(alpha: 0.8),
                     tooltip: 'Clear Chat History',
                     onPressed: _clearChatHistory,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: (_ble.isScanning ? ThemeManager.accentGreen : ThemeManager.accentSlate)
-                          .withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: (_ble.isScanning ? ThemeManager.accentGreen : ThemeManager.accentSlate)
-                            .withValues(alpha: 0.3),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.bluetooth,
-                          size: 13,
-                          color: _ble.isScanning ? ThemeManager.accentGreen : ThemeManager.accentSlate,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          _ble.isScanning ? 'READY' : 'OFFLINE',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                            color: _ble.isScanning ? ThemeManager.accentGreen : ThemeManager.accentSlate,
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),
@@ -1893,7 +1901,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
                       const Icon(Icons.wifi, size: 16, color: ThemeManager.accentBlue),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Text(msg, style: GoogleFonts.spaceGrotesk(fontSize: 12, color: ThemeManager.accentBlue)),
+                        child: Text(msg, style: GoogleFonts.outfit(fontSize: 12, color: ThemeManager.accentBlue)),
                       ),
                       IconButton(
                         icon: const Icon(Icons.close, size: 16, color: ThemeManager.accentBlue),
@@ -1926,8 +1934,8 @@ class _RealChatScreenState extends State<RealChatScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Receiving...', style: GoogleFonts.spaceGrotesk(fontSize: 11)),
-                          Text('$mbps MB / $total MB', style: GoogleFonts.spaceGrotesk(fontSize: 11, fontWeight: FontWeight.bold, color: ThemeManager.accentBlue)),
+                          Text('Receiving...', style: GoogleFonts.outfit(fontSize: 11)),
+                          Text('$mbps MB / $total MB', style: GoogleFonts.jetBrainsMono(fontSize: 11, fontWeight: FontWeight.bold, color: ThemeManager.accentBlue)),
                         ],
                       ),
                       const SizedBox(height: 6),
@@ -1964,8 +1972,8 @@ class _RealChatScreenState extends State<RealChatScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Sending...', style: GoogleFonts.spaceGrotesk(fontSize: 11)),
-                          Text('$mbps MB / $total MB', style: GoogleFonts.spaceGrotesk(fontSize: 11, fontWeight: FontWeight.bold, color: ThemeManager.accentBlue)),
+                          Text('Sending...', style: GoogleFonts.outfit(fontSize: 11)),
+                          Text('$mbps MB / $total MB', style: GoogleFonts.jetBrainsMono(fontSize: 11, fontWeight: FontWeight.bold, color: ThemeManager.accentBlue)),
                         ],
                       ),
                       const SizedBox(height: 6),
@@ -1996,7 +2004,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
                           const SizedBox(height: 10),
                           Text(
                             'No Offline Messages Yet',
-                            style: GoogleFonts.spaceGrotesk(
+                            style: GoogleFonts.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: theme.colorScheme.onSurface,
@@ -2015,12 +2023,38 @@ class _RealChatScreenState extends State<RealChatScreen> {
                             _messages[index].time.day != _messages[index - 1].time.day ||
                             _messages[index].time.month != _messages[index - 1].time.month ||
                             _messages[index].time.year != _messages[index - 1].time.year;
+
+                        final prevMsg = index > 0 ? _messages[index - 1] : null;
+                        final nextMsg = index < _messages.length - 1 ? _messages[index + 1] : null;
+
+                        final isSameSenderAsPrev = prevMsg != null &&
+                            prevMsg.isMe == msg.isMe &&
+                            !isNewDay &&
+                            msg.time.difference(prevMsg.time).inMinutes < 5;
+
+                        final isNextNewDay = nextMsg != null && (
+                            nextMsg.time.day != msg.time.day ||
+                            nextMsg.time.month != msg.time.month ||
+                            nextMsg.time.year != msg.time.year
+                        );
+
+                        final isSameSenderAsNext = nextMsg != null &&
+                            nextMsg.isMe == msg.isMe &&
+                            !isNextNewDay &&
+                            nextMsg.time.difference(msg.time).inMinutes < 5;
+
+                        final isFirstInGroup = !isSameSenderAsPrev;
+                        final isLastInGroup = !isSameSenderAsNext;
                             
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             if (isNewDay) _buildDateHeader(msg.time),
-                            _buildMessageBubble(msg),
+                            _buildMessageBubble(
+                              msg,
+                              isFirstInGroup: isFirstInGroup,
+                              isLastInGroup: isLastInGroup,
+                            ),
                           ],
                         );
                       },
@@ -2070,7 +2104,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
                         children: [
                           Text(
                             _attachedFileName!,
-                            style: GoogleFonts.spaceGrotesk(
+                            style: GoogleFonts.outfit(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                               color: theme.colorScheme.onSurface,
@@ -2108,10 +2142,10 @@ class _RealChatScreenState extends State<RealChatScreen> {
             Container(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
               decoration: BoxDecoration(
-                color: theme.cardColor,
+                color: isDark ? const Color(0xFF06080D) : theme.cardColor,
                 border: Border(
                   top: BorderSide(
-                    color: theme.colorScheme.outline,
+                    color: isDark ? const Color(0x2800F2FE) : theme.colorScheme.outline,
                   ),
                 ),
               ),
@@ -2127,7 +2161,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
                   Expanded(
                     child: TextField(
                       controller: _msgController,
-                      style: GoogleFonts.spaceGrotesk(fontSize: 13, color: theme.colorScheme.onSurface),
+                      style: GoogleFonts.outfit(fontSize: 13, color: theme.colorScheme.onSurface),
                       decoration: InputDecoration(
                         hintText: 'Type offline message…',
                         hintStyle: TextStyle(
@@ -2137,10 +2171,24 @@ class _RealChatScreenState extends State<RealChatScreen> {
                         isDense: true,
                         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                         filled: true,
-                        fillColor: theme.colorScheme.surfaceContainerHighest,
+                        fillColor: isDark ? const Color(0xFF0D1929) : theme.colorScheme.surfaceContainerHighest,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide.none,
+                          borderSide: BorderSide(
+                            color: isDark ? const Color(0x2800F2FE) : Colors.transparent,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                            color: isDark ? const Color(0x2800F2FE) : Colors.transparent,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                            color: isDark ? ThemeManager.accentCyan : theme.colorScheme.primary,
+                          ),
                         ),
                       ),
                       onSubmitted: (_) => _sendMessage(),
@@ -2168,7 +2216,7 @@ class _RealChatScreenState extends State<RealChatScreen> {
                           ],
                         )
                       : IconButton(
-                          icon: const Icon(Icons.send_rounded, color: ThemeManager.accentBlue),
+                          icon: Icon(Icons.send_rounded, color: isDark ? ThemeManager.accentCyan : ThemeManager.accentBlue),
                           onPressed: _sendMessage,
                           tooltip: 'Send Message',
                         ),
@@ -2217,170 +2265,221 @@ class _RealChatScreenState extends State<RealChatScreen> {
     );
   }
 
-  Widget _buildMessageBubble(ChatMessageItem msg) {
+  Widget _buildMessageBubble(
+    ChatMessageItem msg, {
+    bool isFirstInGroup = true,
+    bool isLastInGroup = true,
+  }) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+
+    // Instagram-style adaptive radii
+    const double rDefault = 18.0;
+    const double rGrouped = 5.0;
+
+    final BorderRadius bubbleRadius;
+    if (msg.isMe) {
+      bubbleRadius = BorderRadius.only(
+        topLeft: const Radius.circular(rDefault),
+        topRight: Radius.circular(isFirstInGroup ? rDefault : rGrouped),
+        bottomLeft: const Radius.circular(rDefault),
+        bottomRight: Radius.circular(isLastInGroup ? rDefault : rGrouped),
+      );
+    } else {
+      bubbleRadius = BorderRadius.only(
+        topLeft: Radius.circular(isFirstInGroup ? rDefault : rGrouped),
+        topRight: const Radius.circular(rDefault),
+        bottomLeft: Radius.circular(isLastInGroup ? rDefault : rGrouped),
+        bottomRight: const Radius.circular(rDefault),
+      );
+    }
+
+    final double marginBottom = isLastInGroup ? 8.0 : 2.5;
 
     return Align(
       alignment: msg.isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.78),
-        padding: const EdgeInsets.all(12),
+        margin: EdgeInsets.only(bottom: marginBottom),
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.76,
+          minWidth: 48,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 8),
         decoration: BoxDecoration(
-          color: msg.isMe ? ThemeManager.accentBlue : (isDark ? const Color(0xFF2A2A2A) : const Color(0xFFF0F0F0)),
-          borderRadius: BorderRadius.circular(16),
-          border: msg.isMe ? null : Border.all(color: theme.colorScheme.outline.withValues(alpha: 0.5)),
+          gradient: msg.isMe
+              ? const LinearGradient(
+                  colors: [Color(0xFF0072FF), Color(0xFF00C6FF)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
+              : null,
+          color: msg.isMe
+              ? null
+              : (isDark ? const Color(0xE8142030) : const Color(0xFFF1F5F9)),
+          borderRadius: bubbleRadius,
+          border: msg.isMe
+              ? null
+              : Border.all(
+                  color: isDark ? const Color(0x2206B6D4) : const Color(0xFFE2E8F0),
+                  width: 1,
+                ),
           boxShadow: [
             BoxShadow(
-              color: isDark ? Colors.black.withValues(alpha: 0.25) : const Color(0xFF64748B).withValues(alpha: 0.06),
-              offset: const Offset(0, 1),
-              blurRadius: 4,
+              color: msg.isMe
+                  ? const Color(0xFF0072FF).withValues(alpha: isDark ? 0.30 : 0.16)
+                  : (isDark ? Colors.black.withValues(alpha: 0.30) : const Color(0xFF64748B).withValues(alpha: 0.06)),
+              offset: const Offset(0, 1.5),
+              blurRadius: 6,
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: msg.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          children: [
-            if (!msg.isMe && msg.isSos)
-              Container(
-                margin: const EdgeInsets.only(bottom: 6),
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                decoration: BoxDecoration(
-                  color: ThemeManager.accentRed.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: ThemeManager.accentRed.withValues(alpha: 0.5)),
-                ),
-                child: const Text(
-                  'SOS',
-                  style: TextStyle(
-                    fontSize: 8,
-                    fontWeight: FontWeight.bold,
-                    color: ThemeManager.accentRed,
-                  ),
-                ),
-              ),
-            if (msg.fileName != null) ...[
-              InkWell(
-                onTap: () => _openFileViewer(msg),
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 4),
-                  padding: const EdgeInsets.all(8),
+        child: IntrinsicWidth(
+          child: Column(
+            crossAxisAlignment: msg.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (!msg.isMe && msg.isSos)
+                Container(
+                  margin: const EdgeInsets.only(bottom: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                   decoration: BoxDecoration(
-                    color: (msg.isMe ? Colors.white : Colors.black).withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10),
+                    color: ThemeManager.accentRed.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: ThemeManager.accentRed.withValues(alpha: 0.5)),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (msg.isImage && msg.fileBytes != null) ...[
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.memory(
-                            msg.fileBytes!,
-                            height: 140,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                      ],
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            msg.isImage ? Icons.image : Icons.insert_drive_file_outlined,
-                            size: 16,
-                            color: msg.isMe ? Colors.white : ThemeManager.accentBlue,
-                          ),
-                          const SizedBox(width: 6),
-                          Flexible(
-                            child: Text(
-                              '${msg.fileName} (${msg.fileSizeKb} KB)',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.bold,
-                                color: msg.isMe ? Colors.white : theme.colorScheme.onSurface,
-                              ),
-                              overflow: TextOverflow.ellipsis,
+                  child: const Text(
+                    'SOS',
+                    style: TextStyle(
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                      color: ThemeManager.accentRed,
+                    ),
+                  ),
+                ),
+              if (msg.fileName != null) ...[
+                InkWell(
+                  onTap: () => _openFileViewer(msg),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: (msg.isMe ? Colors.white : Colors.black).withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (msg.isImage && msg.fileBytes != null) ...[
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.memory(
+                              msg.fileBytes!,
+                              height: 140,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                          const SizedBox(width: 4),
-                          Icon(
-                            Icons.open_in_new,
-                            size: 13,
-                            color: msg.isMe ? Colors.white70 : ThemeManager.accentBlue,
-                          ),
+                          const SizedBox(height: 6),
                         ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-            if (msg.text.isNotEmpty)
-              SelectableText(
-                msg.text,
-                style: GoogleFonts.spaceGrotesk(
-                  fontSize: 13,
-                  color: msg.isMe ? Colors.white : theme.colorScheme.onSurface,
-                ),
-              ),
-            const SizedBox(height: 4),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (msg.isMe && msg.isDelivered) ...[
-                  const Icon(
-                    Icons.done, 
-                    size: 14, 
-                    color: Colors.white,
-                  ),
-                  const SizedBox(width: 4),
-                ],
-                if (msg.isMe && !msg.isDelivered) ...[
-                  Tooltip(
-                    message: 'Message not yet acknowledged. Tap to resend.',
-                    child: InkWell(
-                      onTap: () => _resendMessage(msg),
-                      borderRadius: BorderRadius.circular(8),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
-                        child: Row(
+                        Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
-                              Icons.refresh_rounded,
-                              size: 13,
-                              color: Colors.amber.shade200,
+                              msg.isImage ? Icons.image : Icons.insert_drive_file_outlined,
+                              size: 16,
+                              color: msg.isMe ? Colors.white : ThemeManager.accentBlue,
                             ),
-                            const SizedBox(width: 2),
-                            Text(
-                              'Resend',
-                              style: TextStyle(
-                                fontSize: 9,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.amber.shade200,
+                            const SizedBox(width: 6),
+                            Flexible(
+                              child: Text(
+                                '${msg.fileName} (${msg.fileSizeKb} KB)',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: msg.isMe ? Colors.white : theme.colorScheme.onSurface,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
+                            ),
+                            const SizedBox(width: 4),
+                            Icon(
+                              Icons.open_in_new,
+                              size: 13,
+                              color: msg.isMe ? Colors.white70 : ThemeManager.accentBlue,
                             ),
                           ],
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(width: 4),
-                ],
-                Text(
-                  '${msg.time.hour.toString().padLeft(2, '0')}:${msg.time.minute.toString().padLeft(2, '0')}',
-                  style: TextStyle(
-                    fontSize: 9,
-                    color: msg.isMe ? Colors.white70 : (isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted),
                   ),
                 ),
               ],
-            ),
-          ],
+              if (msg.text.isNotEmpty)
+                SelectableText(
+                  msg.text,
+                  style: GoogleFonts.outfit(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: msg.isMe ? Colors.white : theme.colorScheme.onSurface,
+                    height: 1.3,
+                  ),
+                ),
+              const SizedBox(height: 3),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (msg.isMe && msg.isDelivered) ...[
+                    const Icon(
+                      Icons.check, 
+                      size: 13, 
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 3),
+                  ],
+                  if (msg.isMe && !msg.isDelivered) ...[
+                    Tooltip(
+                      message: 'Message not yet acknowledged. Tap to resend.',
+                      child: InkWell(
+                        onTap: () => _resendMessage(msg),
+                        borderRadius: BorderRadius.circular(8),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.refresh_rounded,
+                                size: 12,
+                                color: Colors.amber.shade200,
+                              ),
+                              const SizedBox(width: 2),
+                              Text(
+                                'Resend',
+                                style: TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.amber.shade200,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 3),
+                  ],
+                  Text(
+                    '${msg.time.hour.toString().padLeft(2, '0')}:${msg.time.minute.toString().padLeft(2, '0')}',
+                    style: GoogleFonts.jetBrainsMono(
+                      fontSize: 9.5,
+                      color: msg.isMe ? Colors.white70 : (isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,0 +1,300 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Flare - Emergency SOS</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            midnight: '#07090e',
+            canvas: '#0b0f17',
+            surface: 'rgba(18, 24, 38, 0.75)',
+            'surface-active': 'rgba(23, 37, 65, 0.85)',
+            'flare-red': '#ff2a4b',
+            'flare-orange': '#ff5e3a',
+            'flare-blue': '#2563eb',
+            'flare-cyan': '#0ea5e9',
+            'flare-green': '#10b981'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          boxShadow: {
+            'glow-red': '0 0 25px -4px rgba(255, 42, 75, 0.45), 0 0 10px -2px rgba(255, 94, 58, 0.3)',
+            'glow-blue': '0 0 20px -3px rgba(14, 165, 233, 0.35)',
+            'glow-cyan-sm': '0 0 10px rgba(14, 165, 233, 0.4)'
+          }
+        }
+      }
+    };
+  </script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Core Layout & Custom Micro-styling -->
+<style data-purpose="base-layout">
+    body {
+      background-color: #06080d;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    
+    /* Subtle radial atmospheric glow */
+    .bg-ambient-mesh {
+      background: 
+        radial-gradient(circle at 50% 88%, rgba(239, 68, 68, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 80% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 20% 50%, rgba(14, 165, 233, 0.05) 0%, transparent 50%);
+    }
+
+    /* Modern Glass Card */
+    .glass-card {
+      background: linear-gradient(145deg, rgba(20, 27, 44, 0.65) 0%, rgba(13, 17, 28, 0.75) 100%);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    /* Active Electric Blue Glow Card */
+    .active-radio-mode {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.14) 0%, rgba(37, 99, 235, 0.08) 100%);
+      border: 1.5px solid #0284c7;
+      box-shadow: 0 0 16px -2px rgba(14, 165, 233, 0.28), inset 0 0 12px rgba(14, 165, 233, 0.1);
+    }
+  </style>
+<!-- Interactive State Styling -->
+<style data-purpose="micro-interactions">
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.96); }
+    }
+    .pulse-dot {
+      animation: pulse-subtle 2.5s infinite ease-in-out;
+    }
+
+    /* Broadcast SOS Button Pulse */
+    @keyframes sos-breathe {
+      0%, 100% { box-shadow: 0 0 20px 0 rgba(239, 68, 68, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3); }
+      50% { box-shadow: 0 0 32px 4px rgba(239, 68, 68, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.4); }
+    }
+    .sos-btn-glow {
+      animation: sos-breathe 2.8s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 flex justify-center items-center p-0 md:p-6 bg-ambient-mesh">
+<!-- Mobile Viewport Shell (Strict iOS Frame sizing) -->
+<div class="w-full max-w-[420px] min-h-screen md:min-h-[890px] md:h-[915px] bg-[#080b12] flex flex-col justify-between relative overflow-hidden md:rounded-[48px] md:border md:border-white/10 md:shadow-2xl">
+<!-- BEGIN: TopHeader -->
+<header class="pt-12 px-5 pb-3 flex-shrink-0 z-10" data-purpose="app-header">
+<!-- Upper Status & Brand Row -->
+<div class="flex items-center justify-between mb-4">
+<!-- Logo & App Name -->
+<div class="flex items-center gap-2">
+<!-- Cyber Cyan Flare Waterdrop / Flame Icon -->
+<div class="w-7 h-7 rounded-xl bg-gradient-to-tr from-sky-500 to-cyan-400 p-[1px] flex items-center justify-center">
+<div class="w-full h-full bg-[#090d16] rounded-[11px] flex items-center justify-center">
+<svg class="w-4 h-4 text-cyan-400 drop-shadow" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C10.5 4.5 7.5 7.8 7.5 12c0 3.59 2.91 6.5 6.5 6.5s6.5-2.91 6.5-6.5c0-4.2-3-7.5-4.5-10-.3 2.1-1.5 3.8-3 4.5-.4-2.1-.2-4.4-1-6.5zm0 14c-1.38 0-2.5-1.12-2.5-2.5 0-1.2.85-2.21 2-2.45.2.52.56.97 1.05 1.32v1.13c0 1.38-.55 2.5-.55 2.5z"></path></svg>
+</div>
+</div>
+<span class="font-bold text-xl tracking-tight text-white/95 lowercase">flare</span>
+</div>
+<!-- Gear / Settings -->
+<button aria-label="Settings" class="w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:text-white transition-colors" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+<!-- Title & IDLE Pill Row -->
+<div class="flex items-center justify-between">
+<h1 class="text-2xl font-bold tracking-tight text-white">Emergency SOS</h1>
+<!-- Status IDLE Pill -->
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-700/60 shadow-inner" data-purpose="idle-indicator">
+<svg class="w-3.5 h-3.5 text-slate-400 pulse-dot" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[11px] font-mono font-semibold tracking-wider text-slate-300">IDLE</span>
+</div>
+</div>
+</header>
+<!-- END: TopHeader -->
+<!-- BEGIN: MainContentScroll -->
+<main class="flex-1 px-5 overflow-y-auto space-y-5 pb-6 scrollbar-none" data-purpose="main-flow">
+<!-- SECTION 1: Radio Modes -->
+<section data-purpose="modes-selection">
+<div class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5 px-0.5">Modes</div>
+<div class="grid grid-cols-2 gap-3">
+<!-- Mode 1: Maximum Range (Inactive) -->
+<div class="glass-card rounded-2xl p-3 flex flex-col justify-between h-[86px] cursor-pointer active:scale-[0.98] transition-transform">
+<div class="flex items-center justify-between">
+<!-- Bluetooth icon -->
+<svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"></polyline>
+</svg>
+<span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-sky-950/60 text-sky-300 border border-sky-800/40">
+                Low Strength
+              </span>
+</div>
+<div class="text-[13px] font-semibold tracking-tight text-slate-200">
+              Maximum Range
+            </div>
+</div>
+<!-- Mode 2: Standard Range (Selected / High Strength) -->
+<div class="active-radio-mode rounded-2xl p-3 flex flex-col justify-between h-[86px] cursor-pointer active:scale-[0.98] transition-transform">
+<div class="flex items-center justify-between">
+<!-- Bluetooth icon with emerald accent -->
+<svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<polyline points="6.5 6.5 17.5 17.5 12 23 12 1 17.5 6.5 6.5 17.5"></polyline>
+</svg>
+<span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-emerald-950/70 text-emerald-300 border border-emerald-700/50">
+                High Strength
+              </span>
+</div>
+<div class="text-[13px] font-bold tracking-tight text-white">
+              Standard Range
+            </div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: Who Should Receive This? -->
+<section class="space-y-2.5" data-purpose="recipient-selection">
+<h2 class="text-[13px] font-semibold text-slate-300 tracking-normal px-0.5">
+          2. Who Should Receive This?
+        </h2>
+<div class="space-y-2">
+<!-- Option 1: Open Emergency Alert (Selected) -->
+<div class="active-radio-mode rounded-2xl px-4 py-3.5 flex items-center gap-3.5 cursor-pointer transition-all">
+<div class="w-5 h-5 rounded-full border-2 border-sky-400/80 bg-sky-500/15 flex items-center justify-center"><div class="w-2 h-2 rounded-full bg-sky-400"></div></div>
+<span class="text-[14px] font-semibold text-white tracking-tight">Open Emergency Alert</span>
+</div>
+<!-- Option 2: Private Message Alert -->
+<div class="glass-card hover:bg-slate-800/40 rounded-2xl px-4 py-3.5 flex items-center gap-3.5 cursor-pointer transition-colors">
+<div class="w-5 h-5 rounded-full border-2 border-slate-600 bg-transparent"></div>
+<span class="text-[14px] font-medium text-slate-300">Private Message Alert</span>
+</div>
+<!-- Option 3: Dual Alert -->
+<div class="glass-card hover:bg-slate-800/40 rounded-2xl px-4 py-3.5 flex items-center gap-3.5 cursor-pointer transition-colors">
+<div class="w-5 h-5 rounded-full border-2 border-slate-600 bg-transparent"></div>
+<span class="text-[14px] font-medium text-slate-300">Dual Alert</span>
+</div>
+</div>
+</section>
+<!-- SECTION 3: Current Satellite Location -->
+<section data-purpose="satellite-location">
+<div class="flex items-center justify-between mb-2 px-0.5">
+<h2 class="text-[13px] font-semibold text-slate-300">3. Current Satellite Location</h2>
+<!-- Refresh icon button -->
+<button aria-label="Refresh Satellite Fix" class="text-slate-400 hover:text-white transition-colors" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+<!-- Location Card -->
+<div class="glass-card rounded-2xl p-4 flex items-center justify-between border border-white/[0.08] shadow-sm">
+<div class="flex items-center gap-3">
+<!-- Pin Icon -->
+<div class="w-7 h-7 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+<svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 24 24">
+<path clip-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<!-- Coordinates Text in Monospace -->
+<span class="font-mono text-[14px] font-semibold text-slate-100 tracking-tight">
+              12.84377, 80.15051
+            </span>
+</div>
+<!-- Location Actions (Inline Refresh & Copy) -->
+<div class="flex items-center gap-3">
+<!-- Sub-refresh circular icon -->
+<button aria-label="Sync location" class="text-sky-400 hover:text-sky-300 transition-colors" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Copy Icon -->
+<button aria-label="Copy Coordinates" class="text-sky-400 hover:text-sky-300 transition-colors" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</div>
+</section>
+<!-- SECTION 4: Note (Max 27 characters) -->
+<section data-purpose="note-input">
+<h2 class="text-[13px] font-semibold text-slate-300 mb-2 px-0.5">4. Note (Max 27 characters)</h2>
+<div class="glass-card rounded-2xl p-3.5 border border-white/[0.08] focus-within:border-sky-500/50 transition-colors">
+<input class="w-full bg-transparent border-0 p-0 text-[13px] text-slate-100 placeholder:text-slate-500 focus:ring-0 focus:outline-none" maxlength="27" placeholder="Enter status, injuries, or landmarks..." type="text">
+<div class="flex items-center justify-between pt-3 mt-1 border-t border-white/[0.05]">
+<span class="text-[11px] text-slate-400 font-normal">
+              Broadcast along with your satellite GPS location
+            </span>
+<span class="text-[11px] font-mono text-slate-400 font-medium">
+              0/27
+            </span>
+</div>
+</div>
+</section>
+<!-- SECTION 5: Primary Action - Broadcast Emergency Signal -->
+<div class="pt-1 pb-1" data-purpose="primary-action">
+<button class="w-full h-[52px] rounded-2xl bg-gradient-to-r from-red-600 via-rose-600 to-orange-500 border border-red-400/30 text-white font-bold text-[13px] tracking-wider uppercase flex items-center justify-center gap-2.5 sos-btn-glow active:scale-[0.98] transition-all cursor-pointer shadow-glow-red" type="button">
+<!-- Warning Triangle Icon -->
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="">Broadcast Emergency Signal</span>
+</button>
+</div>
+</main>
+<!-- END: MainContentScroll -->
+<!-- BEGIN: BottomNavigationBar -->
+<nav class="flex-shrink-0 px-4 pt-2 pb-6 bg-[#080b12]/90 backdrop-blur-xl border-t border-white/[0.06]" data-purpose="bottom-navigation">
+<div class="flex items-center justify-between max-w-sm mx-auto px-2">
+<!-- Tab 1: Messages / Chat -->
+<button aria-label="Messages" class="flex flex-col items-center justify-center w-14 h-12 text-slate-500 hover:text-slate-300 transition-colors" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Tab 2: SOS (Active Pill) -->
+<button aria-label="SOS Active Screen" class="px-5 py-1.5 rounded-full bg-red-950/40 border border-red-600/40 flex items-center gap-1.5 text-red-400 font-bold text-xs tracking-wider shadow-sm" type="button">
+<svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="">SOS</span>
+</button>
+<!-- Tab 3: Mesh Network Nodes -->
+<button aria-label="Mesh Network" class="flex flex-col items-center justify-center w-14 h-12 text-slate-500 hover:text-slate-300 transition-colors" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="3"></circle>
+<circle cx="6" cy="6" r="2"></circle>
+<circle cx="18" cy="6" r="2"></circle>
+<circle cx="6" cy="18" r="2"></circle>
+<circle cx="18" cy="18" r="2"></circle>
+<path d="M7.5 7.5l3 3M16.5 7.5l-3 3M7.5 16.5l3-3M16.5 16.5l-3-3"></path>
+</svg>
+</button>
+<!-- Tab 4: ID / Contacts -->
+<button aria-label="Contacts" class="flex flex-col items-center justify-center w-14 h-12 text-slate-500 hover:text-slate-300 transition-colors" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</nav>
+<!-- END: BottomNavigationBar -->
+</div>
+
+
+</body></html>

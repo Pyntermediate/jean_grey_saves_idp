@@ -14,7 +14,10 @@ class RealPeersScreen extends StatefulWidget {
   State<RealPeersScreen> createState() => _RealPeersScreenState();
 }
 
-class _RealPeersScreenState extends State<RealPeersScreen> {
+class _RealPeersScreenState extends State<RealPeersScreen> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final _ble = RealBleService.instance;
   StreamSubscription? _sub;
   Timer? _timer;
@@ -47,6 +50,7 @@ class _RealPeersScreenState extends State<RealPeersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final peers = _ble.discoveredPeers;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
@@ -118,26 +122,25 @@ class _RealPeersScreenState extends State<RealPeersScreen> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+            Container(
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              alignment: Alignment.centerLeft,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Nearby Devices',
-                        style: GoogleFonts.spaceGrotesk(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'Nearby Devices',
+                    style: GoogleFonts.outfit(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurface,
+                    ),
                   ),
                   Row(
                     children: [
@@ -209,7 +212,7 @@ class _RealPeersScreenState extends State<RealPeersScreen> {
                           const SizedBox(height: 12),
                           Text(
                             'No Devices in Range',
-                            style: GoogleFonts.spaceGrotesk(
+                            style: GoogleFonts.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: theme.colorScheme.onSurface,
@@ -255,17 +258,28 @@ class _RealPeersScreenState extends State<RealPeersScreen> {
                                 width: 42,
                                 height: 42,
                                 decoration: BoxDecoration(
-                                  color: theme.colorScheme.surface,
+                                  color: isDark ? const Color(0xFF142338) : theme.colorScheme.surface,
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: isOffline ? (isDark ? Colors.white24 : Colors.black26) : ThemeManager.accentBlue, 
-                                    width: 2
+                                    color: isOffline
+                                        ? (isDark ? Colors.white24 : Colors.black26)
+                                        : (isDark ? ThemeManager.accentCyan : ThemeManager.accentBlue), 
+                                    width: 1.5,
                                   ),
+                                  boxShadow: isOffline || !isDark ? null : [
+                                    BoxShadow(
+                                      color: ThemeManager.accentCyan.withValues(alpha: 0.25),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 1),
+                                    ),
+                                  ],
                                 ),
                                 child: Icon(
                                   isOffline ? Icons.signal_cellular_connected_no_internet_4_bar : Icons.smartphone, 
                                   size: 20, 
-                                  color: isOffline ? (isDark ? Colors.white24 : Colors.black26) : ThemeManager.accentBlue
+                                  color: isOffline
+                                      ? (isDark ? Colors.white24 : Colors.black26)
+                                      : (isDark ? ThemeManager.accentCyan : ThemeManager.accentBlue),
                                 ),
                               ),
                               const SizedBox(width: 14),
@@ -275,7 +289,7 @@ class _RealPeersScreenState extends State<RealPeersScreen> {
                                   children: [
                                     Text(
                                       displayName,
-                                      style: GoogleFonts.spaceGrotesk(
+                                      style: GoogleFonts.outfit(
                                         fontSize: 13,
                                         fontWeight: FontWeight.bold,
                                         color: isOffline ? (isDark ? Colors.white54 : Colors.black54) : theme.colorScheme.onSurface,
@@ -283,7 +297,7 @@ class _RealPeersScreenState extends State<RealPeersScreen> {
                                     ),
                                     Text(
                                       signalText,
-                                      style: TextStyle(
+                                      style: GoogleFonts.jetBrainsMono(
                                         fontSize: 11,
                                         color: isOffline 
                                             ? ThemeManager.accentRed 
@@ -292,30 +306,34 @@ class _RealPeersScreenState extends State<RealPeersScreen> {
                                     ),
                                     Text(
                                       'PHY: ${peer.phyMode.label}',
-                                      style: TextStyle(
+                                      style: GoogleFonts.jetBrainsMono(
                                         fontSize: 10, 
-                                        color: isOffline ? (isDark ? Colors.white38 : Colors.black38) : ThemeManager.accentBlue, 
+                                        color: isOffline ? (isDark ? Colors.white38 : Colors.black38) : (isDark ? ThemeManager.accentCyan : ThemeManager.accentBlue), 
                                         fontWeight: FontWeight.w600
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: (isOffline ? ThemeManager.accentRed : ThemeManager.accentGreen).withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  isOffline ? 'OFFLINE' : 'IN MESH',
-                                  style: TextStyle(
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.bold,
-                                    color: isOffline ? ThemeManager.accentRed : ThemeManager.accentGreen,
+                              if (!isOffline)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: ThemeManager.accentGreen.withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: ThemeManager.accentGreen.withValues(alpha: 0.35),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'IN MESH',
+                                    style: GoogleFonts.jetBrainsMono(
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
+                                      color: ThemeManager.accentGreen,
+                                    ),
                                   ),
                                 ),
-                              ),
                               if (isUnknownPeer || isOffline)
                                 Padding(
                                   padding: const EdgeInsets.only(left: 4),

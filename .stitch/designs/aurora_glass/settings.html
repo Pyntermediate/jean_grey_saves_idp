@@ -1,0 +1,291 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Flare Settings - Aurora Glass Edition</title>
+<!-- Tailwind CSS v3 with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            void: '#070d14',
+            aurora: {
+              cyan: '#00f2fe',
+              teal: '#4facfe',
+              emerald: '#10b981',
+              glow: 'rgba(0, 242, 254, 0.15)'
+            }
+          },
+          fontFamily: {
+            mono: ['SF Mono', 'Roboto Mono', 'Fira Code', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: CSS Stylesheets -->
+<style data-purpose="base-layout">
+    body {
+      background-color: #070d14;
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    .mobile-container {
+      width: 100%;
+      max-width: 412px;
+      min-height: 100vh;
+      background-color: #070d14;
+      position: relative;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.85);
+    }
+  </style>
+<style data-purpose="glassmorphism-effects">
+    .aurora-bg-mesh {
+      position: absolute;
+      top: -100px;
+      right: -60px;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.12) 0%, rgba(79, 172, 254, 0.03) 50%, transparent 70%);
+      filter: blur(50px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .aurora-bottom-mesh {
+      position: absolute;
+      bottom: 60px;
+      left: -80px;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(0, 242, 254, 0.02) 60%, transparent 75%);
+      filter: blur(45px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glass-tile {
+      background: rgba(14, 25, 41, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 1.25rem;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-tile:active {
+      background: rgba(22, 38, 62, 0.65);
+      border-color: rgba(0, 242, 254, 0.28);
+    }
+    .toggle-active-glow {
+      box-shadow: 0 0 14px rgba(0, 242, 254, 0.45);
+    }
+  </style>
+<!-- END: CSS Stylesheets -->
+</head>
+<body>
+<!-- BEGIN: Mobile App Frame -->
+<div class="mobile-container flex flex-col justify-between p-5 pb-6 text-slate-100" data-purpose="flare-settings-screen">
+<!-- Ambient Aurora Glow Orbs -->
+<div class="aurora-bg-mesh"></div>
+<div class="aurora-bottom-mesh"></div>
+<!-- Main Content Area -->
+<div class="relative z-10 flex-1 flex flex-col">
+<!-- BEGIN: Top Navigation Header -->
+<header class="flex items-center justify-between pt-2 pb-6" data-purpose="header-bar">
+<div class="flex items-center space-x-3">
+<!-- Back Arrow Button -->
+<button aria-label="Navigate Back" class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-900/60 border border-slate-800 text-slate-300 hover:text-white hover:border-aurora-cyan/40 transition-all active:scale-95" data-purpose="back-button" onclick="window.history.back()" type="button">
+<svg class="w-5 h-5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+            Settings
+          </h1>
+</div>
+<!-- System Mesh Status Badge -->
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/40 border border-cyan-500/30 text-xs text-cyan-400 font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+<span>MESH READY</span>
+</div>
+</header>
+<!-- END: Top Navigation Header -->
+<!-- BEGIN: Settings Cards Group -->
+<main class="space-y-3.5 mt-1" data-purpose="settings-list">
+<!-- Item 1: Profile - Name -->
+<section class="glass-tile p-4 flex items-center justify-between" data-purpose="profile-name-setting">
+<div class="space-y-1">
+<span class="text-xs uppercase tracking-wider text-slate-400 font-medium">Profile - Name</span>
+<div class="text-lg font-semibold text-white tracking-wide">Mridul</div>
+</div>
+<!-- Edit Pencil Action Button -->
+<button aria-label="Edit Profile Name" class="w-10 h-10 rounded-xl bg-slate-800/60 hover:bg-cyan-500/20 text-slate-300 hover:text-aurora-cyan border border-slate-700/50 hover:border-cyan-500/40 flex items-center justify-center transition-all active:scale-90" data-purpose="edit-profile-btn" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</section>
+<!-- Item 2: Public Key - Device ID -->
+<section class="glass-tile p-4 flex items-center justify-between gap-3" data-purpose="public-key-setting">
+<div class="space-y-1 min-w-0">
+<span class="text-xs uppercase tracking-wider text-slate-400 font-medium">Public Key - Device ID</span>
+<div class="font-mono text-xs sm:text-sm text-cyan-200 truncate tracking-tight py-0.5">
+              PUB_KEY_8de23e270337d3d0
+            </div>
+</div>
+<!-- Copy to Clipboard Button -->
+<button aria-label="Copy Public Key" class="w-10 h-10 flex-shrink-0 rounded-xl bg-slate-800/60 hover:bg-cyan-500/20 text-slate-300 hover:text-aurora-cyan border border-slate-700/50 hover:border-cyan-500/40 flex items-center justify-center transition-all active:scale-90" data-purpose="copy-key-btn" id="copy-btn" onclick="copyKey()" type="button">
+<svg class="w-5 h-5" fill="none" id="copy-icon" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+<path d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="hidden text-xs text-aurora-cyan font-bold" id="copied-toast">✓</span>
+</button>
+</section>
+<!-- Item 3: Enable Relay -->
+<section class="glass-tile p-4 flex items-center justify-between" data-purpose="enable-relay-setting">
+<div class="space-y-1 pr-3">
+<span class="text-sm font-semibold text-white tracking-wide block">Enable Relay</span>
+<p class="text-xs text-slate-400 leading-tight">Silently relays packets while on</p>
+</div>
+<!-- Relay Switch Element -->
+<button aria-checked="false" class="relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-slate-700 bg-slate-800 transition-colors duration-200 ease-in-out focus:outline-none" data-purpose="relay-toggle" id="relay-switch" onclick="toggleRelay()" role="switch" type="button">
+<span class="pointer-events-none inline-block h-5 w-5 transform translate-x-0.5 mt-0.5 rounded-full bg-slate-400 shadow-md ring-0 transition duration-200 ease-in-out" id="relay-thumb"></span>
+</button>
+</section>
+<!-- Item 4: 24/7 Sleep Mode Reception -->
+<section class="glass-tile p-4 relative overflow-hidden" data-purpose="sleep-mode-reception-setting">
+<div class="flex items-center justify-between">
+<div class="flex items-start space-x-3">
+<!-- Charging Battery Icon with subtle glow -->
+<div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 flex-shrink-0 mt-0.5 shadow-[0_0_12px_rgba(16,185,129,0.25)]">
+<svg class="w-5 h-5 fill-emerald-400" viewBox="0 0 24 24">
+<!-- Battery body with lightning bolt cutout -->
+<path d="M16 4h-1V2h-6v2H8C6.9 4 6 4.9 6 6v14c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-3.5 13.5v-3.5H10l3.5-6.5v3.5H15l-3.5 6.5z"></path>
+</svg>
+</div>
+<div class="space-y-1 pr-2">
+<div class="text-sm font-semibold text-white tracking-wide">24/7 Sleep Mode Reception</div>
+<div class="text-xs text-emerald-400 font-medium leading-relaxed">
+                  Unrestricted — 24/7 sleep reception active
+                </div>
+</div>
+</div>
+<!-- Green Verified Checkmark Badge -->
+<div class="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 flex-shrink-0 shadow-[0_0_10px_rgba(16,185,129,0.3)]">
+<svg class="w-4 h-4 stroke-[2.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+</section>
+<!-- Item 5: Dark Theme -->
+<section class="glass-tile p-4 flex items-center justify-between" data-purpose="dark-theme-setting">
+<div class="space-y-1 pr-3">
+<div class="flex items-center gap-2">
+<span class="text-sm font-semibold text-white tracking-wide">Dark Theme</span>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">OLED</span>
+</div>
+<p class="text-xs text-slate-400 leading-tight">Enable pure black mode</p>
+</div>
+<!-- Dark Mode Active Toggle -->
+<button aria-checked="true" class="relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-cyan-400 bg-gradient-to-r from-blue-600 to-cyan-500 toggle-active-glow transition-colors duration-200 ease-in-out focus:outline-none" data-purpose="theme-toggle" id="theme-switch" onclick="toggleTheme()" role="switch" type="button">
+<span class="pointer-events-none inline-block h-5 w-5 transform translate-x-5 mt-0.5 rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out" id="theme-thumb"></span>
+</button>
+</section>
+</main>
+<!-- END: Settings Cards Group -->
+<!-- BEGIN: Diagnostics Footer Card -->
+<footer class="mt-auto pt-8 pb-4" data-purpose="system-diagnostics">
+<div class="p-3.5 rounded-xl bg-slate-900/40 border border-slate-800/80 text-[11px] text-slate-400 space-y-1.5 backdrop-blur-sm">
+<div class="flex items-center justify-between text-slate-300">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+              BLE 5.0 Coded PHY Active
+            </span>
+<span class="text-slate-500 font-mono">250kbps</span>
+</div>
+<div class="flex items-center justify-between border-t border-slate-800/60 pt-1.5">
+<span>Cryptographic Enclave</span>
+<span class="text-emerald-400 font-medium">Secured • Healthy</span>
+</div>
+</div>
+<!-- Android System Gesture Home Bar Indicator -->
+<div aria-hidden="true" class="flex justify-center mt-5">
+<div class="w-32 h-1 bg-slate-700/60 rounded-full"></div>
+</div>
+</footer>
+<!-- END: Diagnostics Footer Card -->
+</div>
+</div>
+<!-- END: Mobile App Frame -->
+<!-- BEGIN: Interactive Logic Scripts -->
+<script data-purpose="settings-interactivity">
+    // Interactive state handling for relay switch
+    let relayActive = false;
+    function toggleRelay() {
+      relayActive = !relayActive;
+      const relayBtn = document.getElementById('relay-switch');
+      const relayThumb = document.getElementById('relay-thumb');
+      
+      relayBtn.setAttribute('aria-checked', relayActive ? 'true' : 'false');
+      if (relayActive) {
+        relayBtn.classList.remove('bg-slate-800', 'border-slate-700');
+        relayBtn.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-cyan-500', 'border-cyan-400', 'toggle-active-glow');
+        relayThumb.classList.remove('translate-x-0.5', 'bg-slate-400');
+        relayThumb.classList.add('translate-x-5', 'bg-white');
+      } else {
+        relayBtn.classList.add('bg-slate-800', 'border-slate-700');
+        relayBtn.classList.remove('bg-gradient-to-r', 'from-blue-600', 'to-cyan-500', 'border-cyan-400', 'toggle-active-glow');
+        relayThumb.classList.add('translate-x-0.5', 'bg-slate-400');
+        relayThumb.classList.remove('translate-x-5', 'bg-white');
+      }
+    }
+
+    // Interactive state handling for theme switch
+    let themeActive = true;
+    function toggleTheme() {
+      themeActive = !themeActive;
+      const themeBtn = document.getElementById('theme-switch');
+      const themeThumb = document.getElementById('theme-thumb');
+      
+      themeBtn.setAttribute('aria-checked', themeActive ? 'true' : 'false');
+      if (themeActive) {
+        themeBtn.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-cyan-500', 'border-cyan-400', 'toggle-active-glow');
+        themeBtn.classList.remove('bg-slate-800', 'border-slate-700');
+        themeThumb.classList.add('translate-x-5', 'bg-white');
+        themeThumb.classList.remove('translate-x-0.5', 'bg-slate-400');
+      } else {
+        themeBtn.classList.remove('bg-gradient-to-r', 'from-blue-600', 'to-cyan-500', 'border-cyan-400', 'toggle-active-glow');
+        themeBtn.classList.add('bg-slate-800', 'border-slate-700');
+        themeThumb.classList.remove('translate-x-5', 'bg-white');
+        themeThumb.classList.add('translate-x-0.5', 'bg-slate-400');
+      }
+    }
+
+    // Public Key copy animation
+    function copyKey() {
+      const icon = document.getElementById('copy-icon');
+      const toast = document.getElementById('copied-toast');
+      navigator.clipboard?.writeText('PUB_KEY_8de23e270337d3d0');
+      
+      icon.classList.add('hidden');
+      toast.classList.remove('hidden');
+      
+      setTimeout(() => {
+        icon.classList.remove('hidden');
+        toast.classList.add('hidden');
+      }, 1500);
+    }
+  </script>
+<!-- END: Interactive Logic Scripts -->
+</body></html>

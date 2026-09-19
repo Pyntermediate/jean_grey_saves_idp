@@ -51,3 +51,6 @@ v26_unpack/
 # Obfuscation & symbols
 app.*.symbols
 app.*.map.json
+
+# Stitch UI design artifacts
+.stitch/

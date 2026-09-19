@@ -12,6 +12,10 @@ class BootReceiver : BroadcastReceiver() {
         if (action == Intent.ACTION_BOOT_COMPLETED ||
             action == Intent.ACTION_LOCKED_BOOT_COMPLETED ||
             action == Intent.ACTION_MY_PACKAGE_REPLACED) {
+            val prefs = context.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+            val isMuleEnabled = prefs.getBoolean("flutter.is_mule_enabled", true)
+            if (!isMuleEnabled) return
+
             val serviceIntent = Intent(context, MeshForegroundService::class.java)
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

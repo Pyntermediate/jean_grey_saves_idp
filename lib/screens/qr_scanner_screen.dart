@@ -49,7 +49,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
         elevation: 0,
         title: Text(
           'Scan Contact QR',
-          style: GoogleFonts.spaceGrotesk(
+          style: GoogleFonts.outfit(
             color: Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -103,7 +103,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                   Text(
                     'Point camera at friend\'s QR Code',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: GoogleFonts.outfit(
                       color: Colors.white,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -113,7 +113,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                   Text(
                     'Align code within the frame to automatically fetch public key',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.spaceGrotesk(
+                    style: GoogleFonts.outfit(
                       color: Colors.white60,
                       fontSize: 11,
                     ),

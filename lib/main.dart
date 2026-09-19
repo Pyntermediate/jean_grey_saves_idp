@@ -9,6 +9,7 @@ import 'screens/real_peers_screen.dart';
 import 'screens/splash_screen.dart';
 import 'services/theme_manager.dart';
 import 'services/update_checker.dart';
+import 'widgets/neu_widgets.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'services/notification_service.dart';
@@ -51,6 +52,19 @@ class FlareApp extends StatelessWidget {
   }
 }
 
+class _NoOverscrollGlowBehavior extends ScrollBehavior {
+  const _NoOverscrollGlowBehavior();
+
+  @override
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
+    return child;
+  }
+}
+
 class MainNavigationShell extends StatefulWidget {
   const MainNavigationShell({super.key});
 
@@ -58,19 +72,57 @@ class MainNavigationShell extends StatefulWidget {
   State<MainNavigationShell> createState() => _MainNavigationShellState();
 }
 
-class _MainNavigationShellState extends State<MainNavigationShell> with WidgetsBindingObserver {
+class _NavItemData {
+  final IconData icon;
+  final String label;
+  final double activeWidth;
+
+  const _NavItemData({
+    required this.icon,
+    required this.label,
+    required this.activeWidth,
+  });
+}
+
+class _MainNavigationShellState extends State<MainNavigationShell>
+    with WidgetsBindingObserver {
   int _currentIndex = 0;
+  late final PageController _pageController;
+
+  static const List<_NavItemData> _navItems = [
+    _NavItemData(
+      icon: Icons.chat_bubble_outline_rounded,
+      label: 'Messages',
+      activeWidth: 98.0,
+    ),
+    _NavItemData(
+      icon: Icons.warning_amber_rounded,
+      label: 'SOS',
+      activeWidth: 64.0,
+    ),
+    _NavItemData(
+      icon: Icons.hub_outlined,
+      label: 'Peers',
+      activeWidth: 74.0,
+    ),
+    _NavItemData(
+      icon: Icons.contacts_outlined,
+      label: 'Contacts',
+      activeWidth: 94.0,
+    ),
+  ];
 
   final List<Widget> _screens = const [
-    RealChatScreen(),
-    RealEmergencyScreen(),
-    RealPeersScreen(),
-    RealKeyVaultScreen(),
+    RepaintBoundary(child: RealChatScreen()),
+    RepaintBoundary(child: RealEmergencyScreen()),
+    RepaintBoundary(child: RealPeersScreen()),
+    RepaintBoundary(child: RealKeyVaultScreen()),
   ];
 
   @override
   void initState() {
     super.initState();
+    _pageController = PageController(initialPage: _currentIndex);
     WidgetsBinding.instance.addObserver(this);
     // Check for app updates and battery optimization after the UI has fully rendered
     if (!kIsWeb) {
@@ -121,6 +173,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> with WidgetsB
 
   @override
   void dispose() {
+    _pageController.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -138,164 +191,275 @@ class _MainNavigationShellState extends State<MainNavigationShell> with WidgetsB
     final isDark = theme.brightness == Brightness.dark;
 
     return PopScope(
-      canPop: _currentIndex == 0,
-      onPopInvokedWithResult: (didPop, _) {
-        if (didPop) return;
-        if (_currentIndex != 0) {
-          setState(() {
-            _currentIndex = 0;
-          });
-        }
-      },
-      child: Scaffold(
-        extendBody: true,
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(4),
-              child: Image.asset(
-                'assets/flame_symbol.png',
-                width: 22,
-                height: 22,
-                fit: BoxFit.contain,
-              ),
+      canPop: true,
+      child: AuroraBackground(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          extendBody: true,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            title: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Image.asset(
+                    'assets/flame_symbol.png',
+                    width: 22,
+                    height: 22,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'flare',
+                  style: GoogleFonts.outfit(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(width: 8),
-            Text(
-              'flare',
-              style: GoogleFonts.spaceGrotesk(
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-                color: theme.colorScheme.onSurface,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.settings_outlined, size: 22),
+                tooltip: 'Settings',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) => const RealSettingsScreen(),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(1.0, 0.0);
+                        const end = Offset.zero;
+                        const curve = Curves.ease;
+                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+                        return SlideTransition(position: offsetAnimation, child: child);
+                      },
+                    ),
+                  );
+                },
               ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_outlined, size: 22),
-            tooltip: 'Settings',
-            onPressed: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const RealSettingsScreen(),
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                    const begin = Offset(1.0, 0.0);
-                    const end = Offset.zero;
-                    const curve = Curves.ease;
-                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                    var offsetAnimation = animation.drive(tween);
-                    return SlideTransition(position: offsetAnimation, child: child);
+              const SizedBox(width: 4),
+            ],
+          ),
+          body: ValueListenableBuilder<bool>(
+            valueListenable: RealChatScreen.isChatOpenNotifier,
+            builder: (context, isChatOpen, _) {
+              return ScrollConfiguration(
+                behavior: const _NoOverscrollGlowBehavior(),
+                child: PageView(
+                  controller: _pageController,
+                  physics: (_currentIndex == 0 && isChatOpen)
+                      ? const NeverScrollableScrollPhysics()
+                      : const PageScrollPhysics(),
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
                   },
+                  children: _screens,
                 ),
               );
             },
           ),
-          const SizedBox(width: 4),
-        ],
-      ),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _screens,
-      ),
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Container(
-          margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-          decoration: BoxDecoration(
-            color: theme.cardColor,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: theme.colorScheme.outline,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: isDark ? Colors.black.withValues(alpha: 0.35) : const Color(0xFF64748B).withValues(alpha: 0.08),
-                offset: const Offset(0, 2),
-                blurRadius: 8,
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(
-                index: 0,
-                icon: Icons.chat_bubble_outline_rounded,
-                label: 'Messages',
-                activeColor: theme.colorScheme.onSurface,
-              ),
-              _buildNavItem(
-                index: 1,
-                icon: Icons.warning_amber_rounded,
-                label: 'SOS',
-                activeColor: ThemeManager.accentRed,
-              ),
-              _buildNavItem(
-                index: 2,
-                icon: Icons.hub_outlined,
-                label: 'Peers',
-                activeColor: theme.colorScheme.onSurface,
-              ),
-              _buildNavItem(
-                index: 3,
-                icon: Icons.contacts_outlined,
-                label: 'Contacts',
-                activeColor: theme.colorScheme.onSurface,
-              ),
-            ],
+          bottomNavigationBar: RepaintBoundary(
+            child: _buildBottomNavigationBar(theme, isDark),
           ),
         ),
       ),
-    ),
     );
   }
 
-  Widget _buildNavItem({
-    required int index,
-    required IconData icon,
-    required String label,
-    required Color activeColor,
-  }) {
-    final isSelected = _currentIndex == index;
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    return GestureDetector(
-      onTap: () => setState(() => _currentIndex = index),
-      behavior: HitTestBehavior.opaque,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+  Widget _buildBottomNavigationBar(ThemeData theme, bool isDark) {
+    return SafeArea(
+      top: false,
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+        height: 52,
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
         decoration: BoxDecoration(
-          color: isSelected
-              ? activeColor.withValues(alpha: isDark ? 0.2 : 0.1)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? activeColor : (isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted),
-              size: 18,
+          color: isDark ? const Color(0xF2121820) : const Color(0xF7FFFFFF),
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: isDark ? const Color(0x1AFFFFFF) : const Color(0xFFE2E8F0),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: isDark ? const Color(0x80000000) : const Color(0xFF64748B).withValues(alpha: 0.12),
+              offset: const Offset(0, 4),
+              blurRadius: 16,
             ),
-            if (isSelected) ...[
-              const SizedBox(width: 6),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: activeColor,
-                ),
-              ),
-            ],
           ],
+        ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // Precise target centers for each tab:
+            // Tab 0 indicator sits with 2px inset on the left. Center = 2.0 + w0 / 2.
+            // Tab 3 indicator sits with 2px inset on the right. Center = maxWidth - 2.0 - w3 / 2.
+            final double w0 = _navItems[0].activeWidth; // 98.0
+            final double w3 = _navItems[3].activeWidth; // 94.0
+            final double center0 = 2.0 + (w0 / 2.0);
+            final double center3 = constraints.maxWidth - 2.0 - (w3 / 2.0);
+            final double span = center3 - center0;
+            final double center1 = center0 + (span / 3.0);
+            final double center2 = center0 + (2.0 * span / 3.0);
+            final centers = [center0, center1, center2, center3];
+
+            return AnimatedBuilder(
+              animation: _pageController,
+              builder: (context, _) {
+                double page = _currentIndex.toDouble();
+                if (_pageController.hasClients && _pageController.position.haveDimensions) {
+                  page = (_pageController.page ?? _currentIndex.toDouble()).clamp(0.0, 3.0);
+                }
+
+                final floorIdx = page.floor().clamp(0, 3);
+                final ceilIdx = page.ceil().clamp(0, 3);
+                final t = page - floorIdx;
+
+                // Dynamic center position of the indicator interpolated across the exact centers
+                final currentCenterX = centers[floorIdx] + (centers[ceilIdx] - centers[floorIdx]) * t;
+
+                // Direct smooth continuous width interpolation between the known tab sizes
+                final currentWidth = _navItems[floorIdx].activeWidth +
+                    (_navItems[ceilIdx].activeWidth - _navItems[floorIdx].activeWidth) * t;
+
+                final currentLeft = currentCenterX - (currentWidth / 2.0);
+
+                final slotWidth = constraints.maxWidth / 4.0;
+
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    // ── Morphing Ellipse-Oval Indicator ────────────────
+                    Positioned(
+                      left: currentLeft,
+                      top: 2,
+                      bottom: 2,
+                      width: currentWidth,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isDark ? const Color(0xCC182434) : const Color(0xFFFFFFFF),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: isDark ? const Color(0x38FFFFFF) : theme.colorScheme.outline.withValues(alpha: 0.35),
+                            width: 1,
+                          ),
+                          boxShadow: [
+                            if (isDark) ...[
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.55),
+                                offset: const Offset(0, 3),
+                                blurRadius: 10,
+                                spreadRadius: 0.5,
+                              ),
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.25),
+                                offset: const Offset(0, 1),
+                                blurRadius: 3,
+                              ),
+                            ] else ...[
+                              BoxShadow(
+                                color: const Color(0xFF0F172A).withValues(alpha: 0.10),
+                                offset: const Offset(0, 3),
+                                blurRadius: 8,
+                                spreadRadius: 0.5,
+                              ),
+                              BoxShadow(
+                                color: const Color(0xFF0F172A).withValues(alpha: 0.04),
+                                offset: const Offset(0, 1),
+                                blurRadius: 3,
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // ── 4 Tab Slots (Each centered exactly at its indicator center) ──
+                    ...List.generate(4, (index) {
+                      final item = _navItems[index];
+                      final diff = (page - index).abs();
+                      final isVisible = diff < 1.0;
+                      final weight = (1.0 - diff).clamp(0.0, 1.0);
+
+                      final iconColor = Color.lerp(
+                        isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted,
+                        isDark ? Colors.white : theme.colorScheme.onSurface,
+                        weight,
+                      )!;
+
+                      final slotLeft = centers[index] - (slotWidth / 2.0);
+
+                      return Positioned(
+                        left: slotLeft,
+                        width: slotWidth,
+                        top: 0,
+                        bottom: 0,
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(16),
+                            onTap: () {
+                              if (_currentIndex != index) {
+                                setState(() => _currentIndex = index);
+                                _pageController.animateToPage(
+                                  index,
+                                  duration: const Duration(milliseconds: 280),
+                                  curve: Curves.easeOutCubic,
+                                );
+                              }
+                            },
+                            child: Center(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    item.icon,
+                                    color: iconColor,
+                                    size: 18,
+                                  ),
+                                  if (isVisible) ...[
+                                    ClipRect(
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        widthFactor: weight,
+                                        child: Opacity(
+                                          opacity: weight,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 4),
+                                            child: Text(
+                                              item.label,
+                                              style: GoogleFonts.outfit(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: iconColor,
+                                              ),
+                                              maxLines: 1,
+                                              softWrap: false,
+                                              overflow: TextOverflow.clip,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
+                );
+              },
+            );
+          },
         ),
       ),
     );

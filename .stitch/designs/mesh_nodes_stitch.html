@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Flare // Tactical Mesh Radar &amp; Directory</title>
+<!-- Google Fonts: Space Grotesk & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "text-primary": "#F0F4F8",
+            "on-tertiary-fixed-variant": "#004a75",
+            "surface-container-lowest": "#170b06",
+            "on-primary": "#542100",
+            "surface-dim": "#1d110a",
+            "secondary": "#ffb3b1",
+            "secondary-fixed": "#ffdad8",
+            "on-background": "#f7ddd2",
+            "surface-container": "#2a1d16",
+            "primary": "#ffb68f",
+            "tertiary": "#96ccff",
+            "on-secondary": "#680011",
+            "inverse-primary": "#9d4400",
+            "primary-container": "#ff7300",
+            "success-accent": "#00E676",
+            "on-tertiary-container": "#003759",
+            "surface": "#1d110a",
+            "surface-elevated": "#191E27",
+            "primary-fixed-dim": "#ffb68f",
+            "secondary-fixed-dim": "#ffb3b1",
+            "on-tertiary-fixed": "#001d32",
+            "surface-container-highest": "#41312a",
+            "surface-bright": "#45362e",
+            "outline": "#a88b7c",
+            "border-outline": "#232A36",
+            "on-surface": "#f7ddd2",
+            "on-primary-fixed": "#331100",
+            "tertiary-fixed-dim": "#96ccff",
+            "on-error-container": "#ffdad6",
+            "on-error": "#690005",
+            "error": "#ffb4ab",
+            "surface-variant": "#41312a",
+            "on-secondary-container": "#fff1f0",
+            "background": "#1d110a",
+            "text-muted": "#7E8C9F",
+            "surface-container-low": "#261912",
+            "surface-tint": "#ffb68f",
+            "surface-card": "#12151B",
+            "scaffold-bg": "#08090B",
+            "on-primary-fixed-variant": "#773200",
+            "tertiary-container": "#00a4fb",
+            "on-secondary-fixed": "#410007",
+            "error-container": "#93000a",
+            "outline-variant": "#594236",
+            "surface-container-high": "#352720",
+            "primary-fixed": "#ffdbca",
+            "distress-accent": "#FF2B43",
+            "on-surface-variant": "#e1c0b0",
+            "tertiary-fixed": "#cee5ff",
+            "on-tertiary": "#003353",
+            "inverse-on-surface": "#3c2d26",
+            "secondary-container": "#df0431",
+            "on-secondary-fixed-variant": "#92001c",
+            "on-primary-container": "#5a2400",
+            "inverse-surface": "#f7ddd2"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "16px",
+            "space-xl": "24px",
+            "gutter": "12px",
+            "margin": "16px",
+            "space-xs": "4px",
+            "space-sm": "8px",
+            "space-md": "12px"
+          },
+          "fontFamily": {
+            "headline-lg": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"],
+            "body-sm": ["Space Grotesk"],
+            "body-md": ["Space Grotesk"],
+            "action-label": ["Space Grotesk"],
+            "headline-sm": ["Space Grotesk"],
+            "telemetry-mono": ["JetBrains Mono"]
+          },
+          "fontSize": {
+            "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "action-label": ["14px", { "lineHeight": "20px", "fontWeight": "700" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "telemetry-mono": ["12px", { "lineHeight": "16px", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    @keyframes sweep {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .radar-sweep-beam {
+      animation: sweep 3.6s linear infinite;
+      transform-origin: center center;
+    }
+    @keyframes tacticalPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.92); }
+    }
+    .pulse-tactical {
+      animation: tacticalPulse 1.8s ease-in-out infinite;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #232A36;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-scaffold-bg text-text-primary antialiased min-h-screen flex flex-col justify-between selection:bg-primary-container selection:text-scaffold-bg">
+<!-- Top App Bar (Shared Components standard anchored) -->
+<header class="bg-surface-card border-b border-border-outline sticky top-0 z-40 w-full">
+<div class="flex justify-between items-center w-full px-margin py-space-sm h-14 max-w-lg mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-distress-accent" data-icon="emergency">emergency</span>
+<span class="text-headline-sm font-headline-sm font-bold tracking-wider text-distress-accent uppercase">FLARE // TACTICAL DISPATCH</span>
+</div>
+<button aria-label="Radar scan status" class="text-text-muted hover:bg-surface-elevated hover:text-text-primary p-1 rounded transition-colors" type="button">
+<span class="material-symbols-outlined text-primary-container animate-spin" data-icon="radar" style="animation-duration: 6s;">radar</span>
+</button>
+</div>
+</header>
+<!-- Sub-Header / Mission Context Control Bar -->
+<div class="bg-surface-elevated border-b border-border-outline w-full py-space-sm px-margin">
+<div class="max-w-lg mx-auto flex items-center justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="text-headline-sm font-headline-sm text-text-primary tracking-wide">NEARBY MESH NODES</span>
+<span class="w-2 h-2 rounded-full bg-success-accent pulse-tactical"></span>
+</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="text-telemetry-mono font-telemetry-mono text-text-muted">CONTINUOUS BEACON [0x48] ACTIVE</span>
+</div>
+</div>
+<button class="flex items-center gap-1 bg-surface-card border border-border-outline hover:border-text-muted active:scale-[0.98] transition-transform text-text-primary px-2.5 py-1.5 rounded text-telemetry-mono font-telemetry-mono">
+<span class="material-symbols-outlined text-sm text-primary-container" data-icon="mop">mop</span>
+<span>CLEAR INACTIVE</span>
+</button>
+</div>
+</div>
+<!-- Primary Canvas -->
+<main class="w-full max-w-lg mx-auto px-margin pt-space-md pb-28 flex-1 space-y-space-md custom-scrollbar">
+<!-- Radial Radar / Range Topology Card (NeuContainer style) -->
+<section class="bg-surface-card border border-border-outline rounded-xl p-space-md relative overflow-hidden">
+<!-- Card Top Header -->
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-sm" data-icon="explore">explore</span>
+<h2 class="text-headline-sm font-headline-sm text-text-primary tracking-wider">RADIAL SCAN // TOPOLOGY</h2>
+</div>
+<span class="text-telemetry-mono font-telemetry-mono text-success-accent bg-surface-elevated border border-success-accent/30 px-2 py-0.5 rounded">
+          8 TOTAL PEERS IN RANGE
+        </span>
+</div>
+<!-- Tactical Radar HUD Scope -->
+<div class="relative w-full aspect-square max-w-[280px] mx-auto my-2 flex items-center justify-center">
+<!-- Outer LE Coded Boundary Circle (400m+) -->
+<div class="absolute inset-0 rounded-full border border-border-outline/70 bg-scaffold-bg/40"></div>
+<!-- 200m Ring -->
+<div class="absolute inset-[18%] rounded-full border border-border-outline/60 border-dashed"></div>
+<!-- Inner 50m 1M PHY zone -->
+<div class="absolute inset-[36%] rounded-full border border-primary-container/40 bg-primary-container/5"></div>
+<!-- Center Origin Anchor -->
+<div class="absolute inset-[47%] rounded-full border border-distress-accent bg-distress-accent/20 flex items-center justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-distress-accent"></span>
+</div>
+<!-- Crosshair Reticles -->
+<div class="absolute inset-y-0 w-px bg-border-outline/40"></div>
+<div class="absolute inset-x-0 h-px bg-border-outline/40"></div>
+<div class="absolute inset-y-0 w-px rotate-45 bg-border-outline/20"></div>
+<div class="absolute inset-y-0 w-px -rotate-45 bg-border-outline/20"></div>
+<!-- Range Distance Labels -->
+<span class="absolute top-2 left-1/2 -translate-x-1/2 text-[10px] text-telemetry-mono font-telemetry-mono text-text-muted bg-scaffold-bg px-1">400m+ CODED</span>
+<span class="absolute top-[38%] left-1/2 -translate-x-1/2 text-[9px] text-telemetry-mono font-telemetry-mono text-primary-container bg-surface-card px-1">50m 1M PHY</span>
+<!-- Sweeping Radar Line Beam (CSS rotating beam) -->
+<div class="absolute inset-0 radar-sweep-beam pointer-events-none">
+<div class="w-1/2 h-1/2 ml-auto origin-bottom-left" style="background: conic-gradient(from 180deg at 0% 100%, rgba(255, 115, 0, 0.28) 0deg, rgba(255, 115, 0, 0) 65deg);"></div>
+<div class="absolute top-0 right-1/2 w-0.5 h-1/2 bg-primary-container"></div>
+</div>
+<!-- Blip: SAR-Alpha-Lead (Close, Phosphor Green) -->
+<div class="absolute top-[42%] right-[32%] flex flex-col items-center pointer-events-none">
+<span class="w-2.5 h-2.5 rounded-full bg-success-accent ring-4 ring-success-accent/20 pulse-tactical"></span>
+<span class="text-[9px] text-telemetry-mono font-telemetry-mono text-success-accent mt-0.5">SAR-A [48m]</span>
+</div>
+<!-- Blip: Base-Camp-Relay-North (Mid range, Amber) -->
+<div class="absolute top-[16%] left-[30%] flex flex-col items-center pointer-events-none">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container ring-4 ring-primary-container/20"></span>
+<span class="text-[9px] text-telemetry-mono font-telemetry-mono text-primary-container mt-0.5">BC-RELAY [185m]</span>
+</div>
+<!-- Blip: Civilian-Echo-4 (Outer range, Weak Red/Grey) -->
+<div class="absolute bottom-[18%] right-[16%] flex flex-col items-center pointer-events-none">
+<span class="w-2 h-2 rounded-full bg-distress-accent ring-2 ring-distress-accent/20"></span>
+<span class="text-[9px] text-telemetry-mono font-telemetry-mono text-text-muted mt-0.5">CIV-E4 [390m]</span>
+</div>
+<!-- Auxiliary Peripheral Blips (Silent) -->
+<div class="absolute top-[68%] left-[22%] w-1.5 h-1.5 rounded-full bg-text-muted/60"></div>
+<div class="absolute bottom-[30%] left-[40%] w-1.5 h-1.5 rounded-full bg-text-muted/40"></div>
+<div class="absolute top-[28%] right-[20%] w-1.5 h-1.5 rounded-full bg-text-muted/60"></div>
+</div>
+<!-- Radar Telemetry Row -->
+<div class="mt-space-sm pt-space-xs border-t border-border-outline grid grid-cols-3 gap-1 text-center">
+<div class="bg-surface-elevated/70 p-1.5 rounded">
+<div class="text-[10px] text-telemetry-mono font-telemetry-mono text-text-muted uppercase">ACTIVE PHY</div>
+<div class="text-telemetry-mono font-telemetry-mono text-text-primary font-bold">LE Coded S=8</div>
+</div>
+<div class="bg-surface-elevated/70 p-1.5 rounded">
+<div class="text-[10px] text-telemetry-mono font-telemetry-mono text-text-muted uppercase">CADENCE</div>
+<div class="text-telemetry-mono font-telemetry-mono text-success-accent font-bold">1000ms</div>
+</div>
+<div class="bg-surface-elevated/70 p-1.5 rounded">
+<div class="text-[10px] text-telemetry-mono font-telemetry-mono text-text-muted uppercase">RF CHANNELS</div>
+<div class="text-telemetry-mono font-telemetry-mono text-primary-container font-bold">37/38/39 Hop</div>
+</div>
+</div>
+</section>
+<!-- Discovered Nodes Directory Section -->
+<section class="space-y-space-sm">
+<div class="flex items-center justify-between px-1">
+<span class="text-action-label font-action-label text-text-muted tracking-wider uppercase text-xs">RESOLVED PEER DIRECTORY (3 ACTIVE)</span>
+<span class="text-telemetry-mono font-telemetry-mono text-text-muted text-[11px]">SORT: RSSI [DESC]</span>
+</div>
+<!-- Node 1: SAR-Alpha-Lead -->
+<article class="bg-surface-card border border-border-outline rounded-xl p-space-md space-y-space-sm hover:border-success-accent/50 transition-colors">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-success-accent pulse-tactical"></span>
+<h3 class="text-headline-sm font-headline-sm text-text-primary">SAR-Alpha-Lead</h3>
+<span class="text-[10px] font-telemetry-mono text-telemetry-mono bg-success-accent/10 border border-success-accent/30 text-success-accent px-1.5 py-0.5 rounded">
+                [RESPONDER UNIT]
+              </span>
+</div>
+<div class="text-telemetry-mono font-telemetry-mono text-text-muted text-[11px] mt-1">
+              ECDH: 0x9F41...2D <span class="text-success-accent ml-1">[VERIFIED SIGNATURE]</span>
+</div>
+</div>
+<!-- Signal Indicator 4 Bars (Phosphor Green) -->
+<div class="flex flex-col items-end">
+<span class="text-telemetry-mono font-telemetry-mono text-success-accent font-bold">-48 dBm</span>
+<div class="flex items-end gap-0.5 mt-1 h-3.5">
+<span class="w-1 h-1.5 bg-success-accent rounded-xs"></span>
+<span class="w-1 h-2 bg-success-accent rounded-xs"></span>
+<span class="w-1 h-2.5 bg-success-accent rounded-xs"></span>
+<span class="w-1 h-3.5 bg-success-accent rounded-xs"></span>
+</div>
+</div>
+</div>
+<!-- Telemetry Chips Row -->
+<div class="flex flex-wrap gap-1.5 pt-1 text-telemetry-mono font-telemetry-mono text-[11px]">
+<span class="bg-surface-elevated text-text-primary border border-border-outline px-2 py-0.5 rounded">PHY: LE Coded S=8</span>
+<span class="bg-surface-elevated text-success-accent border border-border-outline px-2 py-0.5 rounded">HOP: DIRECT LINK</span>
+<span class="bg-surface-elevated text-text-muted border border-border-outline px-2 py-0.5 rounded">PKTS: 128 rx / 0 drop</span>
+</div>
+<!-- Action Button -->
+<button class="w-full flex items-center justify-center gap-2 bg-surface-elevated hover:bg-surface-card active:scale-[0.98] border border-success-accent text-success-accent hover:text-text-primary py-2 px-space-md rounded text-action-label font-action-label transition-all">
+<span class="material-symbols-outlined text-base" data-icon="forum">forum</span>
+<span>START CHAT</span>
+</button>
+</article>
+<!-- Node 2: Base-Camp-Relay-North -->
+<article class="bg-surface-card border border-border-outline rounded-xl p-space-md space-y-space-sm hover:border-primary-container/50 transition-colors">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-success-accent"></span>
+<h3 class="text-headline-sm font-headline-sm text-text-primary">Base-Camp-Relay-North</h3>
+<span class="text-[10px] font-telemetry-mono text-telemetry-mono bg-primary-container/10 border border-primary-container/30 text-primary-container px-1.5 py-0.5 rounded">
+                [FIXED RELAY]
+              </span>
+</div>
+<div class="text-telemetry-mono font-telemetry-mono text-text-muted text-[11px] mt-1">
+              ECDH: 0xA188...E4 <span class="text-primary-container ml-1">[ROUTER ROLE]</span>
+</div>
+</div>
+<!-- Signal Indicator 3 Bars (Amber) -->
+<div class="flex flex-col items-end">
+<span class="text-telemetry-mono font-telemetry-mono text-primary-container font-bold">-66 dBm</span>
+<div class="flex items-end gap-0.5 mt-1 h-3.5">
+<span class="w-1 h-1.5 bg-primary-container rounded-xs"></span>
+<span class="w-1 h-2 bg-primary-container rounded-xs"></span>
+<span class="w-1 h-2.5 bg-primary-container rounded-xs"></span>
+<span class="w-1 h-3.5 bg-border-outline rounded-xs"></span>
+</div>
+</div>
+</div>
+<!-- Telemetry Chips Row -->
+<div class="flex flex-wrap gap-1.5 pt-1 text-telemetry-mono font-telemetry-mono text-[11px]">
+<span class="bg-surface-elevated text-text-primary border border-border-outline px-2 py-0.5 rounded">PHY: Standard 1M PHY</span>
+<span class="bg-surface-elevated text-text-primary border border-border-outline px-2 py-0.5 rounded">HOP: DIRECT LINK</span>
+<span class="bg-surface-elevated text-text-muted border border-border-outline px-2 py-0.5 rounded">PKTS: 412 rx / 1 drop</span>
+</div>
+<!-- Action Button -->
+<button class="w-full flex items-center justify-center gap-2 bg-surface-elevated hover:bg-surface-card active:scale-[0.98] border border-primary-container text-primary-container hover:text-text-primary py-2 px-space-md rounded text-action-label font-action-label transition-all">
+<span class="material-symbols-outlined text-base" data-icon="forum">forum</span>
+<span>START CHAT</span>
+</button>
+</article>
+<!-- Node 3: Civilian-Echo-4 -->
+<article class="bg-surface-card border border-border-outline rounded-xl p-space-md space-y-space-sm hover:border-border-outline/80 transition-colors">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-distress-accent"></span>
+<h3 class="text-headline-sm font-headline-sm text-text-primary">Civilian-Echo-4</h3>
+<span class="text-[10px] font-telemetry-mono text-telemetry-mono bg-distress-accent/10 border border-distress-accent/30 text-distress-accent px-1.5 py-0.5 rounded">
+                [MULE STORE-AND-FORWARD]
+              </span>
+</div>
+<div class="text-telemetry-mono font-telemetry-mono text-text-muted text-[11px] mt-1">
+              ANON EPHEMERAL: 0xC491 <span class="text-text-muted ml-1">[TTL: 42m]</span>
+</div>
+</div>
+<!-- Signal Indicator 1 Bar (Weak) -->
+<div class="flex flex-col items-end">
+<span class="text-telemetry-mono font-telemetry-mono text-distress-accent font-bold">-84 dBm</span>
+<div class="flex items-end gap-0.5 mt-1 h-3.5">
+<span class="w-1 h-1.5 bg-distress-accent rounded-xs"></span>
+<span class="w-1 h-2 bg-border-outline rounded-xs"></span>
+<span class="w-1 h-2.5 bg-border-outline rounded-xs"></span>
+<span class="w-1 h-3.5 bg-border-outline rounded-xs"></span>
+</div>
+</div>
+</div>
+<!-- Telemetry Chips Row -->
+<div class="flex flex-wrap gap-1.5 pt-1 text-telemetry-mono font-telemetry-mono text-[11px]">
+<span class="bg-surface-elevated text-distress-accent border border-border-outline px-2 py-0.5 rounded">HOP: 2 HOPS VIA RELAY-NORTH</span>
+<span class="bg-surface-elevated text-text-muted border border-border-outline px-2 py-0.5 rounded">PKTS: 14 rx</span>
+<span class="bg-surface-elevated text-text-muted border border-border-outline px-2 py-0.5 rounded">STORE-&amp;-FORWARD</span>
+</div>
+<!-- Action CTA: PING NODE -->
+<button class="w-full flex items-center justify-center gap-2 bg-surface-elevated hover:bg-surface-card active:scale-[0.98] border border-border-outline hover:border-text-primary text-text-primary py-2 px-space-md rounded text-action-label font-action-label transition-all">
+<span class="material-symbols-outlined text-base text-text-muted" data-icon="sensors">sensors</span>
+<span>PING NODE</span>
+</button>
+</article>
+</section>
+</main>
+<!-- Persistent Bottom Wrapper: Silicon Diagnostic Telemetry & Docked BottomNavBar -->
+<div class="fixed bottom-0 left-0 w-full z-50 bg-scaffold-bg">
+<!-- Silicon Diagnostic Banner -->
+<div class="w-full max-w-lg mx-auto bg-surface-elevated border-t border-border-outline px-margin py-1.5 flex items-center justify-between">
+<div class="flex items-center gap-2 overflow-hidden">
+<span class="w-1.5 h-1.5 rounded-full bg-success-accent pulse-tactical shrink-0"></span>
+<p class="text-[10px] text-telemetry-mono font-telemetry-mono text-text-muted truncate">
+          SILICON HEARTBEAT: 1000ms CADENCE // PACKET SERIALIZATION: 0x4D 0xFE
+        </p>
+</div>
+<span class="text-[10px] text-telemetry-mono font-telemetry-mono text-success-accent shrink-0 pl-2">SYNC OK</span>
+</div>
+<!-- Docked Bottom Navigation Bar (Exact adherence to Shared Components JSON) -->
+<nav aria-label="Tactical Navigation" class="bg-surface-card border-t border-border-outline w-full">
+<div class="flex justify-around items-center px-gutter py-space-xs max-w-lg mx-auto">
+<!-- Destination 1: SOS Beacon -->
+<a class="flex flex-col items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-card py-1 px-3 active:scale-[0.98] transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="emergency_share">emergency_share</span>
+<span class="text-telemetry-mono font-telemetry-mono uppercase text-[11px] mt-0.5">SOS Beacon</span>
+</a>
+<!-- Destination 2: Mesh Nodes (ACTIVE STATE matching current page) -->
+<a aria-current="page" class="flex flex-col items-center justify-center bg-surface-elevated text-distress-accent rounded-lg border border-distress-accent py-1 px-3 active:scale-[0.98] transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-xl text-distress-accent" data-icon="hub" style="font-variation-settings: 'FILL' 1;">hub</span>
+<span class="text-telemetry-mono font-telemetry-mono uppercase text-[11px] mt-0.5 font-bold">Mesh Nodes</span>
+</a>
+<!-- Destination 3: Radio PHY -->
+<a class="flex flex-col items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-card py-1 px-3 active:scale-[0.98] transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="cell_tower">cell_tower</span>
+<span class="text-telemetry-mono font-telemetry-mono uppercase text-[11px] mt-0.5">Radio PHY</span>
+</a>
+<!-- Destination 4: Map Log -->
+<a class="flex flex-col items-center justify-center text-text-muted hover:text-text-primary hover:bg-surface-card py-1 px-3 active:scale-[0.98] transition-transform duration-100" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="share_location">share_location</span>
+<span class="text-telemetry-mono font-telemetry-mono uppercase text-[11px] mt-0.5">Map Log</span>
+</a>
+</div>
+</nav>
+</div>
+<script>
+    // Lightweight tactile feedback micro-interaction
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.add('opacity-75');
+        setTimeout(() => btn.classList.remove('opacity-75'), 120);
+      });
+    });
+  </script>
+</body></html>

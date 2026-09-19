@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Flare Tactical HUD - Offline Mesh Chat</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-tertiary-fixed-variant": "#004a75",
+            "surface": "#1d110a",
+            "on-tertiary-container": "#003759",
+            "error-container": "#93000a",
+            "secondary": "#ffb3b1",
+            "tertiary-container": "#00a4fb",
+            "secondary-fixed": "#ffdad8",
+            "on-tertiary-fixed": "#001d32",
+            "on-primary-fixed": "#331100",
+            "surface-card": "#12151B",
+            "on-secondary": "#680011",
+            "error": "#ffb4ab",
+            "primary-fixed": "#ffdbca",
+            "on-error-container": "#ffdad6",
+            "inverse-surface": "#f7ddd2",
+            "on-secondary-container": "#fff1f0",
+            "on-secondary-fixed": "#410007",
+            "tertiary": "#96ccff",
+            "inverse-primary": "#9d4400",
+            "on-background": "#f7ddd2",
+            "border-outline": "#232A36",
+            "on-surface-variant": "#e1c0b0",
+            "primary-container": "#ff7300",
+            "surface-dim": "#1d110a",
+            "surface-container-low": "#261912",
+            "text-muted": "#7E8C9F",
+            "tertiary-fixed": "#cee5ff",
+            "primary-fixed-dim": "#ffb68f",
+            "on-secondary-fixed-variant": "#92001c",
+            "secondary-container": "#df0431",
+            "surface-container-high": "#352720",
+            "inverse-on-surface": "#3c2d26",
+            "on-surface": "#f7ddd2",
+            "primary": "#ffb68f",
+            "surface-bright": "#45362e",
+            "surface-container-lowest": "#170b06",
+            "on-tertiary": "#003353",
+            "surface-tint": "#ffb68f",
+            "surface-elevated": "#191E27",
+            "text-primary": "#F0F4F8",
+            "surface-container-highest": "#41312a",
+            "surface-variant": "#41312a",
+            "on-primary-fixed-variant": "#773200",
+            "on-primary": "#542100",
+            "tertiary-fixed-dim": "#96ccff",
+            "outline-variant": "#594236",
+            "distress-accent": "#FF2B43",
+            "background": "#1d110a",
+            "on-error": "#690005",
+            "outline": "#a88b7c",
+            "success-accent": "#00E676",
+            "on-primary-container": "#5a2400",
+            "surface-container": "#2a1d16",
+            "secondary-fixed-dim": "#ffb3b1",
+            "scaffold-bg": "#08090B"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xl": "24px",
+            "space-sm": "8px",
+            "space-lg": "16px",
+            "space-md": "12px",
+            "margin": "16px",
+            "gutter": "12px",
+            "space-xs": "4px"
+          },
+          "fontFamily": {
+            "headline-sm": ["Space Grotesk"],
+            "body-sm": ["Space Grotesk"],
+            "body-md": ["Space Grotesk"],
+            "action-label": ["Space Grotesk"],
+            "telemetry-mono": ["JetBrains Mono"],
+            "headline-md": ["Space Grotesk"],
+            "headline-lg": ["Space Grotesk"]
+          },
+          "fontSize": {
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "action-label": ["14px", { "lineHeight": "20px", "fontWeight": "700" }],
+            "telemetry-mono": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #08090B;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #232A36;
+      border-radius: 2px;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-scaffold-bg text-text-primary antialiased selection:bg-primary-container selection:text-scaffold-bg">
+<div class="flex flex-col h-screen max-w-lg mx-auto bg-scaffold-bg relative overflow-hidden border-x border-border-outline">
+<!-- 1. Contact App Bar (Top Navigation) -->
+<header class="bg-surface-card border-b border-border-outline shrink-0 z-30 pt-2 pb-2 px-margin">
+<div class="flex items-center justify-between gap-space-sm">
+<!-- Back action -->
+<button class="flex items-center justify-center w-8 h-8 rounded bg-surface-elevated border border-border-outline text-text-muted hover:text-text-primary active:scale-[0.98] transition-transform duration-100">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<!-- Recipient identity & tactical encryption status -->
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm tracking-tight text-text-primary truncate">SAR-Alpha-Lead</span>
+<span class="font-telemetry-mono text-[10px] leading-[14px] font-bold px-1 py-0.5 rounded bg-surface-elevated text-primary border border-border-outline">
+              [RESPONDER UNIT]
+            </span>
+</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<div class="flex items-center gap-0.5 text-success-accent font-telemetry-mono text-[10px] leading-tight font-bold">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span>X25519 ENCRYPTED</span>
+</div>
+<span class="text-text-muted text-[10px]">•</span>
+<span class="font-telemetry-mono text-[10px] leading-tight text-text-muted">DIRECT HOP 1</span>
+</div>
+</div>
+<!-- Trailing radar/node actions -->
+<div class="flex items-center gap-space-xs">
+<button class="flex items-center justify-center w-8 h-8 rounded bg-surface-elevated border border-border-outline text-text-muted hover:text-primary active:scale-[0.98] transition-transform duration-100" title="Node Telemetry">
+<span class="material-symbols-outlined text-[18px]">radar</span>
+</button>
+<button class="flex items-center justify-center w-8 h-8 rounded bg-surface-elevated border border-border-outline text-distress-accent hover:bg-distress-accent hover:text-text-primary active:scale-[0.98] transition-transform duration-100" title="Emergency Ping">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">emergency</span>
+</button>
+</div>
+</div>
+<!-- Live Radio Telemetry Strip -->
+<div class="mt-2 pt-1.5 border-t border-border-outline flex items-center justify-between font-telemetry-mono text-[10px] text-text-muted">
+<div class="flex items-center gap-1.5">
+<!-- 4-bar signal gauge -->
+<div class="flex items-end gap-0.5 h-3">
+<div class="w-1 h-1 bg-success-accent rounded-[1px]"></div>
+<div class="w-1 h-1.5 bg-success-accent rounded-[1px]"></div>
+<div class="w-1 h-2.5 bg-success-accent rounded-[1px]"></div>
+<div class="w-1 h-3 bg-success-accent rounded-[1px]"></div>
+</div>
+<span class="text-text-primary font-bold">-48 dBm</span>
+<span class="text-success-accent font-bold">[SIGNAL: STRONG]</span>
+</div>
+<div class="flex items-center gap-2">
+<span>PHY: <span class="text-text-primary font-bold">LE Coded S=8</span></span>
+<span class="text-border-outline">|</span>
+<span class="flex items-center gap-1 text-success-accent">
+<span class="w-1.5 h-1.5 rounded-full bg-success-accent animate-pulse"></span>
+            ACTIVE MESH
+          </span>
+</div>
+</div>
+</header>
+<!-- 2. Offline Security Airgap Banner -->
+<section class="bg-surface-elevated border-b border-border-outline px-margin py-1.5 flex items-center justify-between shrink-0">
+<div class="flex items-center gap-2 overflow-hidden">
+<div class="flex items-center justify-center w-4 h-4 rounded text-success-accent shrink-0">
+<span class="material-symbols-outlined text-[15px]">sensors</span>
+</div>
+<p class="font-telemetry-mono text-[10px] tracking-wide text-text-primary font-bold truncate">
+          ZERO INTERNET REQUIRED // PEER-TO-PEER BLE MESH // AES-256-GCM SECURED
+        </p>
+</div>
+<div class="flex items-center gap-1 pl-2 shrink-0">
+<span class="w-2 h-2 rounded-full bg-success-accent animate-ping"></span>
+<span class="font-telemetry-mono text-[9px] text-success-accent font-bold">AIRGAP</span>
+</div>
+</section>
+<!-- 3. Tactical Chat Stream -->
+<main class="flex-1 overflow-y-auto px-margin py-space-md space-y-4 custom-scroll">
+<!-- Protocol Stamp -->
+<div class="flex items-center justify-center">
+<span class="font-telemetry-mono text-[10px] uppercase text-text-muted px-2 py-0.5 bg-surface-card border border-border-outline rounded">
+          SESSION INITIALIZED // NODE ID: #ALPHA-9092
+        </span>
+</div>
+<!-- Received Bubble (09:41:12) -->
+<div class="flex flex-col items-start max-w-[88%]">
+<div class="flex items-center gap-1.5 mb-1 px-1">
+<span class="font-telemetry-mono text-[11px] font-bold text-success-accent">SAR-Alpha-Lead</span>
+<span class="font-telemetry-mono text-[10px] text-text-muted">[DIRECT HOP]</span>
+</div>
+<div class="bg-surface-card border border-border-outline rounded-lg p-space-md text-text-primary space-y-1.5 shadow-sm">
+<p class="font-body-md text-body-md leading-relaxed">
+            Search grid Charlie-4 clear. Moving toward Ridge Point coordinates. Medical kit ready.
+          </p>
+<div class="pt-1.5 border-t border-border-outline flex items-center justify-between font-telemetry-mono text-[10px] text-text-muted">
+<span>09:41:12 UTC // -48 dBm // SNR +9dB</span>
+<span class="text-primary">PKT #129</span>
+</div>
+</div>
+</div>
+<!-- Mule Relay System Banner / Pill -->
+<div class="w-full bg-surface-card/60 border border-dashed border-border-outline rounded p-2.5 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary-container text-[18px] shrink-0 mt-0.5">hub</span>
+<div class="flex-1 min-w-0">
+<p class="font-telemetry-mono text-[11px] font-bold text-primary-container leading-tight">
+            Mule Relay Active: Packet forwarded through Relay-North via Store-and-Forward
+          </p>
+<div class="flex items-center justify-between font-telemetry-mono text-[10px] text-text-muted mt-1">
+<span>TTL: 42m // ECDH: 0xA188...E4</span>
+<span class="text-success-accent font-semibold">[STORED &amp; FORWARDED]</span>
+</div>
+</div>
+</div>
+<!-- Sent Bubble (09:41:45) -->
+<div class="flex flex-col items-end ml-auto max-w-[88%]">
+<div class="flex items-center gap-1.5 mb-1 px-1">
+<span class="font-telemetry-mono text-[10px] text-text-muted">LOCAL OPERATOR</span>
+<span class="font-telemetry-mono text-[11px] font-bold text-primary-container">NODE-DISPATCH</span>
+</div>
+<div class="bg-surface-elevated border border-primary-container/70 rounded-lg p-space-md text-text-primary space-y-1.5">
+<p class="font-body-md text-body-md leading-relaxed text-text-primary">
+            Copy that Alpha. Standby for updated triage dispatch packet.
+          </p>
+<div class="pt-1.5 border-t border-border-outline flex items-center justify-end gap-2 font-telemetry-mono text-[10px] text-text-muted">
+<span>09:41:45 UTC</span>
+<span class="text-text-primary font-semibold">DELIVERED [ACK 0x06]</span>
+<div class="flex items-center gap-0.5 text-success-accent font-bold">
+<span class="material-symbols-outlined text-[13px]">done_all</span>
+<span>ED25519 VERIFIED</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Received Location / Telemetry Packet card (09:42:04) -->
+<div class="flex flex-col items-start max-w-[92%]">
+<div class="flex items-center gap-1.5 mb-1 px-1">
+<span class="font-telemetry-mono text-[11px] font-bold text-success-accent">SAR-Alpha-Lead</span>
+<span class="font-telemetry-mono text-[10px] text-distress-accent">[BEACON TELEMETRY]</span>
+</div>
+<div class="w-full bg-surface-card border border-border-outline rounded-lg overflow-hidden">
+<div class="p-space-md space-y-2">
+<div class="flex items-center justify-between pb-2 border-b border-border-outline">
+<div class="flex items-center gap-1.5 text-distress-accent">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="font-telemetry-mono text-[11px] font-bold">GNSS PACKET ATTACHED</span>
+</div>
+<span class="font-telemetry-mono text-[10px] text-text-muted">PKT #130 // 32 BYTES</span>
+</div>
+<div class="bg-scaffold-bg p-2.5 rounded border border-border-outline flex flex-col gap-1">
+<div class="flex items-center justify-between font-telemetry-mono text-[10px] text-text-muted">
+<span>COORDINATES (WGS84)</span>
+<span class="text-success-accent">HDOP: 0.9m [3D FIX]</span>
+</div>
+<p class="font-telemetry-mono text-[13px] font-bold text-text-primary tracking-tight">
+                44° 18' 24.2" N, 121° 46' 19.8" W
+              </p>
+<div class="flex items-center justify-between font-telemetry-mono text-[10px] text-text-muted pt-1">
+<span>ALT: 2,142m MSL</span>
+<span>BARO: 782 hPa</span>
+<span>BAT: 84%</span>
+</div>
+</div>
+<button class="w-full flex items-center justify-center gap-2 bg-surface-elevated hover:bg-surface-card text-primary border border-border-outline py-2 px-3 rounded font-action-label text-action-label active:scale-[0.98] transition-transform duration-100">
+<span class="material-symbols-outlined text-[16px]">share_location</span>
+<span>VIEW ON TACTICAL MAP</span>
+</button>
+</div>
+<div class="px-space-md py-1.5 bg-scaffold-bg/80 border-t border-border-outline flex items-center justify-between font-telemetry-mono text-[10px] text-text-muted">
+<span>09:42:04 UTC // -47 dBm</span>
+<span class="text-success-accent font-semibold">SIG CHECK: 0x99FF OK</span>
+</div>
+</div>
+</div>
+</main>
+<!-- 4. Quick Packet Shortcuts -->
+<div class="px-margin py-1.5 bg-scaffold-bg border-t border-border-outline flex items-center gap-2 overflow-x-auto no-scrollbar shrink-0">
+<button class="font-telemetry-mono text-[11px] font-bold px-2.5 py-1 rounded bg-surface-card border border-border-outline text-text-primary hover:border-primary-container active:scale-[0.98] transition-all whitespace-nowrap">
+        [SITREP OK]
+      </button>
+<button class="font-telemetry-mono text-[11px] font-bold px-2.5 py-1 rounded bg-surface-card border border-border-outline text-text-primary hover:border-primary-container active:scale-[0.98] transition-all whitespace-nowrap">
+        [SEND GPS FIX]
+      </button>
+<button class="font-telemetry-mono text-[11px] font-bold px-2.5 py-1 rounded bg-surface-card border border-distress-accent/60 text-distress-accent hover:bg-distress-accent hover:text-text-primary active:scale-[0.98] transition-all whitespace-nowrap">
+        [REQUEST EVAC]
+      </button>
+<button class="font-telemetry-mono text-[11px] font-bold px-2.5 py-1 rounded bg-surface-card border border-border-outline text-text-muted hover:border-primary-container hover:text-text-primary active:scale-[0.98] transition-all whitespace-nowrap">
+        [REPEAT LAST]
+      </button>
+</div>
+<!-- 5. Docked Tactical Input Bar (Fixed Bottom) -->
+<footer class="bg-surface-card border-t border-border-outline p-margin shrink-0 z-30">
+<div class="flex items-center gap-2">
+<!-- Attachment button -->
+<button class="flex items-center justify-center w-10 h-10 rounded bg-surface-elevated border border-border-outline text-text-muted hover:text-text-primary active:scale-[0.98] transition-transform duration-100" title="Attach Offline Payload / GPS">
+<span class="material-symbols-outlined text-[20px]">share_location</span>
+</button>
+<!-- Tactical mono text input -->
+<div class="flex-1 relative">
+<input class="w-full h-10 px-3 bg-scaffold-bg border border-border-outline rounded text-text-primary font-telemetry-mono text-body-md placeholder:text-text-muted placeholder:font-telemetry-mono focus:outline-none focus:border-primary-container focus:ring-0" placeholder="Type encrypted mesh message..." type="text"/>
+</div>
+<!-- Trailing accent send button -->
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-primary-container text-scaffold-bg font-bold hover:brightness-110 active:scale-[0.96] transition-transform duration-100 shrink-0" title="Transmit Packet">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+<!-- Micro-telemetry status text -->
+<div class="mt-2 flex items-center justify-between font-telemetry-mono text-[10px] text-text-muted">
+<span>TX BUFFER: <span class="text-text-primary font-bold">0/240 BYTES</span></span>
+<span class="text-primary-container font-semibold">BLE CODED S=8 ACTIVE</span>
+<span>FEC: RS(255,223)</span>
+</div>
+</footer>
+</div>
+</body></html>

@@ -51,7 +51,7 @@ class _MeshRadarScreenState extends State<MeshRadarScreen> {
       backgroundColor: _bg,
       appBar: AppBar(
         title: Text('Mesh Radar',
-            style: GoogleFonts.spaceGrotesk(
+            style: GoogleFonts.outfit(
                 fontWeight: FontWeight.w700, fontSize: 17, color: _text)),
         backgroundColor: _bg,
         elevation: 0,
@@ -73,7 +73,7 @@ class _MeshRadarScreenState extends State<MeshRadarScreen> {
               child: DropdownButton<BlePhyMode>(
                 value: mesh.activePhyMode,
                 dropdownColor: const Color(0xFF1C2128),
-                style: GoogleFonts.spaceGrotesk(fontSize: 12, color: _blue),
+                style: GoogleFonts.outfit(fontSize: 12, color: _blue),
                 icon: const Icon(Icons.expand_more, size: 16, color: _muted),
                 items: BlePhyMode.values.map((phy) {
                   return DropdownMenuItem<BlePhyMode>(
@@ -175,7 +175,7 @@ class _MeshRadarScreenState extends State<MeshRadarScreen> {
                                   ),
                                   child: Text(
                                     node.name.split(' ').first,
-                                    style: GoogleFonts.spaceGrotesk(
+                                    style: GoogleFonts.outfit(
                                       fontSize: 9,
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,
@@ -213,13 +213,13 @@ class _MeshRadarScreenState extends State<MeshRadarScreen> {
                     child: Row(
                       children: [
                         Text('Event Log',
-                            style: GoogleFonts.spaceGrotesk(
+                            style: GoogleFonts.outfit(
                                 color: _text,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w600)),
                         const Spacer(),
                         Text('${mesh.logs.length} events',
-                            style: GoogleFonts.spaceGrotesk(
+                            style: GoogleFonts.outfit(
                                 color: _muted, fontSize: 11)),
                       ],
                     ),
@@ -230,7 +230,7 @@ class _MeshRadarScreenState extends State<MeshRadarScreen> {
                         ? Center(
                             child: Text(
                               'No events yet. Trigger an SOS first.',
-                              style: GoogleFonts.spaceGrotesk(
+                              style: GoogleFonts.outfit(
                                   color: _muted, fontSize: 12),
                             ),
                           )
@@ -262,14 +262,14 @@ class _MeshRadarScreenState extends State<MeshRadarScreen> {
                                           TextSpan(
                                             text:
                                                 '${log.fromNode} → ${log.toNode}  ',
-                                            style: GoogleFonts.spaceGrotesk(
+                                            style: GoogleFonts.outfit(
                                                 color: _text,
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w600),
                                           ),
                                           TextSpan(
                                             text: log.details,
-                                            style: GoogleFonts.spaceGrotesk(
+                                            style: GoogleFonts.outfit(
                                                 color: _muted, fontSize: 11),
                                           ),
                                         ],
@@ -279,7 +279,7 @@ class _MeshRadarScreenState extends State<MeshRadarScreen> {
                                   const SizedBox(width: 6),
                                   Text(
                                     '${log.time.minute.toString().padLeft(2, '0')}:${log.time.second.toString().padLeft(2, '0')}',
-                                    style: GoogleFonts.spaceGrotesk(
+                                    style: GoogleFonts.outfit(
                                         color: _muted, fontSize: 10),
                                   ),
                                 ],

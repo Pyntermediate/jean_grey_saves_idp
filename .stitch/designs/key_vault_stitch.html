@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Flare // Key Vault &amp; Decentralized Identity</title>
+<!-- Google Fonts: Space Grotesk & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-dim": "#1d110a",
+            "primary": "#ffb68f",
+            "surface-tint": "#ffb68f",
+            "on-error": "#690005",
+            "on-surface": "#f7ddd2",
+            "primary-fixed-dim": "#ffb68f",
+            "distress-accent": "#FF2B43",
+            "on-primary": "#542100",
+            "primary-fixed": "#ffdbca",
+            "surface-elevated": "#191E27",
+            "on-secondary-container": "#fff1f0",
+            "surface-bright": "#45362e",
+            "on-primary-fixed-variant": "#773200",
+            "on-secondary": "#680011",
+            "text-muted": "#7E8C9F",
+            "secondary": "#ffb3b1",
+            "surface-container-highest": "#41312a",
+            "surface": "#1d110a",
+            "on-background": "#f7ddd2",
+            "tertiary": "#96ccff",
+            "error": "#ffb4ab",
+            "surface-variant": "#41312a",
+            "on-error-container": "#ffdad6",
+            "on-secondary-fixed": "#410007",
+            "surface-container-high": "#352720",
+            "on-primary-container": "#5a2400",
+            "text-primary": "#F0F4F8",
+            "secondary-fixed": "#ffdad8",
+            "tertiary-fixed": "#cee5ff",
+            "secondary-fixed-dim": "#ffb3b1",
+            "tertiary-container": "#00a4fb",
+            "inverse-primary": "#9d4400",
+            "on-primary-fixed": "#331100",
+            "on-tertiary": "#003353",
+            "border-outline": "#232A36",
+            "background": "#1d110a",
+            "on-tertiary-fixed": "#001d32",
+            "secondary-container": "#df0431",
+            "outline-variant": "#594236",
+            "surface-container": "#2a1d16",
+            "on-tertiary-container": "#003759",
+            "surface-card": "#12151B",
+            "on-tertiary-fixed-variant": "#004a75",
+            "success-accent": "#00E676",
+            "on-secondary-fixed-variant": "#92001c",
+            "surface-container-low": "#261912",
+            "primary-container": "#ff7300",
+            "inverse-surface": "#f7ddd2",
+            "surface-container-lowest": "#170b06",
+            "error-container": "#93000a",
+            "scaffold-bg": "#08090B",
+            "outline": "#a88b7c",
+            "on-surface-variant": "#e1c0b0",
+            "tertiary-fixed-dim": "#96ccff",
+            "inverse-on-surface": "#3c2d26"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xs": "4px",
+            "space-xl": "24px",
+            "gutter": "12px",
+            "space-md": "12px",
+            "space-lg": "16px",
+            "margin": "16px",
+            "space-sm": "8px"
+          },
+          "fontFamily": {
+            "headline-lg": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"],
+            "telemetry-mono": ["JetBrains Mono"],
+            "body-sm": ["Space Grotesk"],
+            "body-md": ["Space Grotesk"],
+            "headline-sm": ["Space Grotesk"],
+            "action-label": ["Space Grotesk"]
+          },
+          "fontSize": {
+            "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "telemetry-mono": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "action-label": ["14px", { "lineHeight": "20px", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Subtle scanline texture overlay */
+    .scanlines {
+      background: linear-gradient(rgba(18, 21, 27, 0) 50%, rgba(0, 0, 0, 0.35) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+      background-size: 100% 3px, 6px 100%;
+      pointer-events: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-scaffold-bg text-text-primary antialiased min-h-screen flex justify-center selection:bg-primary-container selection:text-text-primary">
+<!-- Outer Mobile Shell (Max-w-lg) -->
+<div class="w-full max-w-lg min-h-screen bg-scaffold-bg flex flex-col relative border-x border-border-outline pb-24">
+<!-- Scanline decorative atmospheric texture -->
+<div class="scanlines fixed inset-0 z-40 max-w-lg mx-auto opacity-70"></div>
+<!-- 1. Top Header / App Bar (Shared Component Anchor Implementation) -->
+<header class="bg-surface-card border-b border-border-outline sticky top-0 z-30 w-full">
+<div class="flex justify-between items-center w-full px-margin py-space-sm h-14 max-w-lg mx-auto">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-elevated border border-border-outline flex items-center justify-center text-distress-accent">
+<span class="material-symbols-outlined" data-icon="shield_lock" style="font-variation-settings: 'FILL' 1;">shield_lock</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-bold tracking-wider text-text-primary uppercase leading-none">KEY VAULT // IDENTITY</span>
+<span class="font-telemetry-mono text-telemetry-mono text-text-muted mt-0.5 tracking-tight text-[10px]">DECENTRALIZED ENCLAVE</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<!-- Airgap Protected Pill -->
+<div class="flex items-center gap-1.5 px-2 py-1 rounded bg-surface-elevated border border-border-outline">
+<span class="w-2 h-2 rounded-full bg-success-accent animate-pulse"></span>
+<span class="font-telemetry-mono text-telemetry-mono text-success-accent text-[10px] tracking-wider uppercase">AIRGAP</span>
+</div>
+<!-- Lock / Shield Status Action -->
+<button aria-label="Security Status Details" class="w-8 h-8 rounded flex items-center justify-center text-text-muted hover:bg-surface-elevated hover:text-text-primary active:scale-[0.98] transition-transform duration-100" type="button">
+<span class="material-symbols-outlined" data-icon="vpn_key">vpn_key</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Tactical HUD Content Area -->
+<main class="flex-1 px-margin pt-space-md space-y-space-md z-10">
+<!-- 2. Enclave & System Telemetry Bar (NeuContainer) -->
+<section class="bg-surface-card border border-border-outline rounded p-3">
+<div class="flex items-center justify-between pb-2 mb-2 border-b border-border-outline text-text-muted font-telemetry-mono text-telemetry-mono text-[10px]">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-tertiary" data-icon="memory">memory</span>
+            CRYPTO CORE STATUS
+          </span>
+<span class="text-success-accent font-bold">100% OFFLINE AIRGAP</span>
+</div>
+<div class="grid grid-cols-1 gap-1.5 font-telemetry-mono text-telemetry-mono text-[11px]">
+<div class="flex justify-between items-center">
+<span class="text-text-muted">CHIP HARDWARE:</span>
+<span class="text-text-primary font-medium tracking-tight">SECURE ENCLAVE (ECDH-P256 / X25519)</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-text-muted">KEY INTEGRITY:</span>
+<span class="text-success-accent flex items-center gap-1 font-bold">
+<span class="material-symbols-outlined text-[12px]" data-icon="verified_user">verified_user</span>
+              VALIDATED (ZERO EXPOSURE)
+            </span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-text-muted">ENTROPY SOURCE:</span>
+<span class="text-tertiary">TRNG HARDWARE POOL [OK: 256-bit]</span>
+</div>
+</div>
+</section>
+<!-- 3. Public Identity QR Card (Central Featured Component - NeuContainer) -->
+<section class="bg-surface-card border border-border-outline rounded p-4 relative overflow-hidden">
+<!-- Top status bar inside card -->
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-ping"></span>
+<h2 class="font-headline-sm text-headline-sm text-text-primary uppercase tracking-wide">YOUR MESH IDENTITY KEY</h2>
+</div>
+<div class="px-2 py-0.5 rounded bg-surface-elevated border border-border-outline font-telemetry-mono text-telemetry-mono text-[10px] text-primary-container">
+            BROADCAST READY
+          </div>
+</div>
+<!-- High-Contrast Tactical QR Matrix Graphic -->
+<div class="my-3 flex flex-col items-center justify-center">
+<div class="relative p-3 bg-scaffold-bg border border-border-outline rounded">
+<!-- Tactical Orange Corner Registration Markers -->
+<div class="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-primary-container"></div>
+<div class="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-primary-container"></div>
+<div class="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-primary-container"></div>
+<div class="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-primary-container"></div>
+<!-- Stylized Crisp QR Matrix -->
+<svg class="w-44 h-44 block" fill="none" viewbox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+<!-- Background matrix -->
+<rect fill="#08090B" height="140" width="140"></rect>
+<!-- Top-Left Finder Pattern -->
+<rect fill="#F0F4F8" height="36" width="36" x="10" y="10"></rect>
+<rect fill="#08090B" height="24" width="24" x="16" y="16"></rect>
+<rect fill="#FF7300" height="12" width="12" x="22" y="22"></rect>
+<!-- Top-Right Finder Pattern -->
+<rect fill="#F0F4F8" height="36" width="36" x="94" y="10"></rect>
+<rect fill="#08090B" height="24" width="24" x="100" y="16"></rect>
+<rect fill="#FF7300" height="12" width="12" x="106" y="22"></rect>
+<!-- Bottom-Left Finder Pattern -->
+<rect fill="#F0F4F8" height="36" width="36" x="10" y="94"></rect>
+<rect fill="#08090B" height="24" width="24" x="16" y="100"></rect>
+<rect fill="#FF7300" height="12" width="12" x="22" y="106"></rect>
+<!-- Timing Patterns -->
+<rect fill="#F0F4F8" height="6" width="6" x="52" y="24"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="64" y="24"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="76" y="24"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="24" y="52"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="24" y="64"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="24" y="76"></rect>
+<!-- Dense Data Payload Blocks (Tactical Geometry) -->
+<rect fill="#F0F4F8" height="6" width="6" x="52" y="12"></rect>
+<rect fill="#7E8C9F" height="6" width="6" x="64" y="12"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="76" y="12"></rect>
+<rect fill="#7E8C9F" height="6" width="6" x="52" y="36"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="64" y="36"></rect>
+<rect fill="#00E676" height="6" width="6" x="76" y="36"></rect>
+<!-- Center Payload Matrix -->
+<rect fill="#12151B" height="48" stroke="#232A36" stroke-width="1" width="48" x="46" y="46"></rect>
+<!-- Crosshair Center Hub -->
+<circle cx="70" cy="70" fill="#08090B" r="14" stroke="#FF7300" stroke-width="2"></circle>
+<circle cx="70" cy="70" fill="#00E676" r="4"></circle>
+<path d="M70 50 V58 M70 82 V90 M50 70 H58 M82 70 H90" stroke="#FF7300" stroke-linecap="square" stroke-width="2"></path>
+<!-- Synthetic Data Modules -->
+<rect fill="#F0F4F8" height="6" width="8" x="10" y="52"></rect>
+<rect fill="#7E8C9F" height="6" width="6" x="10" y="64"></rect>
+<rect fill="#F0F4F8" height="6" width="10" x="10" y="76"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="34" y="52"></rect>
+<rect fill="#7E8C9F" height="6" width="6" x="34" y="70"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="98" y="52"></rect>
+<rect fill="#7E8C9F" height="6" width="14" x="110" y="52"></rect>
+<rect fill="#00E676" height="6" width="10" x="98" y="64"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="114" y="64"></rect>
+<rect fill="#F0F4F8" height="6" width="12" x="104" y="76"></rect>
+<rect fill="#7E8C9F" height="6" width="6" x="122" y="76"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="52" y="98"></rect>
+<rect fill="#7E8C9F" height="6" width="8" x="64" y="98"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="78" y="98"></rect>
+<rect fill="#7E8C9F" height="6" width="10" x="52" y="110"></rect>
+<rect fill="#00E676" height="6" width="6" x="68" y="110"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="80" y="110"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="52" y="122"></rect>
+<rect fill="#F0F4F8" height="6" width="12" x="64" y="122"></rect>
+<rect fill="#7E8C9F" height="6" width="6" x="82" y="122"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="98" y="98"></rect>
+<rect fill="#7E8C9F" height="6" width="6" x="110" y="98"></rect>
+<rect fill="#F0F4F8" height="6" width="6" x="122" y="98"></rect>
+<rect fill="#F0F4F8" height="6" width="14" x="98" y="110"></rect>
+<rect fill="#FF7300" height="6" width="8" x="118" y="110"></rect>
+<rect fill="#7E8C9F" height="6" width="8" x="98" y="122"></rect>
+<rect fill="#F0F4F8" height="6" width="14" x="112" y="122"></rect>
+</svg>
+</div>
+<div class="text-center mt-2.5">
+<span class="font-headline-sm text-body-sm text-text-primary font-semibold tracking-wide block">X25519 Curve25519 Public Identity</span>
+<span class="font-telemetry-mono text-telemetry-mono text-[10px] text-text-muted tracking-tight">Airgap signed with ED25519 Master Root</span>
+</div>
+</div>
+<!-- Monospace Key Fingerprint Readout & Action -->
+<div class="mt-4 pt-3 border-t border-border-outline">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-telemetry-mono text-telemetry-mono text-[10px] text-text-muted flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-primary-container" data-icon="fingerprint">fingerprint</span>
+              PUB_KEY_SHA256 FINGERPRINT
+            </span>
+<span class="font-telemetry-mono text-[9px] text-success-accent bg-surface-elevated px-1.5 py-0.5 rounded border border-border-outline">VALID: SYNCED</span>
+</div>
+<div class="p-2.5 rounded bg-surface-elevated border border-border-outline flex items-center justify-between gap-2">
+<code class="font-telemetry-mono text-telemetry-mono text-primary font-semibold text-[11px] tracking-wider break-all select-all">
+              7A:8F:12:4D:B9:3E:61:0A:F2:45:88:C1:9D:E4:70:9E
+            </code>
+<button class="shrink-0 flex items-center gap-1 px-2.5 py-1 bg-surface-card hover:bg-border-outline border border-border-outline rounded text-text-primary active:scale-[0.98] transition-transform" id="copy-btn" onclick="navigator.clipboard.writeText('7A:8F:12:4D:B9:3E:61:0A:F2:45:88:C1:9D:E4:70:9E'); document.getElementById('copy-label').innerText = 'COPIED'; setTimeout(() =&gt; document.getElementById('copy-label').innerText = 'COPY', 1500);" type="button">
+<span class="material-symbols-outlined text-[14px] text-primary-container" data-icon="content_copy">content_copy</span>
+<span class="font-telemetry-mono text-telemetry-mono text-[10px] font-bold" id="copy-label">COPY</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 4. Primary Broadcast Contact Card Action -->
+<section>
+<button class="w-full bg-surface-card hover:bg-surface-elevated border-2 border-primary-container rounded p-3 text-left relative overflow-hidden group active:scale-[0.99] transition-all" type="button">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded bg-surface-elevated border border-primary-container flex items-center justify-center text-primary-container group-hover:scale-105 transition-transform shrink-0">
+<span class="material-symbols-outlined text-2xl" data-icon="cell_tower" style="font-variation-settings: 'FILL' 1;">cell_tower</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-action-label text-action-label text-text-primary tracking-wide">BROADCAST CONTACT CARD OVER AIR</span>
+<span class="font-telemetry-mono text-telemetry-mono text-primary-container text-[11px] font-bold">0x53 0x7C</span>
+</div>
+<div class="font-telemetry-mono text-telemetry-mono text-text-muted text-[10px] tracking-tight mt-0.5 truncate">
+                BEACON FREQ: 2.4GHz BLE CODED S=8 // 30s BURST EXPIRY
+              </div>
+</div>
+</div>
+<!-- Corner tactical indicator -->
+<div class="absolute bottom-1 right-2 flex items-center gap-1 font-telemetry-mono text-[9px] text-success-accent">
+<span class="w-1.5 h-1.5 rounded-full bg-success-accent animate-ping"></span>
+            RADIO PHY ACTIVE
+          </div>
+</button>
+</section>
+<!-- 5. Key Management & Security Operations (NeuContainer Modular Rows) -->
+<section class="bg-surface-card border border-border-outline rounded p-3 space-y-2">
+<div class="flex items-center justify-between pb-1.5 border-b border-border-outline">
+<span class="font-telemetry-mono text-telemetry-mono text-text-muted uppercase text-[10px] tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]" data-icon="admin_panel_settings">admin_panel_settings</span>
+            SECURE ENCLAVE OPERATIONS
+          </span>
+<span class="font-telemetry-mono text-telemetry-mono text-text-muted text-[10px]">AUTH: PIN/BIO REQUIRED</span>
+</div>
+<!-- Modular action row 1: Export Encrypted Key Backup -->
+<div class="flex items-center justify-between p-2.5 rounded bg-surface-elevated border border-border-outline hover:border-text-muted transition-colors">
+<div class="flex items-start gap-2.5">
+<div class="p-1.5 rounded bg-surface-card border border-border-outline text-text-primary mt-0.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="lock_open">lock_open</span>
+</div>
+<div>
+<div class="font-headline-sm text-body-md text-text-primary font-semibold">Export Encrypted Key Backup</div>
+<div class="font-telemetry-mono text-telemetry-mono text-text-muted text-[10px]">AES-256-GCM paper key or hardware vault export</div>
+</div>
+</div>
+<button aria-label="Export Backup" class="px-2.5 py-1.5 rounded bg-surface-card border border-border-outline text-text-primary hover:text-primary font-telemetry-mono text-telemetry-mono text-[11px] active:scale-[0.98] transition-transform flex items-center gap-1" type="button">
+<span>EXPORT</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<!-- Modular action row 2: Rotate Ephemeral Session Keys -->
+<div class="flex items-center justify-between p-2.5 rounded bg-surface-elevated border border-border-outline hover:border-text-muted transition-colors">
+<div class="flex items-start gap-2.5">
+<div class="p-1.5 rounded bg-surface-card border border-border-outline text-distress-accent mt-0.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="sync">sync</span>
+</div>
+<div>
+<div class="font-headline-sm text-body-md text-text-primary font-semibold">Rotate Ephemeral Session Keys</div>
+<div class="font-telemetry-mono text-telemetry-mono text-text-muted text-[10px]">Force re-key ECDH Ratchet with all active mesh peers</div>
+</div>
+</div>
+<button aria-label="Rotate Keys" class="px-2.5 py-1.5 rounded bg-surface-card border border-distress-accent text-distress-accent font-telemetry-mono text-telemetry-mono text-[10px] font-bold tracking-tight active:scale-[0.98] transition-transform hover:bg-surface-elevated" type="button">
+            ROTATE (RE-KEY)
+          </button>
+</div>
+</section>
+<!-- Heartbeat & Enclave Audit Status Footer Line -->
+<div class="flex items-center justify-center gap-2 py-1 font-telemetry-mono text-telemetry-mono text-[10px] text-text-muted tracking-tight text-center">
+<span class="w-1.5 h-1.5 rounded-full bg-success-accent"></span>
+<span>ENCLAVE SYNC: HARDWARE SECURED // 0 LEAK DETECTED</span>
+</div>
+</main>
+<!-- 6. BottomNavBar (Shared Component Anchor Implementation) -->
+<!-- Destination count: 4, mapped strictly to JSON with active highlight -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter py-space-xs max-w-lg mx-auto bg-scaffold-bg border-t border-border-outline">
+<!-- Nav Item 1: SOS Beacon -->
+<a class="flex flex-col items-center justify-center text-text-muted py-1 px-3 hover:text-text-primary hover:bg-surface-card active:scale-[0.98] transition-transform duration-100" href="#beacon">
+<span class="material-symbols-outlined" data-icon="emergency_share">emergency_share</span>
+<span class="font-telemetry-mono text-telemetry-mono text-[9px] uppercase mt-0.5">SOS Beacon</span>
+</a>
+<!-- Nav Item 2: Mesh Nodes (Active context for decentralized network & cryptographic enclave identity) -->
+<a class="flex flex-col items-center justify-center bg-surface-elevated text-distress-accent rounded-lg border border-distress-accent py-1 px-3 active:scale-[0.98] transition-transform duration-100" href="#nodes">
+<span class="material-symbols-outlined" data-icon="hub" style="font-variation-settings: 'FILL' 1;">hub</span>
+<span class="font-telemetry-mono text-telemetry-mono text-[9px] uppercase mt-0.5 font-bold">Mesh Nodes</span>
+</a>
+<!-- Nav Item 3: Radio PHY -->
+<a class="flex flex-col items-center justify-center text-text-muted py-1 px-3 hover:text-text-primary hover:bg-surface-card active:scale-[0.98] transition-transform duration-100" href="#phy">
+<span class="material-symbols-outlined" data-icon="cell_tower">cell_tower</span>
+<span class="font-telemetry-mono text-telemetry-mono text-[9px] uppercase mt-0.5">Radio PHY</span>
+</a>
+<!-- Nav Item 4: Map Log -->
+<a class="flex flex-col items-center justify-center text-text-muted py-1 px-3 hover:text-text-primary hover:bg-surface-card active:scale-[0.98] transition-transform duration-100" href="#map">
+<span class="material-symbols-outlined" data-icon="share_location">share_location</span>
+<span class="font-telemetry-mono text-telemetry-mono text-[9px] uppercase mt-0.5">Map Log</span>
+</a>
+</nav>
+</div>
+</body></html>

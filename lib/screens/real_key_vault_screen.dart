@@ -15,7 +15,9 @@ class RealKeyVaultScreen extends StatefulWidget {
   State<RealKeyVaultScreen> createState() => _RealKeyVaultScreenState();
 }
 
-class _RealKeyVaultScreenState extends State<RealKeyVaultScreen> {
+class _RealKeyVaultScreenState extends State<RealKeyVaultScreen> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     super.initState();
@@ -145,7 +147,7 @@ class _RealKeyVaultScreenState extends State<RealKeyVaultScreen> {
                       children: [
                         Text(
                           'Your Public Key',
-                          style: GoogleFonts.spaceGrotesk(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
                         Container(
@@ -185,40 +187,68 @@ class _RealKeyVaultScreenState extends State<RealKeyVaultScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(18, 10, 18, 90),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Add Contacts',
-                style: GoogleFonts.spaceGrotesk(
-                  fontSize: 24,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Contacts',
+                style: GoogleFonts.outfit(
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.onSurface,
                 ),
               ),
-              const SizedBox(height: 16),
-              
-              Row(
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(18, 4, 18, 90),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 8),
+                    Row(
                 children: [
                   Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: _openQrScanner,
-                      icon: const Icon(Icons.qr_code_scanner, size: 18),
-                      label: const Text('Scan Contact QR'),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        backgroundColor: ThemeManager.accentBlue,
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF0072FF), Color(0xFF00D2FF)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF0072FF).withValues(alpha: isDark ? 0.35 : 0.2),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: ElevatedButton.icon(
+                        onPressed: _openQrScanner,
+                        icon: const Icon(Icons.qr_code_scanner, size: 18, color: Colors.white),
+                        label: const Text('Scan Contact QR', style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          backgroundColor: Colors.transparent,
+                          foregroundColor: Colors.white,
+                          shadowColor: Colors.transparent,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
                       ),
                     ),
@@ -227,16 +257,18 @@ class _RealKeyVaultScreenState extends State<RealKeyVaultScreen> {
                   Expanded(
                     child: OutlinedButton.icon(
                       onPressed: _showManualSyncOverlay,
-                      icon: const Icon(Icons.qr_code, size: 18),
-                      label: const Text('Show My QR'),
+                      icon: Icon(Icons.qr_code, size: 18, color: isDark ? ThemeManager.accentCyan : ThemeManager.accentBlue),
+                      label: Text('Show My QR', style: TextStyle(color: isDark ? ThemeManager.darkText : ThemeManager.lightText, fontWeight: FontWeight.bold)),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         side: BorderSide(
-                          color: isDark ? Colors.white24 : Colors.black26,
+                          color: isDark ? const Color(0x3300F2FE) : ThemeManager.lightBorder,
+                          width: 1,
                         ),
+                        backgroundColor: isDark ? const Color(0x1400F2FE) : Colors.transparent,
                       ),
                     ),
                   ),
@@ -255,7 +287,7 @@ class _RealKeyVaultScreenState extends State<RealKeyVaultScreen> {
                         children: [
                           Text(
                             'Synced Contacts (${contacts.length})',
-                            style: GoogleFonts.spaceGrotesk(
+                            style: GoogleFonts.outfit(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                               color: theme.colorScheme.onSurface,
@@ -333,7 +365,7 @@ class _RealKeyVaultScreenState extends State<RealKeyVaultScreen> {
                                 const SizedBox(height: 10),
                                 Text(
                                   'No Contacts Added Yet',
-                                  style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.w600),
+                                  style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.w600),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
@@ -353,52 +385,56 @@ class _RealKeyVaultScreenState extends State<RealKeyVaultScreen> {
                             padding: const EdgeInsets.all(12),
                             child: Row(
                               children: [
-                                Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: (hasApp ? ThemeManager.accentGreen : ThemeManager.accentAmber)
-                                        .withValues(alpha: 0.12),
-                                  ),
-                                  child: Icon(
-                                    hasApp ? Icons.lock_outline : Icons.sms_outlined,
-                                    color: hasApp ? ThemeManager.accentGreen : ThemeManager.accentAmber,
-                                    size: 18,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        contact.name,
-                                        style: GoogleFonts.spaceGrotesk(fontSize: 13, fontWeight: FontWeight.bold),
+                                  Container(
+                                    width: 36,
+                                    height: 36,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: (hasApp ? ThemeManager.accentGreen : ThemeManager.accentAmber)
+                                          .withValues(alpha: 0.15),
+                                      border: Border.all(
+                                        color: (hasApp ? ThemeManager.accentGreen : ThemeManager.accentAmber)
+                                            .withValues(alpha: 0.35),
                                       ),
-                                      if (contact.phoneNumber.isNotEmpty)
+                                    ),
+                                    child: Icon(
+                                      hasApp ? Icons.lock_outline : Icons.sms_outlined,
+                                      color: hasApp ? ThemeManager.accentGreen : ThemeManager.accentAmber,
+                                      size: 18,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
                                         Text(
-                                          contact.phoneNumber,
-                                          style: TextStyle(fontSize: 11, color: isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted),
+                                          contact.name,
+                                          style: GoogleFonts.outfit(fontSize: 13, fontWeight: FontWeight.bold),
                                         ),
-                                      Text(
-                                        hasApp
-                                            ? (contact.publicKey.isNotEmpty ? 'Security Key: ${contact.publicKey}' : 'Private Messaging Enabled')
-                                            : 'No App • Gateway SMS Fallback',
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          color: hasApp ? ThemeManager.accentGreen : ThemeManager.accentAmber,
+                                        if (contact.phoneNumber.isNotEmpty)
+                                          Text(
+                                            contact.phoneNumber,
+                                            style: TextStyle(fontSize: 11, color: isDark ? ThemeManager.darkTextMuted : ThemeManager.lightTextMuted),
+                                          ),
+                                        Text(
+                                          hasApp
+                                              ? (contact.publicKey.isNotEmpty ? 'Security Key: ${contact.publicKey}' : 'Private Messaging Enabled')
+                                              : 'No App • Gateway SMS Fallback',
+                                          style: GoogleFonts.jetBrainsMono(
+                                            fontSize: 10,
+                                            color: hasApp ? ThemeManager.accentGreen : ThemeManager.accentAmber,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.copy, size: 16),
-                                  color: ThemeManager.accentBlue.withValues(alpha: 0.8),
-                                  tooltip: 'Copy Public Key',
+                                  IconButton(
+                                    icon: const Icon(Icons.copy, size: 16),
+                                    color: (isDark ? ThemeManager.accentCyan : ThemeManager.accentBlue).withValues(alpha: 0.8),
+                                    tooltip: 'Copy Public Key',
                                   onPressed: () {
                                     if (contact.publicKey.isNotEmpty) {
                                       Clipboard.setData(ClipboardData(text: contact.publicKey));
@@ -448,7 +484,7 @@ class _RealKeyVaultScreenState extends State<RealKeyVaultScreen> {
               const SizedBox(height: 24),
               Center(
                 child: Text(
-                  'Flare v38.39 (Build 89)',
+                  'Flare v1.1',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 10,
@@ -463,6 +499,9 @@ class _RealKeyVaultScreenState extends State<RealKeyVaultScreen> {
           ),
         ),
       ),
-    );
+    ],
+  ),
+),
+);
   }
 }
